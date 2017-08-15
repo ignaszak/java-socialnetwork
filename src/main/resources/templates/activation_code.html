@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Activation code - Social Network</title>
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.min.css" rel="stylesheet" />
+    <link href="../static/public/css/styles.css" th:href="@{/public/css/styles.css}" rel="stylesheet" />
+
+</head>
+<body class="app">
+
+<div class="container">
+    <div class="row">
+        <h1 class="text-center mb-5">Social Network</h1>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-sm-offset-3">
+            <div th:if="${success}" class="card card-inverse card-primary">
+                <div class="card-block">
+                    Activation success
+                </div>
+            </div>
+            <div th:unless="${success}" class="card card-inverse card-danger">
+                <div class="card-block">
+                    Invalid activation code.
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row text-center">
+        <br />
+        <a href="/" th:href="@{/}" class="btn btn-primary">Home</a>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,75 @@
+$ cat .gitignore
+
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+frontend
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+nbproject/private/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+#Gradle temporary files
+target/
+
+.git
+out/
+gradle/
+.settings/
+gradlew
+gradlew.bat
+*.class
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+### ANGULAR
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# compiled output
+/src/main/resources/static/public/angular
+/src/main/resources/static/angular/tmp
+/src/main/resources/static/angular/out-tsc
+
+# dependencies
+/src/main/resources/static/angular/node_modules
+
+# misc
+/src/main/resources/static/angular/.sass-cache
+/src/main/resources/static/angular/connect.lock
+/src/main/resources/static/angular/coverage
+/src/main/resources/static/angular/libpeerconnection.log
+/src/main/resources/static/angular/npm-debug.log
+/src/main/resources/static/angular/testem.log
+/src/main/resources/static/angular/typings
+
+# e2e
+/src/main/resources/static/public/e2e/*.js
+/src/main/resources/static/public/e2e/*.map
+
+# System Files
+/src/main/resources/static/public/.DS_Store
+/src/main/resources/static/public/Thumbs.db
+
+/src/main/resources/application.properties

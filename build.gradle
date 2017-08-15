@@ -1,0 +1,94 @@
+buildscript {
+    ext {
+        springBootVersion = '1.5.4.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("com.moowork.gradle:gradle-node-plugin:1.1.1")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'com.moowork.node'
+
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile('org.springframework.boot:spring-boot-starter-data-rest')
+    compile('org.springframework.boot:spring-boot-starter-data-jpa')
+    compile('org.springframework.boot:spring-boot-starter-security')
+    compile('org.springframework.boot:spring-boot-starter-mail')
+    compile('org.springframework.security:spring-security-data')
+    //compile('org.springframework.session:spring-session')
+    compile('org.springframework.boot:spring-boot-starter-thymeleaf')
+    //compile('org.springframework.boot:spring-boot-starter-validation')
+    //runtime('mysql:mysql-connector-java')
+    compile("com.h2database:h2")
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+node {
+    version = "7.5.0"
+    download = true
+    nodeModulesDir = file("src/main/resources/static/angular")
+}
+
+task buildClientDev(type: NpmTask, dependsOn: 'npmInstall') {
+    group = 'build'
+    description = 'Compile client side folder for development'
+    args = ['run','build']
+}
+task buildClient(type: NpmTask, dependsOn:'npmInstall') {
+    group = 'build'
+    description = "Compile client side folder for production"
+    args = ['run','buildProd']
+}
+task buildClientWatch(type: NpmTask, dependsOn: 'npmInstall') {
+    group = 'application'
+    description = "Build and watches the client side assets for rebuilding"
+    args = ['run','buildWatch']
+}
+task copyIndexClientDev(type: Copy, dependsOn: [buildClientDev]) {
+    group = 'application'
+    description = 'Copy angular index.html to templates folder for development'
+    from 'src/main/resources/static/public/angular/index.html'
+    into 'src/main/resources/templates'
+}
+task copyIndexClient(type: Copy, dependsOn: [buildClient]) {
+    group = 'application'
+    description = 'Copy angular index.html to templates folder for production'
+    from 'src/main/resources/static/public/angular/index.html'
+    into 'src/main/resources/templates'
+}
+task copyApplicationProperitiesClient(type: Copy) {
+    group = 'application'
+    description = 'Create application.properities file'
+    def file = new File('src/main/resources/application.properties')
+    if (! file.exists()) {
+        copy {
+            from 'src/main/resources/application.properties.dist'
+            into 'src/main/resources'
+            rename {String fileName -> 'application.properties'}
+        }
+    }
+}
+
+bootRun.dependsOn(buildClientDev)
+bootRun.dependsOn(copyIndexClientDev)
+bootRun.dependsOn(copyApplicationProperitiesClient)
+
+jar.dependsOn(buildClient)
