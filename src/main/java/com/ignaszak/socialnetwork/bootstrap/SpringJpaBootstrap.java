@@ -1,7 +1,8 @@
 package com.ignaszak.socialnetwork.bootstrap;
 
+import com.ignaszak.socialnetwork.domain.Post;
 import com.ignaszak.socialnetwork.domain.User;
-import com.ignaszak.socialnetwork.service.user.UserService;
+import com.ignaszak.socialnetwork.service.post.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -13,11 +14,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class SpringJpaBootstrap implements ApplicationListener<ContextRefreshedEvent> {
 
-    private UserService userService;
+    private PostService postService;
 
     @Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
+    public void setPostService(PostService postService) {
+        this.postService = postService;
     }
 
     @Override
@@ -29,6 +30,10 @@ public class SpringJpaBootstrap implements ApplicationListener<ContextRefreshedE
         user.setRole("ROLE_ADMIN");
         user.setCaption("Some caption");
         user.setEnabled(true);
-        userService.createUser(user);
+
+        Post post = new Post();
+        post.setUser(user);
+        post.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus bibendum quam a ligula suscipit, nec iaculis lacus cursus. Mauris sed turpis diam. Sed elit eros, aliquam id imperdiet fringilla, ornare eu est.");
+        postService.savePost(post);
     }
 }

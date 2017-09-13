@@ -11,14 +11,23 @@ buildscript {
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
         classpath("com.moowork.gradle:gradle-node-plugin:1.1.1")
+        classpath('se.transmode.gradle:gradle-docker:1.2')
     }
 }
+
+group = 'springio'
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'com.moowork.node'
+apply plugin: 'docker'
+
+jar {
+    baseName = 'socialnetwork'
+    version  = '0.0.1'
+}
 
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
@@ -83,6 +92,17 @@ task copyApplicationProperitiesClient(type: Copy) {
             from 'src/main/resources/application.properties.dist'
             into 'src/main/resources'
             rename {String fileName -> 'application.properties'}
+        }
+    }
+}
+
+task buildDocker(type: Docker, dependsOn: build) {
+    applicationName = jar.baseName
+    dockerfile = file('Dockerfile')
+    doFirst {
+        copy {
+            from jar
+            into "${stageDir}/target"
         }
     }
 }

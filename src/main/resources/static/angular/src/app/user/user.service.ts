@@ -13,7 +13,7 @@ import {UserServiceInterface} from "./user.service.interface";
 @Injectable()
 export class UserService implements UserServiceInterface{
 
-    private static readonly CURRENT_USER_URL = '/rest-api/current-user';
+    private static readonly GET_CURRENT_USER_URL = '/rest-api/current-user';
     private static readonly GET_USER_BY_USERNAME_URL = '/rest-api/users/search/findUserByUsername?username=';
     private static readonly GET_USER_BY_EMAIL_URL = '/rest-api/users/search/findUserByEmailOrNewEmail?email=';
 
@@ -33,14 +33,14 @@ export class UserService implements UserServiceInterface{
     }
 
     getCurrentUser(): Promise<User> {
-        return this.http.get(UserService.CURRENT_USER_URL)
+        return this.http.get(UserService.GET_CURRENT_USER_URL)
             .toPromise()
             .then(response => response.json() as User)
             .catch(this.handleError);
     }
 
     updateUser(user: User) {
-        this.http.put(UserService.CURRENT_USER_URL, user)
+        this.http.put(UserService.GET_CURRENT_USER_URL, user)
             .subscribe();
     }
 

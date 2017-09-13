@@ -18,6 +18,7 @@ import {LayoutComponent} from './layout/layout.component';
 import {UserService} from "./user/user.service";
 import {HttpModule} from "@angular/http";
 import {UserServiceInterface} from "./user/user.service.interface";
+import {PostService} from "./post/post.service";
 
 @NgModule({
     imports: [
@@ -36,7 +37,10 @@ import {UserServiceInterface} from "./user/user.service.interface";
         AsideToggleDirective
     ],
     bootstrap: [AppComponent],
-    providers: [{provide: 'UserServiceInterface', useClass: UserService}]
+    providers: [
+        {provide: 'UserServiceInterface', useClass: UserService},
+        {provide: 'PostServiceInterface', useClass: PostService}
+    ]
 })
 export class AppModule {
 }

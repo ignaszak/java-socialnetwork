@@ -42,7 +42,7 @@ public class IndexController {
         if (user != null) {
             return "index";
         }
-        return "redirect:/login?error=email-activation";
+        return "redirect:/login";
 
     }
 }
