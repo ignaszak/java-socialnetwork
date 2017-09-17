@@ -4,8 +4,8 @@ import org.springframework.data.rest.core.config.Projection;
 
 import java.util.Date;
 
-@Projection(name = "inlineUser", types = { Post.class })
-public interface InlineUser {
+@Projection(name = "postProjection", types = { Post.class })
+public interface PostProjection {
 
     public Integer getId();
     public String getText();

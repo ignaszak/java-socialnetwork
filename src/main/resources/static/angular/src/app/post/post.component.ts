@@ -5,6 +5,7 @@ import {PostServiceInterface} from "./post.service.interface";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {User} from "../user/user";
 import {UserServiceInterface} from "../user/user.service.interface";
+import {Comment} from "./comment";
 
 @Component({
     selector:    'post-list',
@@ -12,7 +13,7 @@ import {UserServiceInterface} from "../user/user.service.interface";
 })
 export class PostComponent {
 
-    @Input() user: User;
+    @Input() username: string;
     private posts: Post[];
     private postForm: FormGroup;
     currentUser: User;
@@ -29,9 +30,8 @@ export class PostComponent {
 
     ngOnInit(): void {
         this.getCurrentUser();
-        console.log(this.user);
-        if (this.user) {
-            this.getPostsByUser(this.user);
+        if (this.username) {
+            this.getPostsByUsername(this.username);
         } else {
             this.getPostsByCurrentUser();
         }
@@ -47,12 +47,32 @@ export class PostComponent {
         }
     }
 
-    private getPostsByCurrentUser(): void {
-        this.postService.getPostsByCurrentUser().then(posts => this.posts = posts);
+    commentPost(id: number): void {
+        let comment: Comment = new Comment();
+        comment.post = this.posts.find(post => post.id == id);
+        comment.user = this.currentUser;
+        this.postService.comment(comment);
     }
 
-    private getPostsByUser(user: User): void {
-        this.postService.getPostByUser(user).then(posts => this.posts = posts);
+    private getPostsByCurrentUser(): void {
+        this.postService.getPostsByCurrentUser().then(posts => {
+            this.posts = posts;
+            this.loadCommentsToPosts();
+        });
+    }
+
+    private getPostsByUsername(username: string): void {
+        this.postService.getPostsByUsername(username).then(posts => {
+            this.posts = posts;
+            this.loadCommentsToPosts();
+        });
+    }
+
+    private loadCommentsToPosts(): void {
+        let count = this.posts.length;
+        for (let i = 0; i < count; ++ i)
+            this.postService.getCommentsByPost(this.posts[i])
+                .then(comments => this.posts[i].comments = comments);
     }
 
     private getCurrentUser(): void {

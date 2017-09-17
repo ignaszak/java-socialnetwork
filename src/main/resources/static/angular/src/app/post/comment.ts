@@ -1,10 +1,10 @@
-import {Comment} from "./comment";
+import {Post} from "./post";
 import {User} from "../user/user";
 
-export class Post {
+export class Comment {
     id: number;
+    post: Post;
     user: User;
     text: string;
     createdDate: any;
-    comments: Comment[];
 }

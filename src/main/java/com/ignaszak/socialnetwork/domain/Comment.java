@@ -2,11 +2,10 @@ package com.ignaszak.socialnetwork.domain;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.Set;
 
 @Entity
-@Table(name = "post")
-public class Post {
+@Table(name = "comment")
+public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -17,15 +16,16 @@ public class Post {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @OneToOne(cascade = CascadeType.DETACH)
+    @JoinColumn(name = "post_id")
+    private Post post;
+
     @Column(name = "text", nullable = false)
     private String text;
 
     @Column(name = "created_date", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", cascade = CascadeType.DETACH)
-    private Set<Comment> comments;
 
     @PrePersist
     protected void onCreate() {
@@ -36,12 +36,24 @@ public class Post {
         return id;
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public User getUser() {
         return user;
     }
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Post getPost() {
+        return post;
+    }
+
+    public void setPost(Post post) {
+        this.post = post;
     }
 
     public String getText() {
@@ -56,7 +68,7 @@ public class Post {
         return createdDate;
     }
 
-    public Set<Comment> getComments() {
-        return comments;
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
     }
 }
