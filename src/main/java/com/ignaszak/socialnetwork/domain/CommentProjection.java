@@ -7,8 +7,8 @@ import java.util.Date;
 @Projection(name = "commentProjection", types = { Comment.class })
 public interface CommentProjection {
 
-    public Integer getId();
-    public User getUser();
-    public String getText();
-    public Date getCreatedDate();
+    Integer getId();
+    User getUser();
+    String getText();
+    Date getCreatedDate();
 }

@@ -1,19 +1,16 @@
-package com.ignaszak.socialnetwork.controller;
+package com.ignaszak.socialnetwork.controller.rest;
 
 import com.ignaszak.socialnetwork.domain.Post;
 import com.ignaszak.socialnetwork.domain.User;
 import com.ignaszak.socialnetwork.service.post.PostService;
 import com.ignaszak.socialnetwork.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.rest.webmvc.RepositoryRestController;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-@RepositoryRestController
-@RequestMapping("rest-api/post")
+@RestController
+@RequestMapping("rest-api/posts")
 public class PostRestController {
 
     private PostService postService;
@@ -30,12 +27,11 @@ public class PostRestController {
         this.userService = userService;
     }
 
-    @RequestMapping(method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public Post add(@RequestBody Post post) {
+    @RequestMapping(method = RequestMethod.PUT)
+    public ResponseEntity<Integer> add(@RequestBody Post post) {
         User currentUser = userService.getCurrentUser();
         post.setUser(currentUser);
         postService.savePost(post);
-        return post;
+        return new ResponseEntity<>(post.getId(), HttpStatus.OK);
     }
 }

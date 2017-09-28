@@ -12,11 +12,11 @@ public class Comment {
     @Column(name = "id", nullable = false, updatable = false)
     private Integer id;
 
-    @OneToOne(cascade = CascadeType.DETACH)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne(cascade = CascadeType.DETACH)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
     @JoinColumn(name = "post_id")
     private Post post;
 

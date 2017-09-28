@@ -5,4 +5,5 @@ import com.ignaszak.socialnetwork.domain.Post;
 public interface PostService {
 
     Post savePost(Post post);
+    Post getById(Integer id);
 }

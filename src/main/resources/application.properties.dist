@@ -18,7 +18,7 @@ spring.jpa.hibernate.naming-strategy = org.hibernate.cfg.ImprovedNamingStrategy
 spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.MySQL5Dialect
 
 # REST API CONF
-spring.data.rest.base-path = /rest-api
+spring.data.rest.base-path = /rest-api/repository
 spring.data.rest.default-page-size = 5
 
 # THYMELEAF

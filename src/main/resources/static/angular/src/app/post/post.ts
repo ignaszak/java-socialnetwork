@@ -7,4 +7,9 @@ export class Post {
     text: string;
     createdDate: any;
     comments: Comment[];
+    commentsNextPage: number;
+
+    public isAuthor(user: User): boolean {
+        return this.user.isEqualsTo(user);
+    }
 }

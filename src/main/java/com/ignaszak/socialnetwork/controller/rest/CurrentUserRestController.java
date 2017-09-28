@@ -1,4 +1,4 @@
-package com.ignaszak.socialnetwork.controller;
+package com.ignaszak.socialnetwork.controller.rest;
 
 import com.ignaszak.socialnetwork.domain.User;
 import com.ignaszak.socialnetwork.model.mail.EmailSender;
@@ -13,8 +13,8 @@ import java.util.Random;
 import java.util.UUID;
 
 @RepositoryRestController
-@RequestMapping("rest-api/current-user")
-public class UserRestController {
+@RequestMapping("rest-api/users/current")
+public class CurrentUserRestController {
 
     private UserService userService;
 

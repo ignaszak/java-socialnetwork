@@ -87,5 +87,29 @@ public class SpringJpaBootstrap implements ApplicationListener<ContextRefreshedE
         comment.setPost(post);
         comment.setText("Sed elit eros.");
         commentService.saveComment(comment);
+
+        comment = new Comment();
+        comment.setUser(user);
+        comment.setPost(post);
+        comment.setText("Sed elit eros.");
+        commentService.saveComment(comment);
+
+        comment = new Comment();
+        comment.setUser(user);
+        comment.setPost(post);
+        comment.setText("Sed elit eros.");
+        commentService.saveComment(comment);
+
+        comment = new Comment();
+        comment.setUser(user);
+        comment.setPost(post);
+        comment.setText("Sed elit eros.");
+        commentService.saveComment(comment);
+
+        comment = new Comment();
+        comment.setUser(user);
+        comment.setPost(post);
+        comment.setText("Sed elit eros.");
+        commentService.saveComment(comment);
     }
 }

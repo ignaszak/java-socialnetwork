@@ -7,8 +7,8 @@ import java.util.Date;
 @Projection(name = "postProjection", types = { Post.class })
 public interface PostProjection {
 
-    public Integer getId();
-    public String getText();
-    public Date getCreatedDate();
-    public User getUser();
+    Integer getId();
+    String getText();
+    Date getCreatedDate();
+    User getUser();
 }

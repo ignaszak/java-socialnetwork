@@ -1,4 +1,4 @@
-import {Component, Inject, Input} from '@angular/core';
+import {Component, Inject, Input, OnInit} from '@angular/core';
 import {Post} from "./post";
 
 import {PostServiceInterface} from "./post.service.interface";
@@ -11,7 +11,7 @@ import {Comment} from "./comment";
     selector:    'post-list',
     templateUrl: 'post.component.html'
 })
-export class PostComponent {
+export class PostComponent implements OnInit {
 
     @Input() username: string;
     private posts: Post[];
@@ -41,38 +41,67 @@ export class PostComponent {
         if (this.postForm.valid) {
             let post: Post = this.postForm.value;
             post.user = this.currentUser;
-            this.postService.addPost(post);
-            this.prependPost(post);
+            post.comments = [];
+            this.postService.addPost(post).then(postId => {
+                post.id = postId;
+                this.prependPost(post);
+            });
             this.postForm.reset();
         }
     }
 
-    commentPost(id: number): void {
+    commentPost(id: number, event: any): void {
         let comment: Comment = new Comment();
-        comment.post = this.posts.find(post => post.id == id);
-        comment.user = this.currentUser;
-        this.postService.comment(comment);
+        let element = event.currentTarget || event.srcElement;
+        comment.text = element.value;
+        if (comment.text) {
+            comment.user = this.currentUser;
+            this.postService.addComment(comment, id).then(commentId => {
+                let post: Post = this.posts.find(post => post.id == id);
+                comment.id = commentId;
+                post.comments.push(comment);
+            });
+            element.value = '';
+        }
+    }
+
+    loadMoreComments(post: Post): void {
+        this.postService.getCommentsByPost(post, post.commentsNextPage)
+            .then(response => {
+                post.commentsNextPage = response.getNextPage();
+                if (typeof post.comments === "undefined") {
+                    post.comments = response.getComments().reverse();
+                } else {
+                    response.getComments().reverse().forEach(comment => {
+                        post.comments.unshift(comment);
+                    });
+                }
+            });
+    }
+
+    deleteComment(comment: Comment): void {
+        console.log(comment);
     }
 
     private getPostsByCurrentUser(): void {
         this.postService.getPostsByCurrentUser().then(posts => {
+            console.log(posts);
             this.posts = posts;
             this.loadCommentsToPosts();
         });
     }
 
     private getPostsByUsername(username: string): void {
-        this.postService.getPostsByUsername(username).then(posts => {
-            this.posts = posts;
+        this.postService.getPostsByUsername(username).then(response => {
+            this.posts = response.getPosts();
             this.loadCommentsToPosts();
         });
     }
 
     private loadCommentsToPosts(): void {
-        let count = this.posts.length;
-        for (let i = 0; i < count; ++ i)
-            this.postService.getCommentsByPost(this.posts[i])
-                .then(comments => this.posts[i].comments = comments);
+        this.posts.forEach(post => {
+            this.loadMoreComments(post);
+        });
     }
 
     private getCurrentUser(): void {
