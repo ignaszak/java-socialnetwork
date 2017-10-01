@@ -80,17 +80,21 @@ public class UserAuthController {
         }
         com.ignaszak.socialnetwork.domain.User user = userService.getUserFromUserRegistrationForm(userRegistrationForm);
         String code = UUID.randomUUID().toString();
-        user.setEnabled(false);
-        user.setActivationCode(code);
-        userService.createUser(user);
-        emailSender.send(
-                user.getEmail(),
-                "User activation",
-                "Your activation link: "
-                        + request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
-                        + "/user/email-activation?code=" + code
-        );
-        return "redirect:/" + userRegistrationForm.getUsername();
+        try {
+            userService.add(user);
+            emailSender.send(
+                    user.getEmail(),
+                    "User activation",
+                    "Your activation link: "
+                            + request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+                            + "/user/email-activation?code=" + code
+            );
+            user.setEnabled(false);
+            user.setActivationCode(code);
+        } catch (Throwable e) {
+            user.setEnabled(true);
+        }
+        return "redirect:/login?activation";
     }
 
     private String redirectToIndexIfUserIsLoggedIn(String view) {

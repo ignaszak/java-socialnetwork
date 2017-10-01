@@ -45,71 +45,71 @@ public class SpringJpaBootstrap implements ApplicationListener<ContextRefreshedE
         user.setRole("ROLE_ADMIN");
         user.setCaption("Some caption");
         user.setEnabled(true);
-        userService.saveUser(user);
+        userService.save(user);
 
         Post post = new Post();
         post.setUser(user);
         post.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus bibendum quam a ligula suscipit, nec iaculis lacus cursus. Mauris sed turpis diam. Sed elit eros, aliquam id imperdiet fringilla, ornare eu est.");
-        postService.savePost(post);
+        postService.save(post);
 
         Comment comment = new Comment();
         comment.setUser(user);
         comment.setPost(post);
         comment.setText("Lorem ipsum dolor sit amet.");
-        commentService.saveComment(comment);
+        commentService.save(comment);
 
         comment = new Comment();
         comment.setUser(user);
         comment.setPost(post);
         comment.setText("Consectetur adipiscing elit.");
-        commentService.saveComment(comment);
+        commentService.save(comment);
 
         comment = new Comment();
         comment.setUser(user);
         comment.setPost(post);
         comment.setText("Vivamus bibendum quam a ligula suscipit.");
-        commentService.saveComment(comment);
+        commentService.save(comment);
 
         comment = new Comment();
         comment.setUser(user);
         comment.setPost(post);
         comment.setText("Nec iaculis lacus cursus.");
-        commentService.saveComment(comment);
+        commentService.save(comment);
 
         comment = new Comment();
         comment.setUser(user);
         comment.setPost(post);
         comment.setText("Mauris sed turpis diam.");
-        commentService.saveComment(comment);
+        commentService.save(comment);
 
         comment = new Comment();
         comment.setUser(user);
         comment.setPost(post);
         comment.setText("Sed elit eros.");
-        commentService.saveComment(comment);
+        commentService.save(comment);
 
         comment = new Comment();
         comment.setUser(user);
         comment.setPost(post);
         comment.setText("Sed elit eros.");
-        commentService.saveComment(comment);
+        commentService.save(comment);
 
         comment = new Comment();
         comment.setUser(user);
         comment.setPost(post);
         comment.setText("Sed elit eros.");
-        commentService.saveComment(comment);
+        commentService.save(comment);
 
         comment = new Comment();
         comment.setUser(user);
         comment.setPost(post);
         comment.setText("Sed elit eros.");
-        commentService.saveComment(comment);
+        commentService.save(comment);
 
         comment = new Comment();
         comment.setUser(user);
         comment.setPost(post);
         comment.setText("Sed elit eros.");
-        commentService.saveComment(comment);
+        commentService.save(comment);
     }
 }

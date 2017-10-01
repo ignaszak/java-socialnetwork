@@ -155,4 +155,8 @@ public class User {
     public void setComments(Set<Comment> comments) {
         this.comments = comments;
     }
+
+    public boolean isEqualsTo(User user) {
+        return this.username.equals(user.username);
+    }
 }

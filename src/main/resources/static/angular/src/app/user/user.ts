@@ -10,18 +10,6 @@ export class User {
     caption: string;
     status: string;
 
-    constructor(json?: any) {
-        if (json) {
-            this.id       = json.id || null;
-            this.email    = json.email || '';
-            this.username = json.username || '';
-            this.password = json.password || '';
-            this.role     = json.role || '';
-            this.caption  = json.caption || '';
-            this.status   = json.status || '';
-        }
-    }
-
     public isEqualsTo(user: User): boolean {
         return this.username == user.username;
     }

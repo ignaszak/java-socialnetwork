@@ -2,20 +2,22 @@ package com.ignaszak.socialnetwork.service.user;
 
 import com.ignaszak.socialnetwork.domain.User;
 import com.ignaszak.socialnetwork.form.UserRegistrationForm;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 /**
  * Created by tomek on 05.04.17.
  */
 public interface UserService {
-    Iterable<User> findAll();
-    User findUserByEmailOrUsername(String find);
+    Page<User> getAll(Pageable page);
     User getUserById(Integer id);
     User getUserByUsername(String username);
     User getUserByEmail(String email);
-    User createUser(User user);
     User getUserFromUserRegistrationForm(UserRegistrationForm userRegistrationForm);
-    User saveUser(User user);
-    void deleteUser(User user);
     User getCurrentUser();
     User getUserByActivationCode(String code);
+    User getUserByEmailOrNewEmail(String email);
+    User add(User user);
+    User save(User user);
+    void delete(User user);
 }

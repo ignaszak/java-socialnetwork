@@ -4,20 +4,17 @@ import com.ignaszak.socialnetwork.domain.User;
 import com.ignaszak.socialnetwork.model.mail.EmailSender;
 import com.ignaszak.socialnetwork.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Random;
 import java.util.UUID;
 
-@RepositoryRestController
+@RestController
 @RequestMapping("rest-api/users/current")
 public class CurrentUserRestController {
 
     private UserService userService;
-
     private EmailSender emailSender;
 
     @Autowired
@@ -30,14 +27,12 @@ public class CurrentUserRestController {
         this.emailSender = emailSender;
     }
 
-    @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public User get() {
         return userService.getCurrentUser();
     }
 
-    @RequestMapping(method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
+    @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public User update(@RequestBody User user, HttpServletRequest request) {
         User currentUser = userService.getCurrentUser();
         currentUser.setCaption(user.getCaption());
@@ -54,7 +49,7 @@ public class CurrentUserRestController {
                             + "/user/email-activation?code=" + code
             );
         }
-        userService.saveUser(currentUser);
+        userService.save(currentUser);
         currentUser.setActivationCode(null);
         return currentUser;
     }

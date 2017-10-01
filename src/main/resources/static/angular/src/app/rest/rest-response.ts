@@ -1,6 +1,6 @@
 import {Response} from "@angular/http";
 import {Post} from "../post/post";
-import {Comment} from "../post/comment";
+import {Comment} from "../comment/comment";
 
 export class RestResponse {
 
@@ -11,23 +11,23 @@ export class RestResponse {
     }
 
     public getComments(): Comment[] {
-        return this.json._embedded.comments || null;
+        return this.json.content || null;
     }
 
     public getPosts(): Post[] {
-        return this.json._embedded.posts || null;
+        return this.json.content || null;
     }
 
     public getPageSize(): number {
-        return this.json.page.size;
+        return this.json.size;
     }
 
     public getTotalPages(): number {
-        return this.json.page.totalPages;
+        return this.json.totalPages;
     }
 
     public getTotalElements(): number {
-        return this.json.page.totalElements;
+        return this.json.totalElements;
     }
 
     public hasNextPage(): boolean {
@@ -35,11 +35,11 @@ export class RestResponse {
     }
 
     public getNextPage(): number {
-        return this.hasNextPage() ? ++ this.json.page.number : null;
+        return this.hasNextPage() ? ++ this.json.number : null;
     }
 
     public getCurrentPage(): number {
-        return this.json.page.number;
+        return this.json.number;
     }
 
 }

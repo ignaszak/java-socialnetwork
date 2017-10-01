@@ -1,14 +1,15 @@
 package com.ignaszak.socialnetwork.repository;
 
 import com.ignaszak.socialnetwork.domain.Comment;
+import com.ignaszak.socialnetwork.domain.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.PagingAndSortingRepository;
-import org.springframework.data.repository.query.Param;
-import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-@RepositoryRestResource()
-public interface CommentRepository extends PagingAndSortingRepository<Comment, Integer> {
+@Repository
+public interface CommentRepository extends JpaRepository<Comment, Integer> {
 
-    Page<Comment> queryAllByPost_IdOrderByCreatedDateDesc(@Param("postId") Integer postId, Pageable page);
+    Page<Comment> queryAllByPostOrderByCreatedDateDesc(Post post, Pageable page);
+    Comment findCommentById(Integer id);
 }

@@ -1,18 +1,15 @@
 package com.ignaszak.socialnetwork.repository;
 
 import com.ignaszak.socialnetwork.domain.Post;
+import com.ignaszak.socialnetwork.domain.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.PagingAndSortingRepository;
-import org.springframework.data.repository.query.Param;
-import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-@RepositoryRestResource()
-public interface PostRepository extends PagingAndSortingRepository<Post, Integer> {
+@Repository
+public interface PostRepository extends JpaRepository<Post, Integer> {
 
-    @Query("SELECT p FROM Post p LEFT JOIN p.user u WHERE u.username = ?#{principal.username} ORDER BY p.createdDate DESC")
-    Page<Post> queryAllByCurrentUser(Pageable page);
-    Page<Post> queryAllByUser_UsernameOrderByCreatedDateDesc(@Param("username") String username, Pageable page);
+    Page<Post> queryAllByUserOrderByCreatedDateDesc(User user, Pageable page);
     Post findById(Integer id);
 }

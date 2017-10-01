@@ -18,6 +18,14 @@
 
                 <h1 class="text-center mb-5">Social Network</h1>
 
+                <div class="card-group mb-4" th:unless="${param.activation == null}">
+                    <div class="card p-4">
+                        <div class="card-block">
+                            <h2 class="text-center">We have sent you an activation code, please check your email.</h2>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="card-group mb-4" th:unless="${param.logout == null}">
                     <div class="card p-4">
                         <div class="card-block">

@@ -33,13 +33,18 @@
                         <div class="col-sm-1">
                             <p style="font-size: 30px; font-weight: bold; margin-bottom: 0"><i class="icon-user"></i></p>
                         </div>
-                        <div class="col-sm-11">
+                        <div class="col-sm-10">
                             <a href="#" [routerLink]="['/', post.user.username]">
                                 {{post.user.username}}
                             </a>
                             <br />
                             <i class="icon-calendar"></i>
                             {{post.createdDate|date: 'dd-MM-yyyy HH:mm'}}
+                        </div>
+                        <div class="col-sm-1 text-right" *ngIf="post.user.username == currentUser.username">
+                            <a href="javascript:" (click)="deletePost(post)">
+                                <i class="icon-close"></i>
+                            </a>
                         </div>
                     </div>
                     <p>{{post.text}}</p>
@@ -63,8 +68,10 @@
                                         {{comment.createdDate|date: 'dd-MM-yyyy HH:mm'}}
                                     </small>
                                 </div>
-                                <div class="col-sm-6 text-right" *ngIf="comment.isAuthor(currentUser)">
-                                    <a href="javascript:" (click)="deleteComment(comment)">[delete]</a>
+                                <div class="col-sm-6 text-right" *ngIf="comment.user.username == currentUser.username || post.user.username == currentUser.username">
+                                    <a href="javascript:" (click)="deleteComment(comment, post)">
+                                        <i class="icon-close"></i>
+                                    </a>
                                 </div>
                             </div>
                             <p>{{comment.text}}</p>

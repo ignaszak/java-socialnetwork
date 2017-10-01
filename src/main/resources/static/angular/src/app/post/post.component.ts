@@ -5,7 +5,8 @@ import {PostServiceInterface} from "./post.service.interface";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {User} from "../user/user";
 import {UserServiceInterface} from "../user/user.service.interface";
-import {Comment} from "./comment";
+import {CommentServiceInterface} from "../comment/comment.service.interface";
+import {Comment} from "../comment/comment";
 
 @Component({
     selector:    'post-list',
@@ -17,10 +18,12 @@ export class PostComponent implements OnInit {
     private posts: Post[];
     private postForm: FormGroup;
     currentUser: User;
+    user: User;
 
     constructor(
         @Inject('PostServiceInterface') private postService: PostServiceInterface,
-        @Inject('UserServiceInterface') private userService: UserServiceInterface
+        @Inject('UserServiceInterface') private userService: UserServiceInterface,
+        @Inject('CommentServiceInterface') private commentService: CommentServiceInterface
     ) {
         this.posts = [];
         this.postForm = new FormGroup({
@@ -31,7 +34,10 @@ export class PostComponent implements OnInit {
     ngOnInit(): void {
         this.getCurrentUser();
         if (this.username) {
-            this.getPostsByUsername(this.username);
+            this.userService.getUserByUsername(this.username).then(user => {
+                this.user = user;
+                this.getPostsByUser(user);
+            });
         } else {
             this.getPostsByCurrentUser();
         }
@@ -56,7 +62,7 @@ export class PostComponent implements OnInit {
         comment.text = element.value;
         if (comment.text) {
             comment.user = this.currentUser;
-            this.postService.addComment(comment, id).then(commentId => {
+            this.commentService.addComment(comment, id).then(commentId => {
                 let post: Post = this.posts.find(post => post.id == id);
                 comment.id = commentId;
                 post.comments.push(comment);
@@ -66,7 +72,7 @@ export class PostComponent implements OnInit {
     }
 
     loadMoreComments(post: Post): void {
-        this.postService.getCommentsByPost(post, post.commentsNextPage)
+        this.commentService.getCommentsByPost(post, post.commentsNextPage)
             .then(response => {
                 post.commentsNextPage = response.getNextPage();
                 if (typeof post.comments === "undefined") {
@@ -79,20 +85,30 @@ export class PostComponent implements OnInit {
             });
     }
 
-    deleteComment(comment: Comment): void {
-        console.log(comment);
+    deletePost(post: Post): void {
+        this.postService.deletePost(post).then(() => {
+            let postIndex = this.posts.indexOf(post);
+            this.posts.splice(postIndex, 1);
+        });
+    }
+
+    deleteComment(comment: Comment, post: Post): void {
+        this.commentService.deleteComment(comment).then(() => {
+            let commentIndex = post.comments.indexOf(comment);
+            let postIndex = this.posts.indexOf(post);
+            this.posts[postIndex].comments.splice(commentIndex, 1);
+        })
     }
 
     private getPostsByCurrentUser(): void {
         this.postService.getPostsByCurrentUser().then(posts => {
-            console.log(posts);
             this.posts = posts;
             this.loadCommentsToPosts();
         });
     }
 
-    private getPostsByUsername(username: string): void {
-        this.postService.getPostsByUsername(username).then(response => {
+    private getPostsByUser(user: User): void {
+        this.postService.getPostsByUser(user).then(response => {
             this.posts = response.getPosts();
             this.loadCommentsToPosts();
         });

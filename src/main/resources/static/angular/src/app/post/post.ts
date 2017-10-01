@@ -1,5 +1,5 @@
-import {Comment} from "./comment";
 import {User} from "../user/user";
+import {Comment} from "../comment/comment";
 
 export class Post {
     id: number;

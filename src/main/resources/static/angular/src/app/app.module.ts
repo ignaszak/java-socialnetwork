@@ -20,6 +20,7 @@ import {HttpModule} from "@angular/http";
 import {UserServiceInterface} from "./user/user.service.interface";
 import {PostService} from "./post/post.service";
 import {RestProvider} from "./rest/rest-provider";
+import {CommentService} from "./comment/comment.service";
 
 @NgModule({
     imports: [
@@ -41,7 +42,8 @@ import {RestProvider} from "./rest/rest-provider";
     providers: [
         {provide: 'RestProviderInterface', useClass: RestProvider},
         {provide: 'UserServiceInterface', useClass: UserService},
-        {provide: 'PostServiceInterface', useClass: PostService}
+        {provide: 'PostServiceInterface', useClass: PostService},
+        {provide: 'CommentServiceInterface', useClass: CommentService}
     ]
 })
 export class AppModule {

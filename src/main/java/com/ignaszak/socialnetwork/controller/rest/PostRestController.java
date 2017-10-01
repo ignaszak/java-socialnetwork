@@ -5,8 +5,12 @@ import com.ignaszak.socialnetwork.domain.User;
 import com.ignaszak.socialnetwork.service.post.PostService;
 import com.ignaszak.socialnetwork.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 public class PostRestController {
 
     private PostService postService;
-
     private UserService userService;
 
     @Autowired
@@ -27,11 +30,25 @@ public class PostRestController {
         this.userService = userService;
     }
 
-    @RequestMapping(method = RequestMethod.PUT)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @Secured("ROLE_ADMIN")
+    public Page<Post> findAll(Pageable page) {
+        return postService.getAll(page);
+    }
+
+    @PutMapping
     public ResponseEntity<Integer> add(@RequestBody Post post) {
         User currentUser = userService.getCurrentUser();
         post.setUser(currentUser);
-        postService.savePost(post);
+        postService.save(post);
         return new ResponseEntity<>(post.getId(), HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public void delete(@PathVariable Integer id) {
+        User currentUser = userService.getCurrentUser();
+        Post post = postService.getPostById(id);
+        if (post.isAuthor(currentUser))
+            postService.delete(post);
     }
 }

@@ -1,12 +1,5 @@
 package com.ignaszak.socialnetwork.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.databind.annotation.JsonAppend;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
@@ -24,15 +17,15 @@ public class Post {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private Set<Comment> comments;
+
     @Column(name = "text", nullable = false)
     private String text;
 
     @Column(name = "created_date", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", cascade = CascadeType.DETACH)
-    private Set<Comment> comments;
 
     @PrePersist
     protected void onCreate() {
@@ -63,7 +56,7 @@ public class Post {
         return createdDate;
     }
 
-    public Set<Comment> getComments() {
-        return comments;
+    public boolean isAuthor(User user) {
+        return this.user.isEqualsTo(user);
     }
 }

@@ -21,36 +21,36 @@ export class UserService implements UserServiceInterface{
     ) {}
 
     getUserByUsername(username: string): Promise<User> {
-        let path: string = this.provider.getPath(RestProvider.GET_USER_BY_USERNAME_URL, {'username': username});
+        let path: string = this.provider.getPath(RestProvider.USER_BY_USERNAME, {'username': username});
         return this.http.get(path)
             .toPromise()
-            .then(this.getUser)
-            .catch(this.handleError);
+            .then(response => response.json() as User)
+            .catch(RestProvider.handleError);
     }
 
     getUserByEmail(email: string): Promise<User> {
-        let path: string = this.provider.getPath(RestProvider.GET_USER_BY_EMAIL_URL, {'email': email});
+        let path: string = this.provider.getPath(RestProvider.USER_BY_EMAIL, {'email': email});
         return this.http.get(path)
             .toPromise()
-            .then(this.getUser);
+            .then(response => response.json() as User)
+            .catch(RestProvider.handleError);
     }
 
     getCurrentUser(): Promise<User> {
-        return this.http.get(RestProvider.GET_CURRENT_USER_URL)
+        return this.http.get(RestProvider.USER_CURRENT)
             .toPromise()
-            .then(this.getUser)
-            .catch(this.handleError);
+            .then(response => response.json() as User)
+            .catch(RestProvider.handleError);
     }
 
     updateUser(user: User) {
-        this.http.put(RestProvider.GET_CURRENT_USER_URL, user)
-            .subscribe();
+        this.http.put(RestProvider.USER_CURRENT, user).subscribe();
     }
 
     static uniqueEmail(http: Http, currentEmail: String = null): any {
         return (control: FormControl) => {
             return new Promise((resolve) => {
-                let path: string = RestProvider.getPath(RestProvider.GET_USER_BY_EMAIL_URL, {
+                let path: string = RestProvider.getPath(RestProvider.USER_BY_EMAIL, {
                     'email': control.value
                 });
                 http.get(path)
@@ -67,13 +67,4 @@ export class UserService implements UserServiceInterface{
             });
         }
     };
-
-    private handleError(error: any): Promise<any> {
-        console.error('An error occurred', error);
-        return Promise.reject(error.message || error);
-    }
-
-    private getUser(response: Response): User {
-        return new User(response.json());
-    }
 }

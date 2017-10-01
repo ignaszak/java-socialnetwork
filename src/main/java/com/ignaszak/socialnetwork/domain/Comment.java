@@ -71,4 +71,8 @@ public class Comment {
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
     }
+
+    public boolean isAuthor(User user) {
+        return this.user.isEqualsTo(user);
+    }
 }

@@ -4,6 +4,8 @@ import com.ignaszak.socialnetwork.domain.User;
 import com.ignaszak.socialnetwork.form.UserRegistrationForm;
 import com.ignaszak.socialnetwork.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 /**
@@ -14,26 +16,14 @@ public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
 
-    private SecurityService securityService;
-
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    @Autowired
-    public void setSecurityService(SecurityService securityService) {
-        this.securityService = securityService;
-    }
-
     @Override
-    public Iterable<User> findAll() {
-        return userRepository.findAll();
-    }
-
-    @Override
-    public User findUserByEmailOrUsername(String find) {
-        return userRepository.findUserByEmailOrUsername(find, find);
+    public Page<User> getAll(Pageable page) {
+        return userRepository.findAll(page);
     }
 
     @Override
@@ -52,7 +42,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User createUser(User user) {
+    public User add(User user) {
         return userRepository.save(user);
     }
 
@@ -67,12 +57,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User saveUser(User user) {
+    public User save(User user) {
         return userRepository.save(user);
     }
 
     @Override
-    public void deleteUser(User user) {
+    public void delete(User user) {
         userRepository.delete(user);
     }
 
@@ -84,5 +74,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserByActivationCode(String code) {
         return userRepository.findUserByActivationCode(code);
+    }
+
+    @Override
+    public User getUserByEmailOrNewEmail(String email) {
+        return userRepository.findUserByEmailOrNewEmail(email, email);
     }
 }

@@ -28,7 +28,7 @@ public class UserActivationController {
             }
             user.setNewEmail(null);
             user.setEnabled(true);
-            userService.saveUser(user);
+            userService.save(user);
             return new ModelAndView("activation_code", "success", true);
         } catch (NullPointerException e) {
             return new ModelAndView("activation_code", "success", false);
