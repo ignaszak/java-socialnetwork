@@ -5,6 +5,8 @@ import net.ignaszak.socialnetwork.form.UserRegistrationForm;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import javax.jws.soap.SOAPBinding;
+
 /**
  * Created by tomek on 05.04.17.
  */
@@ -20,4 +22,6 @@ public interface UserService {
     User add(User user);
     User save(User user);
     void delete(User user);
+    Page<User> getFriendsByUser(User user, Pageable page);
+    Page<User> getInvitationsByUser(User user, Pageable page);
 }

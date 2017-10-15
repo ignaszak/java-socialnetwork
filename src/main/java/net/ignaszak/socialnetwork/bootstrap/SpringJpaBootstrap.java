@@ -2,9 +2,11 @@ package net.ignaszak.socialnetwork.bootstrap;
 
 import net.ignaszak.socialnetwork.domain.Comment;
 import net.ignaszak.socialnetwork.domain.Post;
+import net.ignaszak.socialnetwork.domain.Relation;
 import net.ignaszak.socialnetwork.domain.User;
 import net.ignaszak.socialnetwork.service.comment.CommentService;
 import net.ignaszak.socialnetwork.service.post.PostService;
+import net.ignaszak.socialnetwork.service.relation.RelationService;
 import net.ignaszak.socialnetwork.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
@@ -20,6 +22,7 @@ public class SpringJpaBootstrap implements ApplicationListener<ContextRefreshedE
     private UserService userService;
     private PostService postService;
     private CommentService commentService;
+    private RelationService relationService;
 
     @Autowired
     public void setUserService(UserService userService) {
@@ -36,8 +39,13 @@ public class SpringJpaBootstrap implements ApplicationListener<ContextRefreshedE
         this.commentService = commentService;
     }
 
+    @Autowired
+    public void setRelationService(RelationService relationService) {
+        this.relationService = relationService;
+    }
+
     @Override
-    public void onApplicationEvent(ContextRefreshedEvent event) {
+    public void onApplicationEvent(ContextRefreshedEvent event)  {
         User user = new User();
         user.setUsername("admin");
         user.setPassword("admin123");
@@ -46,6 +54,19 @@ public class SpringJpaBootstrap implements ApplicationListener<ContextRefreshedE
         user.setCaption("Some caption");
         user.setEnabled(true);
         userService.save(user);
+
+        User user2 = new User();
+        user2.setUsername("test");
+        user2.setPassword("test123");
+        user2.setEmail("test@test.com");
+        user2.setRole("ROLE_ADMIN");
+        user2.setCaption("Some caption");
+        user2.setEnabled(true);
+        userService.save(user2);
+
+        try {
+            relationService.accept(new Relation(user, user2));
+        } catch (Exception e) {}
 
         Post post = new Post();
         post.setUser(user);

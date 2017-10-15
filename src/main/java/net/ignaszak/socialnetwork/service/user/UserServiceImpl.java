@@ -80,4 +80,14 @@ public class UserServiceImpl implements UserService {
     public User getUserByEmailOrNewEmail(String email) {
         return userRepository.findUserByEmailOrNewEmail(email, email);
     }
+
+    @Override
+    public Page<User> getFriendsByUser(User user, Pageable page) {
+        return userRepository.findFriendsByUserAndRelationStatus(user, true, page);
+    }
+
+    @Override
+    public Page<User> getInvitationsByUser(User user, Pageable page) {
+        return userRepository.findFriendsByUserAndRelationStatus(user, false, page);
+    }
 }

@@ -15,11 +15,11 @@ export class PostService implements PostServiceInterface {
         @Inject('RestProviderInterface') private provider: RestProviderInterface
     ) {}
 
-    getPostsByCurrentUser(page: number = 0): Promise<Post[]> {
+    getPostsByCurrentUser(page: number = 0): Promise<RestResponse> {
         let path = this.provider.getPath(RestProvider.FEED_PAGEABLE, {'page': page});
         return this.http.get(path)
             .toPromise()
-            .then(response => response.json().content as Post[])
+            .then(RestProvider.getRestResponse)
             .catch(RestProvider.handleError);
     }
 

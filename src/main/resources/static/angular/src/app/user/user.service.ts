@@ -11,6 +11,7 @@ import {FormControl} from "@angular/forms";
 import {UserServiceInterface} from "./user.service.interface";
 import {RestProviderInterface} from "../rest/rest-provider.interface";
 import {RestProvider} from "../rest/rest-provider";
+import {RestResponse} from "../rest/rest-response";
 
 @Injectable()
 export class UserService implements UserServiceInterface{
@@ -45,6 +46,22 @@ export class UserService implements UserServiceInterface{
 
     updateUser(user: User) {
         this.http.put(RestProvider.USER_CURRENT, user).subscribe();
+    }
+
+    getFriendsByUser(user: User): Promise<RestResponse> {
+        let path: string = this.provider.getPath(RestProvider.USER_FRIENDS, {'userId': user.id});
+        return this.http.get(path)
+            .toPromise()
+            .then(RestProvider.getRestResponse)
+            .catch(RestProvider.handleError);
+    }
+
+    getInvitationsbyUser(user: User): Promise<RestResponse> {
+        let path: string = this.provider.getPath(RestProvider.USER_FRIENDS, {'userId': user.id});
+        return this.http.get(path)
+            .toPromise()
+            .then(RestProvider.getRestResponse)
+            .catch(RestProvider.handleError);
     }
 
     static uniqueEmail(http: Http, currentEmail: String = null): any {

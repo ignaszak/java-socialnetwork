@@ -31,7 +31,7 @@ export class RestResponse {
     }
 
     public hasNextPage(): boolean {
-        return this.getTotalPages() > (this.getCurrentPage() + 1);
+        return this.getTotalPages() > this.getCurrentPage();
     }
 
     public getNextPage(): number {

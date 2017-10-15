@@ -2,9 +2,12 @@ package net.ignaszak.socialnetwork.controller.rest;
 
 import net.ignaszak.socialnetwork.domain.User;
 import net.ignaszak.socialnetwork.model.mail.EmailSender;
+import net.ignaszak.socialnetwork.service.relation.RelationService;
 import net.ignaszak.socialnetwork.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;

@@ -6,4 +6,5 @@ export interface UserServiceInterface {
     getUserByEmail(email: string): Promise<User>;
     getCurrentUser(): Promise<User>;
     updateUser(user: User);
+    
 }

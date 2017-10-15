@@ -3,12 +3,13 @@ package net.ignaszak.socialnetwork.model.mail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
-@Service
+@Component
 public class EmailSenderImpl implements EmailSender {
 
     private JavaMailSender javaMailSender;

@@ -41,7 +41,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Page<Post> getFeedByUser(User user, Pageable page) {
-        return postRepository.queryAllByUserOrderByCreatedDateDesc(user, page);
+        return postRepository.queryFeedByUser(user, page);
     }
 
     @Override

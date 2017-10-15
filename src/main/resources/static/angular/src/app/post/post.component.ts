@@ -1,4 +1,4 @@
-import {Component, Inject, Input, OnInit} from '@angular/core';
+import {Component, HostListener, Inject, Input, OnInit} from '@angular/core';
 import {Post} from "./post";
 
 import {PostServiceInterface} from "./post.service.interface";
@@ -7,6 +7,7 @@ import {User} from "../user/user";
 import {UserServiceInterface} from "../user/user.service.interface";
 import {CommentServiceInterface} from "../comment/comment.service.interface";
 import {Comment} from "../comment/comment";
+import {RestResponse} from "../rest/rest-response";
 
 @Component({
     selector:    'post-list',
@@ -16,6 +17,8 @@ export class PostComponent implements OnInit {
 
     @Input() username: string;
     private posts: Post[];
+    private nextPostsPage: number = 0;
+    private hasNextPostBage: boolean = true;
     private postForm: FormGroup;
     currentUser: User;
     user: User;
@@ -56,6 +59,18 @@ export class PostComponent implements OnInit {
         }
     }
 
+    @HostListener('window:scroll', ['$event'])
+    onScrollDown(): void {
+        if (window.innerHeight + window.scrollY === document.body.scrollHeight) {
+            console.log("down");
+            if (this.user) {
+                this.getPostsByUser(this.user);
+            } else {
+                this.getPostsByCurrentUser();
+            }
+        }
+    }
+
     commentPost(id: number, event: any): void {
         let comment: Comment = new Comment();
         let element = event.currentTarget || event.srcElement;
@@ -78,7 +93,7 @@ export class PostComponent implements OnInit {
                 if (typeof post.comments === "undefined") {
                     post.comments = response.getComments().reverse();
                 } else {
-                    response.getComments().reverse().forEach(comment => {
+                    response.getComments().forEach(comment => {
                         post.comments.unshift(comment);
                     });
                 }
@@ -101,17 +116,22 @@ export class PostComponent implements OnInit {
     }
 
     private getPostsByCurrentUser(): void {
-        this.postService.getPostsByCurrentUser().then(posts => {
-            this.posts = posts;
-            this.loadCommentsToPosts();
-        });
+        if (this.hasNextPostBage)
+            this.postService.getPostsByCurrentUser(this.nextPostsPage).then(response => this.loadPosts(response));
     }
 
     private getPostsByUser(user: User): void {
-        this.postService.getPostsByUser(user).then(response => {
-            this.posts = response.getPosts();
-            this.loadCommentsToPosts();
-        });
+        if (this.hasNextPostBage)
+            this.postService.getPostsByUser(user, this.nextPostsPage).then(response => this.loadPosts(response));
+    }
+
+    private loadPosts(response: RestResponse): void {
+        this.nextPostsPage = response.getNextPage();
+        this.hasNextPostBage = response.hasNextPage();
+        console.log(this.nextPostsPage, this.hasNextPostBage);
+        let posts: Post[] = response.getPosts();
+        for (let post of posts) this.posts.push(post);
+        this.loadCommentsToPosts();
     }
 
     private loadCommentsToPosts(): void {
