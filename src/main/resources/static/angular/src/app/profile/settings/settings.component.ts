@@ -20,7 +20,6 @@ export class SettingsComponent implements OnInit{
     generalFormSubmit: boolean;
     generalFormEmailActivation: boolean;
 
-
     constructor(
         @Inject('UserServiceInterface') private userService: UserServiceInterface,
         private http: Http

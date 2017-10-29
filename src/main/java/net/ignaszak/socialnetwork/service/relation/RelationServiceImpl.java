@@ -51,4 +51,9 @@ public class RelationServiceImpl implements RelationService {
         }
         return relation;
     }
+
+    @Override
+    public Integer countInvitationsByCurrentUser() {
+        return relationRepository.countByReceiverAndAcceptedIsFalse(userService.getCurrentUser());
+    }
 }

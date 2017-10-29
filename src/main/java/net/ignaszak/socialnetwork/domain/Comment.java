@@ -8,15 +8,15 @@ import java.util.Date;
 public class Comment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, updatable = false)
     private Integer id;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "author_id")
+    private User author;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     @JoinColumn(name = "post_id")
     private Post post;
 
@@ -36,16 +36,12 @@ public class Comment {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public User getAuthor() {
+        return author;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
+    public void setAuthor(User author) {
+        this.author = author;
     }
 
     public Post getPost() {
@@ -56,23 +52,19 @@ public class Comment {
         this.post = post;
     }
 
-    public String getText() {
-        return text;
-    }
-
     public void setText(String text) {
         this.text = text;
+    }
+
+    public String getText() {
+        return text;
     }
 
     public Date getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
-    }
-
     public boolean isAuthor(User user) {
-        return this.user.isEqualsTo(user);
+        return this.author.isEqualsTo(user);
     }
 }

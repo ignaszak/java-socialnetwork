@@ -83,11 +83,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<User> getFriendsByUser(User user, Pageable page) {
-        return userRepository.findFriendsByUserAndRelationStatus(user, true, page);
+        return userRepository.findFriendsByUser(user, page);
     }
 
     @Override
-    public Page<User> getInvitationsByUser(User user, Pageable page) {
-        return userRepository.findFriendsByUserAndRelationStatus(user, false, page);
+    public Page<User> getInvitationsByCurrentUser(Pageable page) {
+        return userRepository.findInvitationsByUser(getCurrentUser(), page);
     }
 }

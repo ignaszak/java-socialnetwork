@@ -34,14 +34,20 @@
                             <p style="font-size: 30px; font-weight: bold; margin-bottom: 0"><i class="icon-user"></i></p>
                         </div>
                         <div class="col-sm-10">
-                            <a href="#" [routerLink]="['/', post.user.username]">
-                                {{post.user.username}}
+                            <a href="#" *ngIf="post.author.username" [routerLink]="['/', post.author.username]">
+                                {{post.author.username}}
                             </a>
+                            <span *ngIf="! user && post.receiver && post.author && post.receiver.username != post.author.username">
+                                <i class="fa fa-caret-right"></i>
+                                <a href="#" *ngIf="post.receiver.username" [routerLink]="['/', post.receiver.username]">
+                                    {{post.receiver.username}}
+                                </a>
+                            </span>
                             <br />
                             <i class="icon-calendar"></i>
                             {{post.createdDate|date: 'dd-MM-yyyy HH:mm'}}
                         </div>
-                        <div class="col-sm-1 text-right" *ngIf="post.user.username == currentUser.username">
+                        <div class="col-sm-1 text-right" *ngIf="post.author.username == currentUser.username">
                             <a href="javascript:" (click)="deletePost(post)">
                                 <i class="icon-close"></i>
                             </a>
@@ -62,13 +68,13 @@
                         <div class="col-sm-10">
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <a href="#" [routerLink]="['/', post.user.username]">{{comment.user.username}}</a>
+                                    <a href="#" [routerLink]="['/', comment.author.username]">{{comment.author.username}}</a>
                                     <small>
                                         <i class="icon-calendar"></i>
                                         {{comment.createdDate|date: 'dd-MM-yyyy HH:mm'}}
                                     </small>
                                 </div>
-                                <div class="col-sm-6 text-right" *ngIf="comment.user.username == currentUser.username || post.user.username == currentUser.username">
+                                <div class="col-sm-6 text-right" *ngIf="comment.author.username == currentUser.username || post.author.username == currentUser.username">
                                     <a href="javascript:" (click)="deleteComment(comment, post)">
                                         <i class="icon-close"></i>
                                     </a>

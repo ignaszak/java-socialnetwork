@@ -2,23 +2,23 @@ package net.ignaszak.socialnetwork.domain;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.Set;
 
 @Entity
 @Table(name = "post")
 public class Post {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, updatable = false)
     private Integer id;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "author_id", nullable = false)
+    private User author;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private Set<Comment> comments;
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
+    @JoinColumn(name = "receiver_id", nullable = false)
+    private User receiver;
 
     @Column(name = "text", nullable = false)
     private String text;
@@ -36,27 +36,19 @@ public class Post {
         return id;
     }
 
-    public User getUser() {
-        return user;
+    public void setAuthor(User author) {
+        this.author = author;
     }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public String getText() {
-        return text;
+    public void setReceiver(User receiver) {
+        this.receiver = receiver;
     }
 
     public void setText(String text) {
         this.text = text;
     }
 
-    public Date getCreatedDate() {
-        return createdDate;
-    }
-
     public boolean isAuthor(User user) {
-        return this.user.isEqualsTo(user);
+        return this.author.isEqualsTo(user);
     }
 }

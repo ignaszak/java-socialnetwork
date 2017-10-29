@@ -15,7 +15,7 @@ export class CommentService implements CommentServiceInterface {
         @Inject('RestProviderInterface') private provider: RestProviderInterface
     ) {}
 
-    getCommentsByPost(post: Post, page?: number): Promise<RestResponse> {
+    getCommentsByPost(post: Post, page?: number): Promise<RestResponse<Comment>> {
         let path: string = this.provider.getPath(RestProvider.POST_COMMENTS_PAGEABLE, {
             'postId': post.id,
             'page': page

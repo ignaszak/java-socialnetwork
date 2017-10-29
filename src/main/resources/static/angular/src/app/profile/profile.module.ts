@@ -8,6 +8,7 @@ import {BsDropdownModule, TabsModule} from "ngx-bootstrap";
 import {SettingsComponent} from "./settings/settings.component";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {CommonModule} from "@angular/common";
+import {UserHeaderModule} from "../user/header/user.header.module";
 
 @NgModule({
     imports: [
@@ -16,7 +17,8 @@ import {CommonModule} from "@angular/common";
         TabsModule,
         ReactiveFormsModule,
         CommonModule,
-        FormsModule
+        FormsModule,
+        UserHeaderModule
     ],
     declarations: [
         SettingsComponent

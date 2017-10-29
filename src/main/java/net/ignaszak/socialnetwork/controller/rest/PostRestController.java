@@ -39,7 +39,7 @@ public class PostRestController {
     @PutMapping
     public ResponseEntity<Integer> add(@RequestBody Post post) {
         User currentUser = userService.getCurrentUser();
-        post.setUser(currentUser);
+        post.setAuthor(currentUser);
         postService.save(post);
         return new ResponseEntity<>(post.getId(), HttpStatus.OK);
     }

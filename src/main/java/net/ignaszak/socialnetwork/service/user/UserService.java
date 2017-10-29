@@ -23,5 +23,5 @@ public interface UserService {
     User save(User user);
     void delete(User user);
     Page<User> getFriendsByUser(User user, Pageable page);
-    Page<User> getInvitationsByUser(User user, Pageable page);
+    Page<User> getInvitationsByCurrentUser(Pageable page);
 }

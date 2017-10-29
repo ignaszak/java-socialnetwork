@@ -1,0 +1,67 @@
+<div class="row mt-4">
+    <div class="offset-sm-2 col-md-8">
+        <div class="card card-inverse card-primary text-center">
+            <div class="card-block">
+                <blockquote class="card-blockquote">
+                    <p style="font-size: 40px; font-weight: bold;"><i class="icon-user"></i></p>
+                    <h1>{{user.username}}</h1>
+                    <h3>{{user.caption}}</h3>
+                </blockquote>
+                <div class="row">
+                    <div class="col-sm-6 text-left" *ngIf="user.username != currentUser.username">
+                        <button *ngIf="relation.accepted == null" class="btn btn-success btn-sm" type="button" (click)="invite(user)">
+                            <i class="icon-user-follow"></i>
+                            Add friend
+                        </button>
+                        <button *ngIf="relation.accepted == false" class="btn btn-success btn-sm" type="button" disabled>
+                            <i class="icon-clock"></i>
+                            Waiting for confirmation
+                        </button>
+                        <button *ngIf="relation.accepted == true" class="btn btn-success btn-sm" type="button" (click)="deleteRelation(user)">
+                            <i class="icon-user-unfollow"></i>
+                            Remove from friends
+                        </button>
+                    </div>
+                    <div class="col-sm-6 text-right">
+                        <button class="btn btn-secondary btn-sm" type="button" [routerLink]="['/', user.username, 'friends']">
+                            <i class="icon-people"></i>
+                            Friends
+                        </button>
+                        <button *ngIf="user.username == currentUser.username && invitationsCount > 0" class="btn btn-secondary btn-sm" type="button" data-toggle="modal" (click)="invitationsModal.show(); loadInvitations();">
+                            <i class="icon-people"></i>
+                            Invitations
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div bsModal #invitationsModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="invitationsModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Invitations</h4>
+                <button type="button" class="close" (click)="invitationsModal.hide()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p *ngFor="let invitation of invitations">
+                    <i class="icon-user"></i>
+                    {{invitation.username}}
+                    <button class="btn btn-outline-danger btn-sm" type="button" style="float: right" (click)="reject(invitation)">
+                        <i class="icon-user-unfollow"></i> Reject
+                    </button>
+                    <button class="btn btn-outline-success btn-sm" type="button" style="float: right" (click)="accept(invitation)">
+                        <i class="icon-user-following"></i> Accept
+                    </button>
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="invitationsModal.hide()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

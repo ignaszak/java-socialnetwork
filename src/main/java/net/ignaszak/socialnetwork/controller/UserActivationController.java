@@ -21,13 +21,8 @@ public class UserActivationController {
     public ModelAndView emailActivation(@RequestParam String code) {
         try {
             User user = userService.getUserByActivationCode(code);
-            user.setActivationCode(null);
-            user.setStatus(null);
-            if (user.getNewEmail() != null && ! user.getNewEmail().isEmpty()) {
-                user.setEmail(user.getNewEmail());
-            }
-            user.setNewEmail(null);
-            user.setEnabled(true);
+            user.newEmailAsMainEmail();
+            user.activate();
             userService.save(user);
             return new ModelAndView("activation_code", "success", true);
         } catch (NullPointerException e) {

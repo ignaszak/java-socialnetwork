@@ -8,25 +8,25 @@ export class RestProvider implements RestProviderInterface {
 
     private static readonly REST_URL = '/rest-api';
 
-    public static readonly FEED_PAGEABLE             = RestProvider.REST_URL + '/feed?page={page}';
+    public static readonly FEED_PAGEABLE                     = RestProvider.REST_URL + '/feed?page={page}';
 
-    public static readonly POSTS                     = RestProvider.REST_URL + '/posts';
-    public static readonly POST                      = RestProvider.REST_URL + '/posts/{postId}';
-    public static readonly POST_COMMENTS             = RestProvider.REST_URL + '/posts/{postId}/comments';
-    public static readonly POST_COMMENTS_PAGEABLE    = RestProvider.REST_URL + '/posts/{postId}/comments?page={page}';
+    public static readonly POSTS                             = RestProvider.REST_URL + '/posts';
+    public static readonly POST                              = RestProvider.REST_URL + '/posts/{postId}';
+    public static readonly POST_COMMENTS                     = RestProvider.REST_URL + '/posts/{postId}/comments';
+    public static readonly POST_COMMENTS_PAGEABLE            = RestProvider.REST_URL + '/posts/{postId}/comments?page={page}';
 
-    public static readonly USER                      = RestProvider.REST_URL + '/users/{userId}';
-    public static readonly USER_POSTS_PAGEABLE       = RestProvider.REST_URL + '/users/{userId}/posts?page={page}';
-    public static readonly USER_CURRENT              = RestProvider.REST_URL + '/users/current';
-    public static readonly USER_BY_EMAIL             = RestProvider.REST_URL + '/users/findByEmail?email={email}';
-    public static readonly USER_BY_USERNAME          = RestProvider.REST_URL + '/users/findByUsername?username={username}';
+    public static readonly USER_CURRENT                      = RestProvider.REST_URL + '/users/current';
+    public static readonly USER_CURRENT_INVITATIONS_PAGEABLE = RestProvider.REST_URL + '/users/current/invitations?page={page}';
+    public static readonly USER_CURRENT_INVITATIONS_COUNT    = RestProvider.REST_URL + '/users/current/invitations/count';
+    public static readonly USER                              = RestProvider.REST_URL + '/users/{userId}';
+    public static readonly USER_POSTS_PAGEABLE               = RestProvider.REST_URL + '/users/{userId}/posts?page={page}';
+    public static readonly USER_FRIENDS                      = RestProvider.REST_URL + '/users/{userId}/friends';
+    public static readonly USER_FRIENDS_PAGEABLE             = RestProvider.REST_URL + '/users/{userId}/friends?page={page}';
+    public static readonly USER_FRIEND                       = RestProvider.REST_URL + '/users/{userId}/friend';
+    public static readonly USER_BY_EMAIL                     = RestProvider.REST_URL + '/users/findByEmail?email={email}';
+    public static readonly USER_BY_USERNAME                  = RestProvider.REST_URL + '/users/findByUsername?username={username}';
 
-    public static readonly USER_FRIENDS              = RestProvider.REST_URL + '/users/{userId}/friends';
-    public static readonly USER_FRIENDS_PAGEABLE     = RestProvider.REST_URL + '/users/{userId}/friends?page={page}';
-    public static readonly USER_INVITATIONS_PAGEABLE = RestProvider.REST_URL + '/users/{userId}/friends/invitations?page={page}';
-    public static readonly USER_FRIEND               = RestProvider.REST_URL + '/users/{userId}/friend';
-
-    public static readonly COMMENT_URL               = RestProvider.REST_URL + '/comments/{commentId}';
+    public static readonly COMMENT_URL                       = RestProvider.REST_URL + '/comments/{commentId}';
 
     public getPath(path: string, params?: Object): string {
         return RestProvider.getPath(path, params);
@@ -37,7 +37,7 @@ export class RestProvider implements RestProviderInterface {
         return path;
     }
 
-    public static getRestResponse(res: Response): RestResponse {
+    public static getRestResponse(res: Response): RestResponse<Object> {
         return new RestResponse(res);
     }
 

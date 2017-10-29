@@ -81,7 +81,6 @@ public class UserAuthController {
         net.ignaszak.socialnetwork.domain.User user = userService.getUserFromUserRegistrationForm(userRegistrationForm);
         String code = UUID.randomUUID().toString();
         try {
-            userService.add(user);
             emailSender.send(
                     user.getEmail(),
                     "User activation",
@@ -89,11 +88,12 @@ public class UserAuthController {
                             + request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
                             + "/user/email-activation?code=" + code
             );
-            user.setEnabled(false);
             user.setActivationCode(code);
         } catch (Throwable e) {
-            user.setEnabled(true);
+            user.enable();
         }
+        userService.add(user);
+
         return "redirect:/login?activation";
     }
 

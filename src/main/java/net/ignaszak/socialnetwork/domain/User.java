@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
-import java.util.Set;
 
 /**
  * Created by tomek on 05.04.17.
@@ -14,7 +13,7 @@ import java.util.Set;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, updatable = false)
     private Integer id;
 
@@ -24,7 +23,7 @@ public class User {
     @Column(name = "new_email")
     private String newEmail;
 
-    @Column(name = "username", nullable = false, unique = true)
+    @Column(name = "username", nullable = false, unique = true, updatable = false)
     private String username;
 
     @Column(name = "password", nullable = false)
@@ -45,11 +44,6 @@ public class User {
     @Column(name = "enabled")
     private boolean enabled;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.DETACH)
-    private Set<Post> posts;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.DETACH)
-    private Set<Comment> comments;
 
     public User() {
         enabled = false;
@@ -59,24 +53,12 @@ public class User {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getNewEmail() {
-        return newEmail;
-    }
-
-    public void setNewEmail(String email) {
-        this.newEmail = email;
     }
 
     public String getUsername() {
@@ -113,50 +95,39 @@ public class User {
         return caption;
     }
 
-    @JsonIgnore
-    public String getActivationCode() {
-        return activationCode;
-    }
-
     public void setActivationCode(String activationCode) {
         this.activationCode = activationCode;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
+        enabled = false;
     }
 
     public boolean isEnabled() {
         return enabled;
     }
 
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    @JsonIgnore
-    public Set<Post> getPosts() {
-        return posts;
-    }
-
-    public void setPosts(Set<Post> posts) {
-        this.posts = posts;
-    }
-
-    @JsonIgnore
-    public Set<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(Set<Comment> comments) {
-        this.comments = comments;
+    public void enable() {
+        enabled = true;
     }
 
     public boolean isEqualsTo(User user) {
         return this.username.equals(user.username);
+    }
+
+    public void activate() {
+        activationCode = null;
+        status = null;
+        enabled = true;
+    }
+
+    public void newEmailAsMainEmail() {
+        if (newEmail != null && ! newEmail.isEmpty()) {
+            email = newEmail;
+            newEmail = null;
+        }
+    }
+
+    public void changeEmail(String newEmail, String activationCode) {
+        this.newEmail = newEmail;
+        this.activationCode = activationCode;
+        status = "email_activation";
     }
 }

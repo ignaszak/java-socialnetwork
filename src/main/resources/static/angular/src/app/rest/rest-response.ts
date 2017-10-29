@@ -1,8 +1,10 @@
 import {Response} from "@angular/http";
 import {Post} from "../post/post";
 import {Comment} from "../comment/comment";
+import {Invitation} from "../user/invitation";
+import {User} from "../user/user";
 
-export class RestResponse {
+export class RestResponse <T> {
 
     private json: any;
 
@@ -10,11 +12,7 @@ export class RestResponse {
         this.json = response.json();
     }
 
-    public getComments(): Comment[] {
-        return this.json.content || null;
-    }
-
-    public getPosts(): Post[] {
+    public getResponse(): Array<T> {
         return this.json.content || null;
     }
 
@@ -31,7 +29,7 @@ export class RestResponse {
     }
 
     public hasNextPage(): boolean {
-        return this.getTotalPages() > this.getCurrentPage();
+        return ! this.json.last;
     }
 
     public getNextPage(): number {

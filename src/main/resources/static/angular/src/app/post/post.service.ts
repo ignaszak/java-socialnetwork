@@ -15,7 +15,7 @@ export class PostService implements PostServiceInterface {
         @Inject('RestProviderInterface') private provider: RestProviderInterface
     ) {}
 
-    getPostsByCurrentUser(page: number = 0): Promise<RestResponse> {
+    getFeed(page: number = 0): Promise<RestResponse<Post>> {
         let path = this.provider.getPath(RestProvider.FEED_PAGEABLE, {'page': page});
         return this.http.get(path)
             .toPromise()
@@ -23,9 +23,9 @@ export class PostService implements PostServiceInterface {
             .catch(RestProvider.handleError);
     }
 
-    getPostsByUser(user: User, page: number = 0): Promise<RestResponse> {
+    getPostsByUser(user: User, page: number = 0): Promise<RestResponse<Post>> {
         let path: string = this.provider.getPath(RestProvider.USER_POSTS_PAGEABLE, {
-            'userId': user.username,
+            'userId': user.id,
             'page':   page
         });
         return this.http.get(path)

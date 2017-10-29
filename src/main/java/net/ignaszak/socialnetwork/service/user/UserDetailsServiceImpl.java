@@ -21,9 +21,6 @@ import java.util.Set;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private UserRepository userRepository;
-    private boolean accountNonExpired = true;
-    private boolean credentialsNonExpired = true;
-    private boolean accountNonLocked = true;
 
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
@@ -35,15 +32,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findUserByUsername(username);
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-        grantedAuthorities.add(new SimpleGrantedAuthority("USER"));
+        grantedAuthorities.add(new SimpleGrantedAuthority(user.getRole()));
 
         return new org.springframework.security.core.userdetails.User(
                 user.getUsername(),
                 user.getPassword(),
                 user.isEnabled(),
-                accountNonExpired,
-                credentialsNonExpired,
-                accountNonLocked,
+                true,
+                true,
+                true,
                 grantedAuthorities
         );
     }

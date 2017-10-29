@@ -47,7 +47,7 @@ public class PostCommentRestController {
     @PutMapping
     public ResponseEntity<Integer> add(@RequestBody Comment comment, @PathVariable("id") Integer id) {
         comment.setPost(postService.getPostById(id));
-        comment.setUser(userService.getCurrentUser());
+        comment.setAuthor(userService.getCurrentUser());
         commentService.save(comment);
         return new ResponseEntity<>(comment.getId(), HttpStatus.OK);
     }

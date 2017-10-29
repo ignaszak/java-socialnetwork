@@ -1,21 +1,4 @@
-<div class="animated fadeIn">
-    <div class="container">
-
-        <div class="row mt-4">
-            <div class="col-md-12">
-                <div class="card card-inverse card-primary text-center">
-                    <div class="card-block">
-                        <blockquote class="card-blockquote">
-                            <p style="font-size: 40px; font-weight: bold;"><i class="icon-user"></i></p>
-                            <h1>{{user.username}}</h1>
-                            <h3>{{user.caption}}</h3>
-                        </blockquote>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <post-list [username]="user.username"></post-list>
-
-    </div>
+<div class="container" *ngIf="user.id > 0">
+    <user-header [user]="user"></user-header>
+    <post-list [user]="user"></post-list>
 </div>

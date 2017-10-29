@@ -4,8 +4,8 @@ import {RestResponse} from "../rest/rest-response";
 
 export interface PostServiceInterface {
 
-    getPostsByCurrentUser(page?: number): Promise<RestResponse>;
-    getPostsByUser(user: User, page?: number): Promise<RestResponse>;
+    getFeed(page?: number): Promise<RestResponse<Post>>;
+    getPostsByUser(user: User, page?: number): Promise<RestResponse<Post>>;
     addPost(post: Post): Promise<any>;
     deletePost(post: Post): Promise<any>;
 }

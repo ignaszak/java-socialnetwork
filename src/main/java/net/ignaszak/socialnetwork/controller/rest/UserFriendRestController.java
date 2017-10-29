@@ -52,13 +52,6 @@ public class UserFriendRestController {
         relationService.delete(relation);
     }
 
-    @GetMapping(value = "/{id}/friends/invitations", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Page<User> getInvitations(@PathVariable Integer id, Pageable page) {
-        User user = userService.getUserById(id);
-        if (user == null) throw new ResourceNotFoundException();
-        return userService.getInvitationsByUser(user, page);
-    }
-
     @GetMapping(value = "/{id}/friend", produces = MediaType.APPLICATION_JSON_VALUE)
     public Relation getRelation(@PathVariable Integer id) {
         return relationService.getRelationWithCurrentUserByUserId(id);

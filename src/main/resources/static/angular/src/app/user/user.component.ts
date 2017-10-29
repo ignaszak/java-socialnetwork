@@ -22,7 +22,9 @@ export class UserComponent implements OnInit {
     ngOnInit(): void {
         this.route.params
             .switchMap((params: Params) => this.userService.getUserByUsername(params['username']))
-            .subscribe(user => this.user = user);
+            .subscribe(user => {
+                console.log('Parent: ',user);
+                this.user = user
+            });
     }
-
 }

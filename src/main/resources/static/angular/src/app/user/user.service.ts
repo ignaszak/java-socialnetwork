@@ -4,7 +4,7 @@
 
 import {Inject, Injectable} from "@angular/core";
 import {User} from "./user";
-import {Http, Response} from "@angular/http";
+import {Http} from "@angular/http";
 
 import 'rxjs/add/operator/toPromise';
 import {FormControl} from "@angular/forms";
@@ -12,6 +12,8 @@ import {UserServiceInterface} from "./user.service.interface";
 import {RestProviderInterface} from "../rest/rest-provider.interface";
 import {RestProvider} from "../rest/rest-provider";
 import {RestResponse} from "../rest/rest-response";
+import {Relation} from "./relation";
+import {Invitation} from "./invitation";
 
 @Injectable()
 export class UserService implements UserServiceInterface{
@@ -44,23 +46,65 @@ export class UserService implements UserServiceInterface{
             .catch(RestProvider.handleError);
     }
 
-    updateUser(user: User) {
-        this.http.put(RestProvider.USER_CURRENT, user).subscribe();
-    }
-
-    getFriendsByUser(user: User): Promise<RestResponse> {
-        let path: string = this.provider.getPath(RestProvider.USER_FRIENDS, {'userId': user.id});
+    getFriendsByUser(user: User, page: number = 0): Promise<RestResponse<User>> {
+        let path: string = this.provider.getPath(RestProvider.USER_FRIENDS_PAGEABLE, {'userId': user.id, 'page': page});
         return this.http.get(path)
             .toPromise()
             .then(RestProvider.getRestResponse)
             .catch(RestProvider.handleError);
     }
 
-    getInvitationsbyUser(user: User): Promise<RestResponse> {
-        let path: string = this.provider.getPath(RestProvider.USER_FRIENDS, {'userId': user.id});
+    getCurrentUserInvitations(page: number = 0): Promise<RestResponse<Invitation>> {
+        let path: string = this.provider.getPath(RestProvider.USER_CURRENT_INVITATIONS_PAGEABLE, {'page': page});
         return this.http.get(path)
             .toPromise()
             .then(RestProvider.getRestResponse)
+            .catch(RestProvider.handleError);
+    }
+
+    countCurrentUserInvitations(): Promise<number> {
+        return this.http.get(RestProvider.USER_CURRENT_INVITATIONS_COUNT)
+            .toPromise()
+            .then(response => Number(response.text()))
+            .catch(RestProvider.handleError);
+    }
+
+    getRelationByUser(user: User): Promise<Relation> {
+        let path: string = this.provider.getPath(RestProvider.USER_FRIEND, {'userId': user.id});
+        return this.http.get(path)
+            .toPromise()
+            .then(response => {
+                if (response.text()) return response.json() as Relation;
+                return new Relation();
+            })
+            .catch(RestProvider.handleError)
+    }
+
+    updateUser(user: User): void {
+        this.http.put(RestProvider.USER_CURRENT, user).subscribe();
+    }
+
+    inviteUser(user: User): Promise<boolean> {
+        let path: string = this.provider.getPath(RestProvider.USER_FRIENDS, {'userId': user.id});
+        return this.http.post(path, null)
+            .toPromise()
+            .then(() => false) // False for not accepted invitation
+            .catch(RestProvider.handleError);
+    }
+
+    acceptByUserId(userId: number): Promise<boolean> {
+        let path: string = this.provider.getPath(RestProvider.USER_FRIEND, {'userId': userId});
+        return this.http.post(path, null)
+            .toPromise()
+            .then(() => true)
+            .catch(RestProvider.handleError);
+    }
+
+    deleteRelationByUserId(userId: number): Promise<any> {
+        let path: string = this.provider.getPath(RestProvider.USER_FRIENDS, {'userId': userId});
+        return this.http.delete(path, null)
+            .toPromise()
+            .then(() => null)
             .catch(RestProvider.handleError);
     }
 

@@ -5,11 +5,21 @@ import {
 } from '@angular/router';
 
 import {UserComponent} from './user.component';
+import {UserFriendsComponent} from "./friends/user.friends.component";
 
 const routes: Routes = [
     {
         path: '',
-        component: UserComponent
+        children: [
+            {
+                path: '',
+                component: UserComponent
+            },
+            {
+                path: 'friends',
+                component: UserFriendsComponent
+            }
+        ]
     }
 ];
 

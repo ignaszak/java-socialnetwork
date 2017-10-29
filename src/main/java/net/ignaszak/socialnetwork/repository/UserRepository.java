@@ -27,8 +27,18 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Query(
         "SELECT DISTINCT u FROM User u WHERE u != :user AND " +
-        "(u IN(SELECT r.sender FROM Relation r WHERE r.isAccepted = :accept AND r.receiver = :user) " +
-        "OR u IN(SELECT r.receiver FROM Relation r WHERE r.isAccepted = :accept AND r.sender = :user))"
+        "(u IN(SELECT r.sender FROM Relation r WHERE r.accepted = 1 AND r.receiver = :user) " +
+        "OR u IN(SELECT r.receiver FROM Relation r WHERE r.accepted = 1 AND r.sender = :user)) " +
+        "AND u.enabled = 1 " +
+        "ORDER BY u.username"
     )
-    Page<User> findFriendsByUserAndRelationStatus(@Param("user") User user, @Param("accept") boolean accept, Pageable page);
+    Page<User> findFriendsByUser(@Param("user") User user, Pageable page);
+
+    @Query(
+        "SELECT new map(u.id AS id, u.username AS username, r.invitationDate AS invitationDate) FROM Relation r " +
+        "LEFT JOIN r.sender u " +
+        "WHERE r.receiver = :user AND u.enabled = 1" +
+        "ORDER BY r.invitationDate DESC"
+    )
+    Page<User> findInvitationsByUser(@Param("user") User user, Pageable page);
 }

@@ -1,96 +1,82 @@
-<div class="animated fadeIn">
-    <div class="container">
+<div class="container">
 
-        <div class="row mt-4">
-            <div class="col-md-12">
-                <div class="card card-inverse card-primary text-center">
-                    <div class="card-block">
-                        <blockquote class="card-blockquote">
-                            <p style="font-size: 40px; font-weight: bold;"><i class="icon-user"></i></p>
-                            <h1>{{currentUser.username}}</h1>
-                            <h3>{{currentUser.caption}}</h3>
-                        </blockquote>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <user-header *ngIf="currentUser.id > 0" [user]="currentUser"></user-header>
 
-        <div class="row mt-2">
-            <div class="col-md-12">
+    <div class="row mt-2">
+        <div class="offset-sm-2 col-md-8">
 
-                <tabset>
-                    <!-- GENERAL -->
-                    <tab heading="General">
-                        <div *ngIf="generalFormSubmit">
+            <tabset>
+                <!-- GENERAL -->
+                <tab heading="General">
+                    <div *ngIf="generalFormSubmit">
 
-                            <div class="card card-inverse card-success text-center">
-                                <div class="card-block">
-                                    <blockquote class="card-blockquote">
-                                        <p>Successful data update.</p>
-                                        <p *ngIf="generalFormEmailActivation">You must confirm your new email, by clicking on activation link.</p>
-                                    </blockquote>
-                                </div>
+                        <div class="card card-inverse card-success text-center">
+                            <div class="card-block">
+                                <blockquote class="card-blockquote">
+                                    <p>Successful data update.</p>
+                                    <p *ngIf="generalFormEmailActivation">You must confirm your new email, by clicking on activation link.</p>
+                                </blockquote>
                             </div>
-
                         </div>
-                        <form [formGroup]="generalForm" (ngSubmit)="onSubmitGeneral()" class="form-horizontal" novalidate>
-                            <div class="form-group row" [ngClass]="{
-                                'has-danger': generalForm.controls.email.invalid && generalForm.controls.email.dirty,
-                                'has-success': generalForm.controls.email.valid && generalForm.controls.email.dirty
-                            }">
-                                <label class="col-md-3 form-control-label text-right" for="email">Email</label>
-                                <div class="col-md-9">
-                                    <input type="email" id="email" formControlName="email" class="form-control" placeholder="Enter Email.." [ngClass]="{
-                                        'form-control-danger': generalForm.controls.email.invalid && generalForm.controls.email.dirty,
-                                        'form-control-success': generalForm.controls.email.valid && generalForm.controls.email.dirty
-                                    }">
-                                    <span *ngIf="generalForm.controls.email.errors?.uniqueEmail" class="help-block">Email is already taken!</span>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-md-3 form-control-label text-right" for="caption">Caption</label>
-                                <div class="col-md-9">
-                                    <textarea id="caption" [(ngModel)]="currentUser.caption" formControlName="caption" rows="9" class="form-control" placeholder="Caption.."></textarea>
-                                </div>
-                            </div>
-                            <div class="form-group form-actions text-center">
-                                <button type="submit" class="btn btn-sm btn-success">Save</button>
-                            </div>
-                        </form>
-                    </tab>
-                    <!-- PASSWORD -->
-                    <tab heading="Password">
-                        <form action="" method="post" class="form-horizontal">
-                            <div class="form-group row">
-                                <label class="col-md-3 form-control-label text-right" for="old-password">Old password</label>
-                                <div class="col-md-9">
-                                    <input type="password" id="old-password" name="old-password" class="form-control" placeholder="Enter Current Password..">
-                                    <span class="help-block">Please enter your current password</span>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-md-3 form-control-label text-right" for="new-password">New password</label>
-                                <div class="col-md-9">
-                                    <input type="password" id="new-password" name="new-password" class="form-control" placeholder="Enter New Password..">
-                                    <span class="help-block">Please enter your new password</span>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-md-3 form-control-label text-right" for="repeat-new-password">RepeatNew password</label>
-                                <div class="col-md-9">
-                                    <input type="password" id="repeat-new-password" name="repeat-new-password" class="form-control" placeholder="Repeat New Password..">
-                                    <span class="help-block">Please repeat your new password</span>
-                                </div>
-                            </div>
-                            <div class="form-group form-actions text-center">
-                                <button type="submit" class="btn btn-sm btn-success">Change password</button>
-                            </div>
-                        </form>
-                    </tab>
-                </tabset>
 
-            </div><!-- .col-xs-12 -->
-        </div><!-- .row -->
+                    </div>
+                    <form [formGroup]="generalForm" (ngSubmit)="onSubmitGeneral()" class="form-horizontal" novalidate>
+                        <div class="form-group row" [ngClass]="{
+                            'has-danger': generalForm.controls.email.invalid && generalForm.controls.email.dirty,
+                            'has-success': generalForm.controls.email.valid && generalForm.controls.email.dirty
+                        }">
+                            <label class="col-md-3 form-control-label text-right" for="email">Email</label>
+                            <div class="col-md-9">
+                                <input type="email" id="email" formControlName="email" class="form-control" placeholder="Enter Email.." [ngClass]="{
+                                    'form-control-danger': generalForm.controls.email.invalid && generalForm.controls.email.dirty,
+                                    'form-control-success': generalForm.controls.email.valid && generalForm.controls.email.dirty
+                                }">
+                                <span *ngIf="generalForm.controls.email.errors?.uniqueEmail" class="help-block">Email is already taken!</span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 form-control-label text-right" for="caption">Caption</label>
+                            <div class="col-md-9">
+                                <textarea id="caption" [(ngModel)]="currentUser.caption" formControlName="caption" rows="9" class="form-control" placeholder="Caption.."></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group form-actions text-center">
+                            <button type="submit" class="btn btn-sm btn-success">Save</button>
+                        </div>
+                    </form>
+                </tab>
+                <!-- PASSWORD -->
+                <tab heading="Password">
+                    <form action="" method="post" class="form-horizontal">
+                        <div class="form-group row">
+                            <label class="col-md-3 form-control-label text-right" for="old-password">Old password</label>
+                            <div class="col-md-9">
+                                <input type="password" id="old-password" name="old-password" class="form-control" placeholder="Enter Current Password..">
+                                <span class="help-block">Please enter your current password</span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 form-control-label text-right" for="new-password">New password</label>
+                            <div class="col-md-9">
+                                <input type="password" id="new-password" name="new-password" class="form-control" placeholder="Enter New Password..">
+                                <span class="help-block">Please enter your new password</span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 form-control-label text-right" for="repeat-new-password">RepeatNew password</label>
+                            <div class="col-md-9">
+                                <input type="password" id="repeat-new-password" name="repeat-new-password" class="form-control" placeholder="Repeat New Password..">
+                                <span class="help-block">Please repeat your new password</span>
+                            </div>
+                        </div>
+                        <div class="form-group form-actions text-center">
+                            <button type="submit" class="btn btn-sm btn-success">Change password</button>
+                        </div>
+                    </form>
+                </tab>
+            </tabset>
 
-    </div><!-- .container -->
-</div>
+        </div><!-- .col-xs-12 -->
+    </div><!-- .row -->
+
+</div><!-- .container -->

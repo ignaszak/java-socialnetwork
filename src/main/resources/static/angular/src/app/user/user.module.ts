@@ -6,6 +6,8 @@ import {UserRoutingModule} from './user-routing.module';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {CommonModule} from "@angular/common";
 import {PostListModule} from "../post/post-list.module";
+import {UserHeaderModule} from "./header/user.header.module";
+import {UserFriendsComponent} from "./friends/user.friends.component";
 
 @NgModule({
     imports: [
@@ -14,10 +16,12 @@ import {PostListModule} from "../post/post-list.module";
         ChartsModule,
         FormsModule,
         ReactiveFormsModule,
-        PostListModule
+        PostListModule,
+        UserHeaderModule
     ],
     declarations: [
-        UserComponent
+        UserComponent,
+        UserFriendsComponent
     ]
 })
 export class UserModule {

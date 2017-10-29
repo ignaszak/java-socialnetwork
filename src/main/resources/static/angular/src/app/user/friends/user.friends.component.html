@@ -1,0 +1,11 @@
+<div class="container">
+    <user-header *ngIf="user.id > 0" [user]="user"></user-header>
+
+    <div class="row">
+        <div *ngFor="let friend of friends" class="col-sm-6">
+            <a href="#" [routerLink]="['/', friend.username]">
+                {{friend.username}}
+            </a>
+        </div>
+    </div>
+</div>
