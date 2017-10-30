@@ -12,4 +12,4 @@ Edit SMTP options in file ```src/main/resources/application.properties```
 
 ## Demo user
 
-Username: **admin**, password: **admin123**
+Username: **test**, password: **test1234**

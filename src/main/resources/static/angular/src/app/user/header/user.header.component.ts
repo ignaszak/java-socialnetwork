@@ -3,6 +3,7 @@ import {User} from "../user";
 import {UserServiceInterface} from "../user.service.interface";
 import {Relation} from "../relation";
 import {Invitation} from "../invitation";
+import {Swal} from "../../shared/swal";
 
 @Component({
     selector:    'user-header',
@@ -41,8 +42,12 @@ export class UserHeaderComponent implements OnInit, OnChanges {
     }
 
     public deleteRelation(user: User): void {
-        this.userService.deleteRelationByUserId(user.id)
-            .then(accepted => this.relation.accepted = accepted);
+        Swal.confirm(() => {
+            this.userService.deleteRelationByUserId(user.id).then(accepted => {
+                this.relation.accepted = accepted;
+                Swal.success('Removed!', '<strong>' + user.username + '</strong> is not more your friend.');
+            })
+        });
     }
 
     public loadInvitations(): void {
@@ -62,11 +67,20 @@ export class UserHeaderComponent implements OnInit, OnChanges {
     }
 
     public accept(invitation: Invitation): void {
-        this.userService.acceptByUserId(invitation.id).then(() => this.deleteInvitation(invitation));
+        this.userService.acceptByUserId(invitation.id).then(() => {
+            this.deleteInvitation(invitation);
+            Swal.success('Accepted!', 'Invitation from <strong>' + invitation.username + '</strong> has been accepted.');
+        });
     }
 
     public reject(invitation: Invitation): void {
-        this.userService.acceptByUserId(invitation.id).then(() => this.deleteInvitation(invitation));
+        Swal.confirm(() => {
+            this.userService.acceptByUserId(invitation.id).then(() => {
+                this.deleteInvitation(invitation);
+                Swal.success('Rejected!', 'Invitation from <strong>' + invitation.username + '</strong> has been rejected.');
+            })
+        });
+
     }
 
     private deleteInvitation(invitation: Invitation): void {

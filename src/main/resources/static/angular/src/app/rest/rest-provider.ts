@@ -2,6 +2,7 @@ import {Injectable} from "@angular/core";
 import {RestProviderInterface} from "./rest-provider.interface";
 import {RestResponse} from "./rest-response";
 import {Response} from "@angular/http";
+import {Swal} from "../shared/swal";
 
 @Injectable()
 export class RestProvider implements RestProviderInterface {
@@ -43,6 +44,7 @@ export class RestProvider implements RestProviderInterface {
 
     public static handleError(error: any): Promise<any> {
         console.error('An error occurred', error);
+        Swal.error();
         return Promise.reject(error.message || error);
     }
 }

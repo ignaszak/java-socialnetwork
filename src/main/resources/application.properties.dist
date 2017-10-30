@@ -15,7 +15,7 @@ spring.jpa.hibernate.naming-strategy = org.hibernate.cfg.ImprovedNamingStrategy
 # stripped before adding them to the entity manager)
 
 # The SQL dialect makes Hibernate generate better SQL for the chosen database
-spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.PostgreSQLDialect
+spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.MySQL5Dialect
 
 # REST API CONF
 spring.data.rest.default-page-size = 5

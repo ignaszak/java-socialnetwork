@@ -2,6 +2,7 @@ package net.ignaszak.socialnetwork.domain;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "post")
@@ -19,6 +20,9 @@ public class Post {
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
     @JoinColumn(name = "receiver_id", nullable = false)
     private User receiver;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private Set<Comment> comments;
 
     @Column(name = "text", nullable = false)
     private String text;

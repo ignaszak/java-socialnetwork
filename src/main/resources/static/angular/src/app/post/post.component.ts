@@ -8,6 +8,7 @@ import {UserServiceInterface} from "../user/user.service.interface";
 import {CommentServiceInterface} from "../comment/comment.service.interface";
 import {Comment} from "../comment/comment";
 import {RestResponse} from "../rest/rest-response";
+import {Swal} from "../shared/swal";
 
 @Component({
     selector:    'post-list',
@@ -100,18 +101,22 @@ export class PostComponent implements OnInit, OnChanges {
     }
 
     deletePost(post: Post): void {
-        this.postService.deletePost(post).then(() => {
-            let postIndex = this.posts.indexOf(post);
-            this.posts.splice(postIndex, 1);
-        });
+        Swal.confirm(() => {
+            this.postService.deletePost(post).then(() => {
+                let postIndex = this.posts.indexOf(post);
+                this.posts.splice(postIndex, 1);
+            });
+        }, 'Delete post?');
     }
 
     deleteComment(comment: Comment, post: Post): void {
-        this.commentService.deleteComment(comment).then(() => {
-            let commentIndex = post.comments.indexOf(comment);
-            let postIndex = this.posts.indexOf(post);
-            this.posts[postIndex].comments.splice(commentIndex, 1);
-        })
+        Swal.confirm(() => {
+            this.commentService.deleteComment(comment).then(() => {
+                let commentIndex = post.comments.indexOf(comment);
+                let postIndex = this.posts.indexOf(post);
+                this.posts[postIndex].comments.splice(commentIndex, 1);
+            })
+        }, 'Delete comment?');
     }
 
     private getFeed(): void {
