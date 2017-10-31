@@ -1,5 +1,7 @@
 package net.ignaszak.socialnetwork.model.mail;
 
+import javax.mail.MessagingException;
+
 public interface EmailSender {
-    void send(String to, String subject, String Content);
+    void send(String to, String from, String subject, String Content) throws MessagingException;
 }

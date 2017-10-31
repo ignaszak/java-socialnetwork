@@ -3,11 +3,11 @@ import {Comment} from "../comment/comment";
 
 export class Post {
     id: number;
-    author: User;
-    receiver: User;
+    author: User = new User();
+    receiver: User = new User();
     text: string;
     createdDate: any;
-    comments: Comment[];
+    comments: Comment[] = [];
     commentsNextPage: number;
 
     public isAuthor(user: User): boolean {

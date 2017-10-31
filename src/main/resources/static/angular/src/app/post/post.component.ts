@@ -51,7 +51,6 @@ export class PostComponent implements OnInit, OnChanges {
             let post: Post = this.postForm.value;
             post.author = this.currentUser;
             post.receiver = this.user ? this.user : this.currentUser;
-            post.comments = [];
             this.postService.addPost(post).then(postId => {
                 post.id = postId;
                 this.prependPost(post);

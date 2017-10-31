@@ -2,7 +2,7 @@ import {User} from "../user/user";
 
 export class Comment {
     id: number;
-    author: User;
+    author: User = new User();
     text: string;
     createdDate: any;
 

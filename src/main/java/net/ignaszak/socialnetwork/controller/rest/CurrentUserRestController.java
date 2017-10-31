@@ -5,11 +5,13 @@ import net.ignaszak.socialnetwork.model.mail.EmailSender;
 import net.ignaszak.socialnetwork.service.relation.RelationService;
 import net.ignaszak.socialnetwork.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.UUID;
 
@@ -20,6 +22,7 @@ public class CurrentUserRestController {
     private UserService userService;
     private EmailSender emailSender;
     private RelationService relationService;
+    private String emailFromAddress;
 
     @Autowired
     public void setUserService(UserService userService) {
@@ -36,6 +39,11 @@ public class CurrentUserRestController {
         this.relationService = relationService;
     }
 
+    @Value("${mail.from.address}")
+    public void setEmailFromAddress(String emailFromAddress) {
+        this.emailFromAddress = emailFromAddress;
+    }
+
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public User get() {
         return userService.getCurrentUser();
@@ -48,16 +56,20 @@ public class CurrentUserRestController {
         if (! currentUser.getEmail().equals(user.getEmail())) {
             String code = UUID.randomUUID().toString();
             currentUser.changeEmail(user.getEmail(), code);
-            emailSender.send(
+            try {
+                emailSender.send(
                     user.getEmail(),
+                    emailFromAddress,
                     "Activation code",
                     "Your activation link: "
-                            + request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
-                            + "/user/email-activation?code=" + code
-            );
+                    + request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+                    + "/user/email-activation?code=" + code
+                );
+            } catch (MessagingException e) {
+                user.activate();
+            }
         }
         userService.save(currentUser);
-        //currentUser.setActivationCode(null);
         return currentUser;
     }
 

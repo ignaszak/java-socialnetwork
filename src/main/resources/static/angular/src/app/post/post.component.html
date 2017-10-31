@@ -37,7 +37,7 @@
                             <a href="#" *ngIf="post.author.username" [routerLink]="['/', post.author.username]">
                                 {{post.author.username}}
                             </a>
-                            <span *ngIf="! user && post.receiver && post.author && post.receiver.username != post.author.username">
+                            <span *ngIf="! user && post.receiver.username != post.author.username">
                                 <i class="fa fa-caret-right"></i>
                                 <a href="#" *ngIf="post.receiver.username" [routerLink]="['/', post.receiver.username]">
                                     {{post.receiver.username}}

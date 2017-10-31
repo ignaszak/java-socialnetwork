@@ -24,10 +24,11 @@ spring.data.rest.default-page-size = 5
 spring.thymeleaf.cache = false
 
 # MAIL
+mail.from.address=
 spring.mail.host=
 spring.mail.port=
 spring.mail.username=
 spring.mail.password=
-spring.mail.properties.mail.smtp.auth=true;
+spring.mail.properties.mail.smtp.auth=true
 spring.mail.properties.mail.smtp.starttls.enable=true
 spring.mail.properties.mail.smtp.starttls.required=true
