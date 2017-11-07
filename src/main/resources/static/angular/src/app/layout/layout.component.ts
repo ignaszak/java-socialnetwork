@@ -1,20 +1,27 @@
-import {Component, Inject, OnInit, Output} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {User} from "../user/user";
 import {UserServiceInterface} from "../user/user.service.interface";
+import {MessageInterface} from "../shared/event/message.interface";
+import {Events} from "../shared/event/events";
+import {Event} from "../shared/event/event";
 
 @Component({
     selector: 'app-dashboard',
     templateUrl: './layout.component.html'
 })
-export class LayoutComponent implements OnInit {
+export class LayoutComponent extends Event implements OnInit {
 
     public disabled = false;
     public status: { isopen: boolean } = {isopen: false};
-
-    @Output() currentUser: User;
+    currentUser: User;
 
     constructor(@Inject('UserServiceInterface') private userService: UserServiceInterface) {
+        super();
         this.currentUser = new User();
+        this.addEvent(Events.UPDATE_CURRENT_USER, (message: MessageInterface<User>) => {
+            this.currentUser = message.getMessage();
+        });
+        this.listenToEvents();
     }
 
     ngOnInit(): void {

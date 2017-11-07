@@ -35,7 +35,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     Page<User> findFriendsByUser(@Param("user") User user, Pageable page);
 
     @Query(
-        "SELECT new map(u.id AS id, u.username AS username, r.invitationDate AS invitationDate) FROM Relation r " +
+        "SELECT new map(u.id AS id, u.username AS username, u.profile AS profile, r.invitationDate AS invitationDate) FROM Relation r " +
         "LEFT JOIN r.sender u " +
         "WHERE r.receiver = :user AND u.enabled = 1" +
         "ORDER BY r.invitationDate DESC"

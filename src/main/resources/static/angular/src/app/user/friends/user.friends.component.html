@@ -2,10 +2,21 @@
     <user-header *ngIf="user.id > 0" [user]="user"></user-header>
 
     <div class="row">
-        <div *ngFor="let friend of friends" class="col-sm-6">
-            <a href="#" [routerLink]="['/', friend.username]">
-                {{friend.username}}
-            </a>
+        <div class="offset-sm-2 col-md-8">
+            <div class="row">
+                <div *ngFor="let friend of friends" class="col-md-4 col-sm-6">
+                    <a href="#" [routerLink]="['/', friend.username]">
+                        <div class="card card-accent-info">
+                            <div class="card-block text-center">
+                                <div class="avatar-lg">
+                                    <img [mediaProfileThumbnail]="friend" class="img-avatar" />
+                                </div>
+                                <h5 class="mt-3">{{friend.username}}</h5>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 </div>

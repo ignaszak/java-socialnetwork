@@ -21,6 +21,7 @@ import {UserServiceInterface} from "./user/user.service.interface";
 import {PostService} from "./post/post.service";
 import {RestProvider} from "./rest/rest-provider";
 import {CommentService} from "./comment/comment.service";
+import {MediaModule} from "./shared/media/media.module";
 
 @NgModule({
     imports: [
@@ -29,7 +30,8 @@ import {CommentService} from "./comment/comment.service";
         BsDropdownModule.forRoot(),
         TabsModule.forRoot(),
         ChartsModule,
-        HttpModule
+        HttpModule,
+        MediaModule
     ],
     declarations: [
         AppComponent,

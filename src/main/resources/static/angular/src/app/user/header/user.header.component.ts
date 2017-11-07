@@ -15,7 +15,7 @@ export class UserHeaderComponent implements OnInit, OnChanges {
     currentUser: User;
     relation: Relation;
     invitationsCount: number;
-    invitations: Invitation[];
+    invitations: Invitation[] = [];
     invitationsModal: any;
 
     constructor(
@@ -51,6 +51,7 @@ export class UserHeaderComponent implements OnInit, OnChanges {
     }
 
     public loadInvitations(): void {
+        if (this.invitations.length > 0) return;
         let hasNextPage: boolean = false;
         let page: number = 0;
         do {

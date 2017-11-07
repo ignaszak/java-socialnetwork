@@ -79,6 +79,7 @@ export class PostComponent implements OnInit, OnChanges {
             this.commentService.addComment(comment, id).then(commentId => {
                 let post: Post = this.posts.find(post => post.id == id);
                 comment.id = commentId;
+                if (typeof post.comments === "undefined") post.comments = [];
                 post.comments.push(comment);
             });
             element.value = '';

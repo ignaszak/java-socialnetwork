@@ -5,6 +5,7 @@ import {HomeRoutingModule} from './home-routing.module';
 import {CommonModule} from "@angular/common";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {PostListModule} from "../post/post-list.module";
+import {MediaModule} from "../shared/media/media.module";
 
 @NgModule({
     imports: [
@@ -12,7 +13,8 @@ import {PostListModule} from "../post/post-list.module";
         HomeRoutingModule,
         FormsModule,
         ReactiveFormsModule,
-        PostListModule
+        PostListModule,
+        MediaModule
     ],
     declarations: [
         HomeComponent

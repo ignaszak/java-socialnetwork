@@ -9,6 +9,8 @@ import {SettingsComponent} from "./settings/settings.component";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {CommonModule} from "@angular/common";
 import {UserHeaderModule} from "../user/header/user.header.module";
+import {ImageUploadModule} from "angular2-image-upload";
+import {MediaModule} from "../shared/media/media.module";
 
 @NgModule({
     imports: [
@@ -18,7 +20,9 @@ import {UserHeaderModule} from "../user/header/user.header.module";
         ReactiveFormsModule,
         CommonModule,
         FormsModule,
-        UserHeaderModule
+        UserHeaderModule,
+        ImageUploadModule.forRoot(),
+        MediaModule
     ],
     declarations: [
         SettingsComponent

@@ -8,22 +8,27 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Http} from "@angular/http";
 import {UserServiceInterface} from "../../user/user.service.interface";
 import {UserService} from "../../user/user.service";
+import {RestProvider} from "../../rest/rest-provider";
+import {FileHolder} from "angular2-image-upload";
+import {Events} from "../../shared/event/events";
+import {Event} from "../../shared/event/event";
 
 @Component({
     templateUrl: './settings.component.html'
 })
-
-export class SettingsComponent implements OnInit{
+export class SettingsComponent extends Event implements OnInit{
 
     currentUser: User;
     generalForm: FormGroup;
     generalFormSubmit: boolean;
     generalFormEmailActivation: boolean;
+    profilePhotoUrl: string = RestProvider.USER_CURRENT_MEDIAS_PROFILE;
 
     constructor(
         @Inject('UserServiceInterface') private userService: UserServiceInterface,
         private http: Http
     ) {
+        super();
         this.generalFormSubmit = false;
         this.generalFormEmailActivation = false;
         this.currentUser = new User();
@@ -69,5 +74,15 @@ export class SettingsComponent implements OnInit{
             }
             console.log(user);
         }
+    }
+
+    onUploadFinished(event: FileHolder): void {
+        this.userService.getCurrentUser().then(user => {
+            this.currentUser = user;
+            this.sendEvent(Events.UPDATE_CURRENT_USER, user);
+        });
+    }
+
+    onUploadStateChanged(event: any): void {
     }
 }

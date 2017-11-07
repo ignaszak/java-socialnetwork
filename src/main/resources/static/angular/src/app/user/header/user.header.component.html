@@ -3,24 +3,26 @@
         <div class="card card-inverse card-primary text-center">
             <div class="card-block">
                 <blockquote class="card-blockquote">
-                    <p style="font-size: 40px; font-weight: bold;"><i class="icon-user"></i></p>
+                    <img [mediaProfileThumbnail]="user" class="img-avatar" alt="{{user.username}}" />
                     <h1>{{user.username}}</h1>
                     <h3>{{user.caption}}</h3>
                 </blockquote>
                 <div class="row">
-                    <div class="col-sm-6 text-left" *ngIf="user.username != currentUser.username">
-                        <button *ngIf="relation.accepted == null" class="btn btn-success btn-sm" type="button" (click)="invite(user)">
-                            <i class="icon-user-follow"></i>
-                            Add friend
-                        </button>
-                        <button *ngIf="relation.accepted == false" class="btn btn-success btn-sm" type="button" disabled>
-                            <i class="icon-clock"></i>
-                            Waiting for confirmation
-                        </button>
-                        <button *ngIf="relation.accepted == true" class="btn btn-success btn-sm" type="button" (click)="deleteRelation(user)">
-                            <i class="icon-user-unfollow"></i>
-                            Remove from friends
-                        </button>
+                    <div class="col-sm-6 text-left">
+                        <div *ngIf="user.username != currentUser.username">
+                            <button *ngIf="relation.accepted == null" class="btn btn-success btn-sm" type="button" (click)="invite(user)">
+                                <i class="icon-user-follow"></i>
+                                Add friend
+                            </button>
+                            <button *ngIf="relation.accepted == false" class="btn btn-success btn-sm" type="button" disabled>
+                                <i class="icon-clock"></i>
+                                Waiting for confirmation
+                            </button>
+                            <button *ngIf="relation.accepted == true" class="btn btn-success btn-sm" type="button" (click)="deleteRelation(user)">
+                                <i class="icon-user-unfollow"></i>
+                                Remove from friends
+                            </button>
+                        </div>
                     </div>
                     <div class="col-sm-6 text-right">
                         <button class="btn btn-secondary btn-sm" type="button" [routerLink]="['/', user.username, 'friends']">
@@ -48,16 +50,21 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p *ngFor="let invitation of invitations">
-                    <i class="icon-user"></i>
-                    {{invitation.username}}
-                    <button class="btn btn-outline-danger btn-sm" type="button" style="float: right" (click)="reject(invitation)">
-                        <i class="icon-user-unfollow"></i> Reject
-                    </button>
-                    <button class="btn btn-outline-success btn-sm" type="button" style="float: right" (click)="accept(invitation)">
-                        <i class="icon-user-following"></i> Accept
-                    </button>
-                </p>
+                <div *ngFor="let invitation of invitations">
+                    <div class="avatar"  style="float: left">
+                        <img [mediaProfileThumbnail]="invitation" class="img-avatar" />
+                    </div>
+                    <div>
+                        <h6 class="mt-2" style="display: inline; margin-left: 5px">{{invitation.username}}</h6>
+                        <button class="btn btn-outline-danger btn-sm" type="button" style="float: right" (click)="reject(invitation)">
+                            <i class="icon-user-unfollow"></i> Reject
+                        </button>
+                        <button class="btn btn-outline-success btn-sm" type="button" style="float: right" (click)="accept(invitation)">
+                            <i class="icon-user-following"></i> Accept
+                        </button>
+                    </div>
+                </div>
+                <h4 *ngIf="invitations.length == 0" class="text-center">No invitations</h4>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" (click)="invitationsModal.hide()">Close</button>

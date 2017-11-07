@@ -19,8 +19,8 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
             "p.author = :user " +
             "OR p.receiver = :user " +
             "OR p.author = :user " +
-            "OR p IN(SELECT c.post FROM Comment c WHERE c.author = :user)" +
-            "ORDER BY p.createdDate DESC"
+            "OR p IN(SELECT c.post FROM Comment c WHERE c.author = :user) " +
+        "ORDER BY p.createdDate DESC"
     )
     Page<Post> findPostsByUser(@Param("user") User user, Pageable page);
 
@@ -30,7 +30,7 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
             "OR p.author IN(SELECT r.receiver FROM Relation r WHERE r.sender = :user) " +
             "OR p.author = :user " +
             "OR p.receiver = :user " +
-            "OR p IN(SELECT c.post FROM Comment c WHERE c.author = :user)" +
+            "OR p IN(SELECT c.post FROM Comment c WHERE c.author = :user) " +
         "ORDER BY p.createdDate DESC"
     )
     Page<Post> findFeedByUser(@Param("user") User user, Pageable page);

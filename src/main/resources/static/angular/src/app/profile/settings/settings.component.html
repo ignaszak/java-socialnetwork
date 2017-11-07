@@ -9,7 +9,6 @@
                 <!-- GENERAL -->
                 <tab heading="General">
                     <div *ngIf="generalFormSubmit">
-
                         <div class="card card-inverse card-success text-center">
                             <div class="card-block">
                                 <blockquote class="card-blockquote">
@@ -18,7 +17,6 @@
                                 </blockquote>
                             </div>
                         </div>
-
                     </div>
                     <form [formGroup]="generalForm" (ngSubmit)="onSubmitGeneral()" class="form-horizontal" novalidate>
                         <div class="form-group row" [ngClass]="{
@@ -73,6 +71,19 @@
                             <button type="submit" class="btn btn-sm btn-success">Change password</button>
                         </div>
                     </form>
+                </tab>
+                <!-- PROFILE PHOTO -->
+                <tab heading="Profile photo">
+                    <image-upload
+                        url="{{profilePhotoUrl}}"
+                        [preview]="false"
+                        [max]="1"
+                        [extensions]="['jpeg','png', 'gif']"
+                        [buttonCaption]="'Select Image!'"
+                        [dropBoxMessage]="'Drop your image here!'"
+                        (uploadFinished)="onUploadFinished($event)"
+                        (uploadStateChanged)="onUploadStateChanged($event)"
+                    ></image-upload>
                 </tab>
             </tabset>
 

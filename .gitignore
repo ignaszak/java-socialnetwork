@@ -72,4 +72,6 @@ gradlew.bat
 /src/main/resources/static/public/.DS_Store
 /src/main/resources/static/public/Thumbs.db
 
+/src/main/resources/static/public/uploads
+
 /src/main/resources/application.properties

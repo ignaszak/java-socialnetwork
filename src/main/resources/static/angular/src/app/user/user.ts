@@ -8,6 +8,7 @@ export class User {
     password: string;
     role: string;
     caption: string;
+    profile: string;
     status: string;
 
     public isEqualsTo(user: User): boolean {

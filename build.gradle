@@ -42,12 +42,10 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-security')
     compile('org.springframework.boot:spring-boot-starter-mail')
     compile('org.springframework.security:spring-security-data')
-    //compile('org.springframework.session:spring-session')
     compile('org.springframework.boot:spring-boot-starter-thymeleaf')
-    //compile('org.springframework.boot:spring-boot-starter-validation')
-    //runtime('mysql:mysql-connector-java')
     compile("com.h2database:h2")
-    compile group: 'com.google.guava', name: 'guava', version: '23.0'
+    compile(group: 'com.google.guava', name: 'guava', version: '23.0')
+    compile(group: 'net.coobird', name: 'thumbnailator', version: '0.4.8')
     testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile('org.springframework.security:spring-security-test')
 }

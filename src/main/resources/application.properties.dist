@@ -23,8 +23,17 @@ spring.data.rest.default-page-size = 5
 # THYMELEAF
 spring.thymeleaf.cache = false
 
+# FILE UPLOAD
+app.uploads.path = src/main/resources/static/public/uploads
+app.thumbnail.width = 400
+app.thumbnail.height = 400
+app.profile.thumbnail.width = 100
+app.profile.thumbnail.height = 100
+spring.http.multipart.max-file-size = 128000KB
+spring.http.multipart.max-request-size = 128000KB
+
 # MAIL
-mail.from.address=
+app.mail.from.address=
 spring.mail.host=
 spring.mail.port=
 spring.mail.username=

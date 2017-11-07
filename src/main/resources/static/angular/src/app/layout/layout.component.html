@@ -1,23 +1,18 @@
 <header class="app-header navbar">
     <button class="navbar-toggler mobile-sidebar-toggler d-lg-none" type="button">&#9776;</button>
-    <a class="navbar-brand" [routerLink]="['/']"></a>
+    <a class="navbar-brand" [routerLink]="['/']">socialnetwork</a>
     <ul class="nav navbar-nav mr-auto d-md-down-none">
 
     </ul>
     <ul class="nav navbar-nav ml-auto">
         <li class="nav-item dropdown" dropdown (onToggle)="toggled($event)">
             <a href class="nav-link dropdown-toggle" dropdownToggle (click)="false">
-                <!--<img src="" class="img-avatar" alt="">-->
-                <i class="fa fa-user"></i>
+                <img [mediaProfileThumbnail]="currentUser" class="img-avatar" />
                 <span class="d-md-down-none">{{currentUser.username}}</span>
             </a>
             <div class="dropdown-menu dropdown-menu-right" *dropdownMenu aria-labelledby="simple-dropdown">
-                <a class="dropdown-item" href="#" [routerLink]="['/', currentUser.username]"><i class="fa fa-user"></i> Profile</a>
-                <a class="dropdown-item" href="#"><i class="fa fa-envelope-o"></i>
-                    Messages<span class="badge badge-success">42</span>
-                </a>
-
-                <div class="dropdown-header text-center"><strong>Settings</strong></div>
+                <a class="dropdown-item" href="#" [routerLink]="['/', currentUser.username]"><i class="icon-user"></i> Profile</a>
+                <a class="dropdown-item" href="#" [routerLink]="['/', currentUser.username, 'friends']"><i class="icon-people"></i> Friends</a>
                 <a class="dropdown-item" href="#" [routerLink]="['/profile/settings']"><i class="fa fa-wrench"></i> Setting</a>
                 <a class="dropdown-item" href="/auth/logout"><i class="fa fa-lock"></i> Logout</a>
             </div>
@@ -38,7 +33,10 @@
 </div>
 
 <footer class="app-footer">
-    <a href="http://coreui.io">CoreUI</a> &copy; 2017 creativeLabs.
+    <a href="https://github.com/ignaszak/java-socialnetwork">
+        <i class="fa fa-github"></i>
+        GitHub
+    </a>
     <span class="float-right">Powered by <a href="http://coreui.io">CoreUI</a>
     </span>
 </footer>

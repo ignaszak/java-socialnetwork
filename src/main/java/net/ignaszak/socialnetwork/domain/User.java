@@ -35,6 +35,9 @@ public class User {
     @Column(name = "caption")
     private String caption;
 
+    @Column(name = "profile")
+    private String profile;
+
     @Column(name = "activation_code")
     private String activationCode;
 
@@ -93,6 +96,14 @@ public class User {
 
     public String getCaption() {
         return caption;
+    }
+
+    public void setProfile(String profile) {
+        this.profile = profile;
+    }
+
+    public String getProfile() {
+        return profile;
     }
 
     public void setActivationCode(String activationCode) {

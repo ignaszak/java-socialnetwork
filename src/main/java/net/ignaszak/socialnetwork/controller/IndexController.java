@@ -1,7 +1,6 @@
 package net.ignaszak.socialnetwork.controller;
 
 import net.ignaszak.socialnetwork.service.user.SecurityService;
-import net.ignaszak.socialnetwork.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
@@ -15,16 +14,9 @@ public class IndexController {
 
     private SecurityService securityService;
 
-    private UserService userService;
-
     @Autowired
     public void setSecurityService(SecurityService securityService) {
         this.securityService = securityService;
-    }
-
-    @Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
     }
 
     @GetMapping("/")

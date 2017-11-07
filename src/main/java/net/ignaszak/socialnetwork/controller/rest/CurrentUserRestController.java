@@ -39,7 +39,7 @@ public class CurrentUserRestController {
         this.relationService = relationService;
     }
 
-    @Value("${mail.from.address}")
+    @Value("${app.mail.from.address}")
     public void setEmailFromAddress(String emailFromAddress) {
         this.emailFromAddress = emailFromAddress;
     }
