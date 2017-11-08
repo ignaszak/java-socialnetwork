@@ -14,9 +14,6 @@ import org.springframework.security.data.repository.query.SecurityEvaluationCont
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-/**
- * Created by tomek on 03.04.17.
- */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {

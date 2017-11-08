@@ -29,10 +29,8 @@ public class RelationServiceTests {
 
     @Autowired
     private RelationService relationService;
-
     @MockBean
     private RelationRepository relationRepository;
-
     @MockBean
     private UserService userService;
 
