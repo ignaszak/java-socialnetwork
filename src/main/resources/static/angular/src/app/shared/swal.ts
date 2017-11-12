@@ -25,4 +25,11 @@ export class Swal {
             type: 'success'
         })
     }
+
+    public static blank(title: string): void {
+        swal({
+            html: title,
+            showConfirmButton: false
+        })
+    }
 }

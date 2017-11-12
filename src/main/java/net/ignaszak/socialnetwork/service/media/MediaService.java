@@ -13,4 +13,5 @@ public interface MediaService {
     Media saveImageWithUser(MultipartFile file, User user);
     Resource getOneResourceByFilename(String filename);
     Page<Media> getByUser(User user, Pageable page);
+    void init();
 }

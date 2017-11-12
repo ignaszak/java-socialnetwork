@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -114,6 +115,15 @@ public class MediaServiceImpl implements MediaService {
             }
         } catch (MalformedURLException e) {
             throw new MediaUploadException("Could not read file: " + filename, e);
+        }
+    }
+
+    @Override
+    public void init() {
+        try {
+            if (! Files.exists(uploadsLocation)) Files.createDirectories(uploadsLocation);
+        } catch (IOException e) {
+            throw new MediaUploadException("Could not initialize storage", e);
         }
     }
 

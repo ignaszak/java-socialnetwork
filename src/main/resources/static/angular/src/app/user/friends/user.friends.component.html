@@ -1,5 +1,5 @@
 <div class="container">
-    <user-header *ngIf="user.id > 0" [user]="user"></user-header>
+    <user-header *ngIf="user.id > 0" (removedFriend)="removeFromFriendsList($event)" [user]="user"></user-header>
 
     <div class="row">
         <div class="offset-sm-2 col-md-8">
@@ -19,4 +19,5 @@
             </div>
         </div>
     </div>
+
 </div>

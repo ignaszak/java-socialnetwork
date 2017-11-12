@@ -1,4 +1,4 @@
-import {Component, Inject, Input, OnChanges, OnInit, SimpleChanges} from "@angular/core";
+import {Component, EventEmitter, Inject, Input, OnChanges, OnInit, Output, SimpleChanges} from "@angular/core";
 import {User} from "../user";
 import {UserServiceInterface} from "../user.service.interface";
 import {Relation} from "../relation";
@@ -12,6 +12,7 @@ import {Swal} from "../../shared/swal";
 export class UserHeaderComponent implements OnInit, OnChanges {
 
     @Input() user: User;
+    @Output() removedFriend = new EventEmitter();
     currentUser: User;
     relation: Relation;
     invitationsCount: number;
@@ -45,6 +46,7 @@ export class UserHeaderComponent implements OnInit, OnChanges {
         Swal.confirm(() => {
             this.userService.deleteRelationByUserId(user.id).then(accepted => {
                 this.relation.accepted = accepted;
+                this.removedFriend.emit(user);
                 Swal.success('Removed!', '<strong>' + user.username + '</strong> is not more your friend.');
             })
         });

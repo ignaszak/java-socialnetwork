@@ -2,7 +2,6 @@ import {Component, HostListener, Inject, OnChanges, OnInit, SimpleChanges} from 
 import {User} from "../user";
 import {UserServiceInterface} from "../user.service.interface";
 import {ActivatedRoute, Params} from "@angular/router";
-import {Invitation} from "../invitation";
 
 @Component({
     templateUrl: './user.friends.component.html'
@@ -41,6 +40,11 @@ export class UserFriendsComponent implements OnInit, OnChanges {
     @HostListener('window:scroll', ['$event'])
     onScrollDown(): void {
         if (window.innerHeight + window.scrollY === document.body.scrollHeight) this.getFriends();
+    }
+
+    removeFromFriendsList(friend: User): void {
+        let friendIndex: number = this.friends.indexOf(friend);
+        this.friends.splice(friendIndex, 1);
     }
 
     private getFriends(): void {

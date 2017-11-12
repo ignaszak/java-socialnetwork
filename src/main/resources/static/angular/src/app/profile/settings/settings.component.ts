@@ -1,7 +1,3 @@
-/**
- * Created by tomek on 29.06.17.
- */
-
 import {Component, Inject, OnInit} from "@angular/core";
 import {User} from "../../user/user";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
@@ -9,9 +5,10 @@ import {Http} from "@angular/http";
 import {UserServiceInterface} from "../../user/user.service.interface";
 import {UserService} from "../../user/user.service";
 import {RestProvider} from "../../rest/rest-provider";
-import {FileHolder} from "angular2-image-upload";
+import {FileHolder, UploadMetadata} from "angular2-image-upload";
 import {Events} from "../../shared/event/events";
 import {Event} from "../../shared/event/event";
+import {Swal} from "../../shared/swal";
 
 @Component({
     templateUrl: './settings.component.html'
@@ -72,17 +69,19 @@ export class SettingsComponent extends Event implements OnInit{
             if (this.generalForm.controls.email.valid && this.generalForm.controls.email.dirty) {
                 this.generalFormEmailActivation = true;
             }
-            console.log(user);
         }
     }
+
+    onBeforeUpload = (metadata: UploadMetadata) => {
+        Swal.blank('<i class="fa fa-spinner fa-spin" aria-hidden="true"></i> Uploading photo');
+        return metadata;
+    };
 
     onUploadFinished(event: FileHolder): void {
         this.userService.getCurrentUser().then(user => {
             this.currentUser = user;
             this.sendEvent(Events.UPDATE_CURRENT_USER, user);
+            Swal.success("Your profile has been updated successfully!");
         });
-    }
-
-    onUploadStateChanged(event: any): void {
     }
 }

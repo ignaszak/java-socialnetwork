@@ -5,3 +5,8 @@
     margin-top: -3px;
     border-radius: 50em;
 }
+.disable-clear{
+    .img-ul-clear {
+        display: none !important;
+    }
+}
