@@ -4,6 +4,7 @@ import {CommonModule} from "@angular/common";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {RouterModule} from "@angular/router";
 import {MediaModule} from "../shared/media/media.module";
+import {ImageUploadModule} from "angular2-image-upload";
 
 @NgModule({
     imports: [
@@ -11,7 +12,8 @@ import {MediaModule} from "../shared/media/media.module";
         FormsModule,
         ReactiveFormsModule,
         RouterModule,
-        MediaModule
+        MediaModule,
+        ImageUploadModule.forRoot()
     ],
     declarations: [
         PostComponent

@@ -22,6 +22,8 @@ export class PostComponent implements OnInit, OnChanges {
     private nextPostsPage: number = 0;
     private hasNextPostPage: boolean = true;
     private postForm: FormGroup;
+    postMediaUrl: string = '';
+    showUploader: boolean = false;
 
     constructor(
         @Inject('PostServiceInterface') private postService: PostServiceInterface,
