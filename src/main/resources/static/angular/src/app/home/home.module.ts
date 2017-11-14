@@ -4,7 +4,7 @@ import {HomeComponent} from './home.component';
 import {HomeRoutingModule} from './home-routing.module';
 import {CommonModule} from "@angular/common";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {PostListModule} from "../post/post-list.module";
+import {PostModule} from "../post/post.module";
 import {MediaModule} from "../shared/media/media.module";
 
 @NgModule({
@@ -13,7 +13,7 @@ import {MediaModule} from "../shared/media/media.module";
         HomeRoutingModule,
         FormsModule,
         ReactiveFormsModule,
-        PostListModule,
+        PostModule,
         MediaModule
     ],
     declarations: [

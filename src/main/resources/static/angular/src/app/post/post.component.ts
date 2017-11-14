@@ -18,10 +18,12 @@ export class PostComponent implements OnInit, OnChanges {
 
     @Input() user: User;
     currentUser: User;
-    private posts: Post[] = null;
+    posts: Post[] = null;
+    postForm: FormGroup;
+    postMediaUrl: string = '';
+    showUploader: boolean = false;
     private nextPostsPage: number = 0;
     private hasNextPostPage: boolean = true;
-    private postForm: FormGroup;
 
     constructor(
         @Inject('PostServiceInterface') private postService: PostServiceInterface,
