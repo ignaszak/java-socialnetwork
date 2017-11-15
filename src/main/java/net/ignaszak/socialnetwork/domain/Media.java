@@ -13,8 +13,12 @@ public class Media {
     @Column(name = "id", nullable = false, updatable = false)
     private Integer id;
 
-    @Column(name = "uuid", nullable = false)
-    private String uuid;
+    @Column(name = "filename", nullable = false)
+    private String filename;
+
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
+    @JoinColumn(name = "post_id")
+    private Post post;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
     @JoinColumn(name = "author_id", nullable = false)
@@ -24,8 +28,13 @@ public class Media {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
 
-    public Media() {
-        uuid = UUID.randomUUID().toString();
+    @Column(name = "key")
+    private Integer key;
+
+    public Media() {}
+
+    public Media(String filename) {
+        this.filename = filename;
     }
 
     @PrePersist
@@ -33,11 +42,27 @@ public class Media {
         createdDate = new Date();
     }
 
+    public String getFilename() {
+        return filename;
+    }
+
+    public Post getPost() {
+        return post;
+    }
+
+    public void setPost(Post post) {
+        this.post = post;
+    }
+
     public void setAuthor(User author) {
         this.author = author;
     }
 
-    public String getUuid() {
-        return uuid;
+    public Integer getKey() {
+        return key;
+    }
+
+    public void setKey(Integer key) {
+        this.key = key;
     }
 }

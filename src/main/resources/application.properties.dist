@@ -25,6 +25,9 @@ spring.thymeleaf.cache = false
 
 # FILE UPLOAD
 app.uploads.path = src/main/resources/static/public/uploads
+# Temporary upload path for images attached to post
+# Images are being uploaded before post submit
+app.uploads.temp.path = src/main/resources/static/public/uploads/temp
 app.thumbnail.width = 400
 app.thumbnail.height = 400
 app.profile.thumbnail.width = 100

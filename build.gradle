@@ -44,6 +44,7 @@ dependencies {
     compile('org.springframework.security:spring-security-data')
     compile('org.springframework.boot:spring-boot-starter-thymeleaf')
     compile("com.h2database:h2")
+    compile(group: 'commons-io', name: 'commons-io', version: '2.6')
     compile(group: 'com.google.guava', name: 'guava', version: '23.0')
     compile(group: 'net.coobird', name: 'thumbnailator', version: '0.4.8')
     testCompile('org.springframework.boot:spring-boot-starter-test')

@@ -9,6 +9,7 @@ import {CommentServiceInterface} from "../comment/comment.service.interface";
 import {Comment} from "../comment/comment";
 import {RestResponse} from "../rest/rest-response";
 import {Swal} from "../shared/swal";
+import {RestProvider} from "../rest/rest-provider";
 
 @Component({
     selector:    'post-list',
@@ -22,7 +23,7 @@ export class PostComponent implements OnInit, OnChanges {
     private nextPostsPage: number = 0;
     private hasNextPostPage: boolean = true;
     private postForm: FormGroup;
-    postMediaUrl: string = '';
+    postMediaUrl: string = RestProvider.POSTS_MEDIAS;
     showUploader: boolean = false;
 
     constructor(

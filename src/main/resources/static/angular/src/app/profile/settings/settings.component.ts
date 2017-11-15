@@ -19,7 +19,7 @@ export class SettingsComponent extends Event implements OnInit{
     generalForm: FormGroup;
     generalFormSubmit: boolean;
     generalFormEmailActivation: boolean;
-    profilePhotoUrl: string = RestProvider.USER_CURRENT_MEDIAS_PROFILE;
+    profilePhotoUrl: string = RestProvider.USER_CURRENT_PROFILE;
 
     constructor(
         @Inject('UserServiceInterface') private userService: UserServiceInterface,
@@ -78,10 +78,14 @@ export class SettingsComponent extends Event implements OnInit{
     };
 
     onUploadFinished(event: FileHolder): void {
-        this.userService.getCurrentUser().then(user => {
-            this.currentUser = user;
-            this.sendEvent(Events.UPDATE_CURRENT_USER, user);
-            Swal.success("Your profile has been updated successfully!");
-        });
+        if (event.serverResponse.status == 200) {
+            this.userService.getCurrentUser().then(user => {
+                this.currentUser = user;
+                this.sendEvent(Events.UPDATE_CURRENT_USER, user);
+                Swal.success("Your profile has been updated successfully!");
+            });
+        } else {
+            Swal.error();
+        }
     }
 }

@@ -12,15 +12,14 @@ export class RestProvider implements RestProviderInterface {
     private static readonly REST_URL = '/rest-api';
     public static readonly FEED_PAGEABLE                     = RestProvider.REST_URL + '/feed?page={page}';
     public static readonly POSTS                             = RestProvider.REST_URL + '/posts';
+    public static readonly POSTS_MEDIAS                      = RestProvider.REST_URL + '/posts/medias';
     public static readonly POST                              = RestProvider.REST_URL + '/posts/{postId}';
     public static readonly POST_COMMENTS                     = RestProvider.REST_URL + '/posts/{postId}/comments';
     public static readonly POST_COMMENTS_PAGEABLE            = RestProvider.REST_URL + '/posts/{postId}/comments?page={page}';
     public static readonly USER_CURRENT                      = RestProvider.REST_URL + '/users/current';
     public static readonly USER_CURRENT_INVITATIONS_PAGEABLE = RestProvider.REST_URL + '/users/current/invitations?page={page}';
     public static readonly USER_CURRENT_INVITATIONS_COUNT    = RestProvider.REST_URL + '/users/current/invitations/count';
-    public static readonly USER_CURRENT_MEDIAS               = RestProvider.REST_URL + '/users/current/medias';
-    public static readonly USER_CURRENT_MEDIAS_PAGEABLE      = RestProvider.REST_URL + '/users/current/medias?page={page}';
-    public static readonly USER_CURRENT_MEDIAS_PROFILE       = RestProvider.REST_URL + '/users/current/medias/profile';
+    public static readonly USER_CURRENT_PROFILE              = RestProvider.REST_URL + '/users/current/profile';
     public static readonly USER                              = RestProvider.REST_URL + '/users/{userId}';
     public static readonly USER_POSTS_PAGEABLE               = RestProvider.REST_URL + '/users/{userId}/posts?page={page}';
     public static readonly USER_FRIENDS                      = RestProvider.REST_URL + '/users/{userId}/friends';

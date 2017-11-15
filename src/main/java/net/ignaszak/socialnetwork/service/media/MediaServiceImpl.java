@@ -1,11 +1,13 @@
 package net.ignaszak.socialnetwork.service.media;
 
 import net.ignaszak.socialnetwork.domain.Media;
+import net.ignaszak.socialnetwork.domain.Post;
 import net.ignaszak.socialnetwork.domain.User;
 import net.ignaszak.socialnetwork.exception.MediaUploadException;
 import net.ignaszak.socialnetwork.model.image.Image;
 import net.ignaszak.socialnetwork.model.image.ImageException;
 import net.ignaszak.socialnetwork.repository.MediaRepository;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -22,6 +24,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Set;
+import java.util.UUID;
 
 @Service
 public class MediaServiceImpl implements MediaService {
@@ -29,6 +33,7 @@ public class MediaServiceImpl implements MediaService {
     private MediaRepository mediaRepository;
     private Image image;
     private Path uploadsLocation;
+    private Path tempLocation;
     private int profileThumbnailWidth;
     private int profileThumbnailHeight;
     private int thumbnailWidth;
@@ -47,6 +52,11 @@ public class MediaServiceImpl implements MediaService {
     @Value("${app.uploads.path}")
     public void setUploadsLocation(String uploadsLocation) {
         this.uploadsLocation = Paths.get(uploadsLocation);
+    }
+
+    @Value("${app.uploads.temp.path}")
+    public void setTempLocation(String tempLocation) {
+        this.tempLocation = Paths.get(tempLocation);
     }
 
     @Value("${app.profile.thumbnail.width}")
@@ -77,10 +87,11 @@ public class MediaServiceImpl implements MediaService {
     @Override
     public Media saveProfileImageWithUser(MultipartFile file, User user) {
         try {
-            Media media = new Media();
-            Image image = storeFile(file, media.getUuid());
+            String newName = getUniqueName(file);
+            Media media = new Media(newName);
+            Image image = storeFile(file, newName);
             image.createProfileThumbnail(profileThumbnailWidth, profileThumbnailHeight);
-            user.setProfile(image.toFile().getName());
+            user.setProfile(newName);
             media.setAuthor(user);
             mediaRepository.save(media);
             return media;
@@ -90,17 +101,35 @@ public class MediaServiceImpl implements MediaService {
     }
 
     @Override
-    public Media saveImageWithUser(MultipartFile file, User user) {
+    public Media saveTempImageWithUserAndKey(MultipartFile file, User user, Integer key) {
         try {
-            Media media = new Media();
-            Image image = storeFile(file, media.getUuid());
+            String newName = getUniqueName(file);
+            Media media = new Media(newName);
+            Image image = storeFile(file, newName);
             image.createThumbnail(thumbnailWidth, thumbnailHeight);
             media.setAuthor(user);
+            media.setKey(key);
             mediaRepository.save(media);
             return media;
         } catch (ImageException e) {
-            throw new MediaUploadException("Failed to store file " + file.getOriginalFilename(), e);
+            throw new MediaUploadException("Failed to store temp file " + file.getOriginalFilename(), e);
         }
+    }
+
+    @Override
+    public void attachMediasToPostByKey(Post post, Integer key) {
+        Set<Media> medias = mediaRepository.findAllByKey(key);
+        medias.forEach(m -> {
+            Path file = Paths.get(m.getFilename());
+            Path thumbnail = Paths.get("thumbnail-" + m.getFilename());
+            try {
+                Files.move(tempLocation.resolve(file), uploadsLocation.resolve(file));
+                Files.move(tempLocation.resolve(thumbnail), uploadsLocation.resolve(thumbnail));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        mediaRepository.attachMediasToPostByKey(post, key);
     }
 
     @Override
@@ -127,7 +156,7 @@ public class MediaServiceImpl implements MediaService {
         }
     }
 
-    private Image storeFile(MultipartFile file, String newNameWithoutExtension) {
+    private Image storeFile(MultipartFile file, String newName) {
         String filename = StringUtils.cleanPath(file.getOriginalFilename());
         if (file.isEmpty()) throw new MediaUploadException("Failed to store empty file " + filename);
         if (filename.contains(".."))
@@ -138,9 +167,13 @@ public class MediaServiceImpl implements MediaService {
                     this.uploadsLocation.resolve(filename),
                     StandardCopyOption.REPLACE_EXISTING
             );
-            return image.set(getOneResourceByFilename(filename)).toJpg().rename(newNameWithoutExtension + ".jpg");
+            return image.set(getOneResourceByFilename(filename)).toJpg().rename(newName);
         } catch (Exception e) {
             throw new MediaUploadException("Could not store file: " + filename, e);
         }
+    }
+
+    private String getUniqueName(MultipartFile file) {
+        return UUID.randomUUID().toString() + "." + FilenameUtils.getExtension(file.getOriginalFilename());
     }
 }
