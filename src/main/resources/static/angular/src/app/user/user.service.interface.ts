@@ -12,8 +12,8 @@ export interface UserServiceInterface {
     getCurrentUserInvitations(page: number): Promise<RestResponse<Invitation>>;
     countCurrentUserInvitations(): Promise<number>;
     getRelationByUser(user: User): Promise<Relation>;
-    updateUser(user: User): void;
-    changePassword(passwordSet: any): void;
+    updateUser(user: User): Promise<boolean>;
+    changePassword(passwordSet: any): Promise<boolean>;
     inviteUser(user: User): Promise<boolean>;
     acceptByUserId(userId: number): Promise<boolean>;
     deleteRelationByUserId(userId: number): Promise<any>;

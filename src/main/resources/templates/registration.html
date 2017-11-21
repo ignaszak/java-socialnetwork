@@ -23,24 +23,32 @@
                             <p class="text-muted">Create your account</p>
                             <div class="input-group mb-3">
                                 <span class="input-group-addon"><i class="icon-user"></i></span>
-                                <input class="form-control" placeholder="Username" type="text"  th:field="*{username}" />
+                                <input class="form-control" placeholder="Username" type="text"  th:field="*{username}" th:required="required" />
                             </div>
-                            <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}" th:required="required">Username error</p>
+                            <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}" th:required="required">
+                                Invalid username!
+                            </p>
                             <div class="input-group mb-3">
                                 <span class="input-group-addon">@</span>
-                                <input class="form-control" placeholder="Email" type="text" th:field="*{email}" />
+                                <input class="form-control" placeholder="Email" type="email" th:field="*{email}" th:required="required" />
                             </div>
-                            <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" th:required="required">Email error</p>
+                            <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" th:required="required">
+                                Invalid email!
+                            </p>
                             <div class="input-group mb-3">
                                 <span class="input-group-addon"><i class="icon-lock"></i></span>
-                                <input class="form-control" placeholder="Password" type="password"  th:field="*{password}" />
+                                <input class="form-control" placeholder="Password" type="password"  th:field="*{password}" th:required="required" />
                             </div>
-                            <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" th:required="required">Password error</p>
+                            <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" th:required="required">
+                                Password must by 8-15 characters!
+                            </p>
                             <div class="input-group mb-4">
                                 <span class="input-group-addon"><i class="icon-lock"></i></span>
-                                <input class="form-control" placeholder="Repeat password" type="password"  th:field="*{passwordRepeat}" />
+                                <input class="form-control" placeholder="Repeat password" type="password"  th:field="*{passwordRepeat}" th:required="required" />
                             </div>
-                            <p th:if="${#fields.hasErrors('passwordRepeat')}" th:errors="*{passwordRepeat}" th:required="required">RePassword error</p>
+                            <p th:if="${#fields.hasErrors('passwordRepeat')}" th:errors="*{passwordRepeat}" th:required="required">
+                                Passwords don't match!
+                            </p>
                             <button class="btn btn-block btn-success" type="submit">Create Account</button>
                         </form>
                     </div>

@@ -80,8 +80,11 @@ export class UserService implements UserServiceInterface{
             .catch(RestProvider.handleError)
     }
 
-    updateUser(user: User): void {
-        this.http.put(RestProvider.USER_CURRENT, user).subscribe();
+    updateUser(user: User): Promise<boolean> {
+        return this.http.put(RestProvider.USER_CURRENT, user)
+            .toPromise()
+            .then(() => true)
+            .catch(RestProvider.handleError);
     }
 
     inviteUser(user: User): Promise<boolean> {
@@ -108,8 +111,11 @@ export class UserService implements UserServiceInterface{
             .catch(RestProvider.handleError);
     }
 
-    changePassword(passwordSet: any): void {
-        this.http.put(RestProvider.USER_CURRENT_PASSWORD, passwordSet).subscribe();
+    changePassword(passwordSet: any): Promise<boolean> {
+        return this.http.put(RestProvider.USER_CURRENT_PASSWORD, passwordSet)
+            .toPromise()
+            .then(() => true)
+            .catch(() => false);
     }
 
     static uniqueEmail(http: Http, currentEmail: String = null): any {
@@ -127,7 +133,8 @@ export class UserService implements UserServiceInterface{
                             } else {
                                 resolve(null);
                             }
-                        }
+                        },
+                        error => resolve(null)
                     );
             });
         }

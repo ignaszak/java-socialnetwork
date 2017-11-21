@@ -32,19 +32,19 @@ public class UserRegistrationTypeValidator implements Validator {
 
     private void validateEmail(UserRegistrationType type, Errors errors) {
         if (userService.getUserByEmail(type.getEmail()) != null) {
-            errors.rejectValue("email", "Duplicate.registration.email","User with this email already exists.");
+            errors.rejectValue("email", "Duplicate.registration.email","User with this email already exists!");
         }
     }
 
     private void validateUsername(UserRegistrationType type, Errors errors) {
         if (userService.getUserByUsername(type.getUsername()) != null) {
-            errors.rejectValue("username", "Duplicate.registration.username", "User with this username already exists.");
+            errors.rejectValue("username", "Duplicate.registration.username", "User with this username already exists!");
         }
     }
 
     private void validatePasswords(UserRegistrationType type, Errors errors) {
         if (! type.getPassword().equals(type.getPasswordRepeat())) {
-            errors.rejectValue("password", "Diff.registration.password","Passwords do not match.");
+            errors.rejectValue("password", "Diff.registration.password","Passwords don't match!");
         }
     }
 }

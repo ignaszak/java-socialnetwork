@@ -22,7 +22,7 @@
                             <p class="text-muted">Send email with new password</p>
                             <div class="input-group mb-3">
                                 <span class="input-group-addon">@</span>
-                                <input class="form-control" placeholder="E-mail" type="email" th:field="*{email}" />
+                                <input class="form-control" placeholder="E-mail" type="email" th:field="*{email}" th:required="required" />
                             </div>
                             <p th:if="${isEmailInvalid}">Email not exists</p>
                             <button class="btn btn-block btn-success" type="submit">Remind password</button>

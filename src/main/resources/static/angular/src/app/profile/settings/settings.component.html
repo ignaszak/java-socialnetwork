@@ -8,16 +8,6 @@
             <tabset>
                 <!-- GENERAL -->
                 <tab heading="General">
-                    <div *ngIf="generalFormSubmit">
-                        <div class="card card-inverse card-success text-center">
-                            <div class="card-block">
-                                <blockquote class="card-blockquote">
-                                    <h4>Successful data update.</h4>
-                                    <h4 *ngIf="generalFormEmailActivation">You must confirm your new email, by clicking on activation link.</h4>
-                                </blockquote>
-                            </div>
-                        </div>
-                    </div>
                     <form [formGroup]="generalForm" (ngSubmit)="onSubmitGeneral()" class="form-horizontal" novalidate>
                         <div class="form-group row" [ngClass]="{
                             'has-danger': generalForm.controls.email.invalid && generalForm.controls.email.dirty,
@@ -49,7 +39,7 @@
                         <div class="form-group row">
                             <label class="col-md-3 form-control-label text-right" for="old-password">Old password</label>
                             <div class="col-md-9">
-                                <input type="password" id="old-password" formControlName="oldPassword" name="old-password" class="form-control" placeholder="Enter Current Password..">
+                                <input type="password" id="old-password" formControlName="oldPassword" name="old-password" class="form-control" placeholder="Enter Current Password">
                                 <span class="help-block" *ngIf="passwordForm.hasError('oldPassword')">
                                     Invalid password!
                                 </span>
@@ -58,18 +48,18 @@
                         <div class="form-group row">
                             <label class="col-md-3 form-control-label text-right" for="new-password">New password</label>
                             <div class="col-md-9">
-                                <input type="password" id="new-password" formControlName="newPassword" name="new-password" class="form-control" placeholder="Enter New Password..">
+                                <input type="password" id="new-password" formControlName="newPassword" name="new-password" class="form-control" placeholder="Enter New Password">
                                 <span class="help-block" *ngIf="passwordForm.hasError('newPassword')">
-                                    Invalid password!
+                                    Password must by 8-15 characters!
                                 </span>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-md-3 form-control-label text-right" for="new-password-repeat">RepeatNew password</label>
                             <div class="col-md-9">
-                                <input type="password" id="new-password-repeat" formControlName="newPasswordRepeat" name="new-password-repeat" class="form-control" placeholder="Repeat New Password..">
+                                <input type="password" id="new-password-repeat" formControlName="newPasswordRepeat" name="new-password-repeat" class="form-control" placeholder="Repeat New Password">
                                 <span class="help-block" *ngIf="passwordForm.hasError('newPasswordRepeat')">
-                                    Passwords do not match!
+                                    Passwords don't match!
                                 </span>
                             </div>
                         </div>

@@ -60,14 +60,14 @@
                                 <p class="text-muted">Sign In to your account</p>
                                 <div class="input-group mb-3">
                                     <span class="input-group-addon"><i class="icon-user"></i></span>
-                                    <input type="text" class="form-control" placeholder="Username" th:field="*{username}" />
+                                    <input type="text" class="form-control" placeholder="Username" th:field="*{username}" th:required="required" />
                                 </div>
-                                <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}" th:required="required">Username error</p>
+                                <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}" th:required="required">Invalid username!</p>
                                 <div class="input-group mb-4">
                                     <span class="input-group-addon"><i class="icon-lock"></i></span>
-                                    <input type="password" class="form-control" placeholder="Password" th:field="*{password}" />
+                                    <input type="password" class="form-control" placeholder="Password" th:field="*{password}" th:required="required" />
                                 </div>
-                                <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" th:required="required">Password error</p>
+                                <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" th:required="required">Invalid password!</p>
                                 <div class="row">
                                     <div class="col-md-6">
                                         <button type="submit" class="btn btn-primary px-4">Login</button>

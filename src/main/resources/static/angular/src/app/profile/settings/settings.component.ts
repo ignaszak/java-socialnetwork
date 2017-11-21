@@ -18,18 +18,15 @@ export class SettingsComponent extends Event implements OnInit{
 
     currentUser: User;
     generalForm: FormGroup;
-    generalFormSubmit: boolean;
-    generalFormEmailActivation: boolean;
     passwordForm: ValidationManager;
     profilePhotoUrl: string = RestProvider.USER_CURRENT_MEDIAS_PROFILE;
+    private message = 'Your profile has been updated successfully!';
 
     constructor(
         @Inject('UserServiceInterface') private userService: UserServiceInterface,
         private http: Http
     ) {
         super();
-        this.generalFormSubmit = false;
-        this.generalFormEmailActivation = false;
         this.currentUser = new User();
         this.generalForm = new FormGroup({
             email: new FormControl(),
@@ -69,20 +66,25 @@ export class SettingsComponent extends Event implements OnInit{
 
     onSubmitGeneral(): void {
         if (this.generalForm.valid) {
+            Swal.blank('<i class="fa fa-spinner fa-spin" aria-hidden="true"></i> Saving');
             let user: User = this.generalForm.value;
             user.id = this.currentUser.id;
-            this.userService.updateUser(user);
-            this.generalFormSubmit = true;
-            if (this.generalForm.controls.email.valid && this.generalForm.controls.email.dirty) {
-                this.generalFormEmailActivation = true;
-            }
+            this.userService.updateUser(user).then(() => {
+                let activation = '';
+                if (this.generalForm.controls.email.valid && this.generalForm.controls.email.dirty) {
+                    activation = 'You must confirm your new email, by clicking on activation link.';
+                }
+                Swal.success(this.message, activation);
+            });
+
         }
     }
 
     onSubmitPassword(): void {
         if (this.passwordForm.isValid()) {
-            console.log(this.passwordForm.getData());
-            this.userService.changePassword(this.passwordForm.getData());
+            Swal.blank('<i class="fa fa-spinner fa-spin" aria-hidden="true"></i> Saving');
+            this.userService.changePassword(this.passwordForm.getData())
+                .then(res => res ? Swal.success(this.message) : Swal.error('Incorrect old password.', ''));
         }
     }
 
@@ -95,7 +97,7 @@ export class SettingsComponent extends Event implements OnInit{
         this.userService.getCurrentUser().then(user => {
             this.currentUser = user;
             this.sendEvent(Events.UPDATE_CURRENT_USER, user);
-            Swal.success("Your profile has been updated successfully!");
+            Swal.success(this.message);
         });
     }
 }
