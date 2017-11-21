@@ -1,7 +1,7 @@
 package net.ignaszak.socialnetwork.service.user;
 
 import net.ignaszak.socialnetwork.domain.User;
-import net.ignaszak.socialnetwork.form.UserRegistrationForm;
+import net.ignaszak.socialnetwork.type.UserRegistrationType;
 import net.ignaszak.socialnetwork.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserFromUserRegistrationForm(UserRegistrationForm userRegistrationForm) {
+    public User getUserFromUserRegistrationForm(UserRegistrationType userRegistrationForm) {
         User user = new User();
         user.setEmail(userRegistrationForm.getEmail());
         user.setUsername(userRegistrationForm.getUsername());

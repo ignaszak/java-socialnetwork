@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("rest-api/posts")
-public class PostRestController {
+public class PostsRestController {
 
     private PostService postService;
     private UserService userService;

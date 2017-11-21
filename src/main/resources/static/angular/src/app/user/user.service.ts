@@ -108,6 +108,10 @@ export class UserService implements UserServiceInterface{
             .catch(RestProvider.handleError);
     }
 
+    changePassword(passwordSet: any): void {
+        this.http.put(RestProvider.USER_CURRENT_PASSWORD, passwordSet).subscribe();
+    }
+
     static uniqueEmail(http: Http, currentEmail: String = null): any {
         return (control: FormControl) => {
             return new Promise((resolve) => {

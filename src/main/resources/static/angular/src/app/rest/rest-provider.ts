@@ -21,6 +21,7 @@ export class RestProvider implements RestProviderInterface {
     public static readonly USER_CURRENT_MEDIAS               = RestProvider.REST_URL + '/users/current/medias';
     public static readonly USER_CURRENT_MEDIAS_PAGEABLE      = RestProvider.REST_URL + '/users/current/medias?page={page}';
     public static readonly USER_CURRENT_MEDIAS_PROFILE       = RestProvider.REST_URL + '/users/current/medias/profile';
+    public static readonly USER_CURRENT_PASSWORD             = RestProvider.REST_URL + '/users/current/password';
     public static readonly USER                              = RestProvider.REST_URL + '/users/{userId}';
     public static readonly USER_POSTS_PAGEABLE               = RestProvider.REST_URL + '/users/{userId}/posts?page={page}';
     public static readonly USER_FRIENDS                      = RestProvider.REST_URL + '/users/{userId}/friends';

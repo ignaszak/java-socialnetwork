@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("rest-api/posts/{id}/comments")
-public class PostCommentRestController {
+public class PostsCommentsRestController {
 
     private CommentService commentService;
     private UserService userService;
@@ -40,7 +40,7 @@ public class PostCommentRestController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public Page<Comment> get(@PathVariable("id") Integer id, Pageable page) {
         Post post = postService.getPostById(id);
-        //if (post == null) throw new ResourceNotFoundException();
+        if (post == null) throw new ResourceNotFoundException();
         return commentService.getCommentsByPost(post, page);
     }
 

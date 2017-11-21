@@ -34,6 +34,14 @@
                     </div>
                 </div>
 
+                <div class="card-group mb-4" th:unless="${param.remind == null}">
+                    <div class="card p-4">
+                        <div class="card-block">
+                            <h2 class="text-center">We have sent you new password, please check your email.</h2>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="card-group mb-4" th:unless="${param.error == null}">
                     <div class="card p-4">
                         <div class="card-block">
@@ -65,7 +73,7 @@
                                         <button type="submit" class="btn btn-primary px-4">Login</button>
                                     </div>
                                     <div class="col-md-6 text-right">
-                                        <a href="#" class="btn btn-link px-0">Forgot password?</a>
+                                        <a href="/remind" th:href="@{/remind}" class="btn btn-link px-0">Forgot password?</a>
                                     </div>
                                 </div>
                             </form>

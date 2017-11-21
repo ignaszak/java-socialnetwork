@@ -1,8 +1,7 @@
 package net.ignaszak.socialnetwork.controller;
 
-import net.ignaszak.socialnetwork.auth.validator.UserRegistrationFormValidator;
-import net.ignaszak.socialnetwork.form.UserLoginForm;
-import net.ignaszak.socialnetwork.form.UserRegistrationForm;
+import net.ignaszak.socialnetwork.auth.validator.UserRegistrationTypeValidator;
+import net.ignaszak.socialnetwork.type.UserRegistrationType;
 import net.ignaszak.socialnetwork.model.mail.EmailSender;
 import net.ignaszak.socialnetwork.service.user.SecurityService;
 import net.ignaszak.socialnetwork.service.user.UserService;
@@ -14,23 +13,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
 import javax.validation.Valid;
 import java.util.UUID;
 
-/**
- * Created by tomek on 10.04.17.
- */
 @Controller
-public class UserAuthController {
+@RequestMapping("/registration")
+public class UserRegistrationController {
 
     private UserService userService;
-    private UserRegistrationFormValidator userRegistrationFormValidator;
+    private UserRegistrationTypeValidator userRegistrationTypeValidator;
     private SecurityService securityService;
     private EmailSender emailSender;
     private String emailFromAddress;
@@ -46,8 +40,8 @@ public class UserAuthController {
     }
 
     @Autowired
-    public void setUserRegistrationFormValidator(UserRegistrationFormValidator userRegistrationFormValidator) {
-        this.userRegistrationFormValidator = userRegistrationFormValidator;
+    public void setUserRegistrationTypeValidator(UserRegistrationTypeValidator userRegistrationTypeValidator) {
+        this.userRegistrationTypeValidator = userRegistrationTypeValidator;
     }
 
     @Autowired
@@ -62,24 +56,19 @@ public class UserAuthController {
 
     @InitBinder("registration")
     public void initBinder(WebDataBinder binder) {
-        binder.addValidators(userRegistrationFormValidator);
+        binder.addValidators(userRegistrationTypeValidator);
     }
 
-    @GetMapping("/login")
-    public String login(Model model) {
-        model.addAttribute("login", new UserLoginForm());
-        return redirectToIndexIfUserIsLoggedIn("login");
-    }
-
-    @GetMapping("/registration")
+    @GetMapping
     public String registration(Model model) {
-        model.addAttribute("registration", new UserRegistrationForm());
-        return redirectToIndexIfUserIsLoggedIn("registration");
+        model.addAttribute("registration", new UserRegistrationType());
+        User user = securityService.findLoggedInUser();
+        return user != null ? "redirect:/" : "registration";
     }
 
-    @PostMapping("/registration")
+    @PostMapping
     public String registration(
-            @Valid @ModelAttribute("registration") UserRegistrationForm userRegistrationForm,
+            @Valid @ModelAttribute("registration") UserRegistrationType userRegistrationForm,
             BindingResult bindingResult,
             HttpServletRequest request
     ) {
@@ -104,13 +93,5 @@ public class UserAuthController {
         userService.add(user);
 
         return "redirect:/login?activation";
-    }
-
-    private String redirectToIndexIfUserIsLoggedIn(String view) {
-        User user = securityService.findLoggedInUser();
-        if (user != null) {
-            return "redirect:/";
-        }
-        return view;
     }
 }

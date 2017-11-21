@@ -1,8 +1,6 @@
 package net.ignaszak.socialnetwork.controller;
 
-import net.ignaszak.socialnetwork.auth.validator.UserRegistrationFormValidator;
 import net.ignaszak.socialnetwork.config.SecurityConfig;
-import net.ignaszak.socialnetwork.model.mail.EmailSender;
 import net.ignaszak.socialnetwork.service.user.SecurityService;
 import net.ignaszak.socialnetwork.service.user.UserService;
 import org.junit.Test;
@@ -17,15 +15,16 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.bind.WebDataBinder;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(value = UserAuthController.class)
+@WebMvcTest(value = UserLoginController.class)
 @Import(SecurityConfig.class)
-public class UserAuthControllerTests {
+public class UserLoginControllerTests {
 
     @Autowired
     MockMvc mockMvc;
@@ -34,15 +33,9 @@ public class UserAuthControllerTests {
     @MockBean
     UserService userService;
     @MockBean
-    UserRegistrationFormValidator userRegistrationFormValidator;
-    @MockBean
-    EmailSender emailSender;
-    @MockBean
     UserDetailsService userDetailsService;
     @MockBean
     User user;
-    @MockBean
-    WebDataBinder webDataBinder;
 
     @Test
     @WithMockUser
@@ -51,19 +44,12 @@ public class UserAuthControllerTests {
         mockMvc.perform(get("/login"))
                 .andExpect(status().isMovedTemporarily())
                 .andExpect(redirectedUrl("/"));
-        mockMvc.perform(get("/registration"))
-                .andExpect(status().isMovedTemporarily())
-                .andExpect(redirectedUrl("/"));
     }
 
     @Test
-    public void shouldDisplayLoginOrRegistrationFormWhenUserIsNotLogged() throws Exception {
+    public void shouldDisplayLoginFormWhenUserIsNotLogged() throws Exception {
         mockMvc.perform(get("/login"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("login"));
-        Mockito.when(userRegistrationFormValidator.supports(Mockito.any())).thenReturn(true);
-        mockMvc.perform(get("/registration"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("registration"));
     }
 }

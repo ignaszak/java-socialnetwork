@@ -9,6 +9,7 @@ import {FileHolder, UploadMetadata} from "angular2-image-upload";
 import {Events} from "../../shared/event/events";
 import {Event} from "../../shared/event/event";
 import {Swal} from "../../shared/swal";
+import {ValidationManager} from "ng2-validation-manager";
 
 @Component({
     templateUrl: './settings.component.html'
@@ -19,6 +20,7 @@ export class SettingsComponent extends Event implements OnInit{
     generalForm: FormGroup;
     generalFormSubmit: boolean;
     generalFormEmailActivation: boolean;
+    passwordForm: ValidationManager;
     profilePhotoUrl: string = RestProvider.USER_CURRENT_MEDIAS_PROFILE;
 
     constructor(
@@ -32,6 +34,11 @@ export class SettingsComponent extends Event implements OnInit{
         this.generalForm = new FormGroup({
             email: new FormControl(),
             caption: new FormControl()
+        });
+        this.passwordForm = new ValidationManager({
+            'oldPassword'      : 'required|rangeLength:8,15',
+            'newPassword'      : 'required|rangeLength:8,15',
+            'newPasswordRepeat': 'required|equalTo:newPassword'
         });
     }
 
@@ -69,6 +76,13 @@ export class SettingsComponent extends Event implements OnInit{
             if (this.generalForm.controls.email.valid && this.generalForm.controls.email.dirty) {
                 this.generalFormEmailActivation = true;
             }
+        }
+    }
+
+    onSubmitPassword(): void {
+        if (this.passwordForm.isValid()) {
+            console.log(this.passwordForm.getData());
+            this.userService.changePassword(this.passwordForm.getData());
         }
     }
 

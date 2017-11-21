@@ -13,6 +13,7 @@ export interface UserServiceInterface {
     countCurrentUserInvitations(): Promise<number>;
     getRelationByUser(user: User): Promise<Relation>;
     updateUser(user: User): void;
+    changePassword(passwordSet: any): void;
     inviteUser(user: User): Promise<boolean>;
     acceptByUserId(userId: number): Promise<boolean>;
     deleteRelationByUserId(userId: number): Promise<any>;

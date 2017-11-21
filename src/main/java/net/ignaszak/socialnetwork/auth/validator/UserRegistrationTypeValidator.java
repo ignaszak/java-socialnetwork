@@ -1,17 +1,14 @@
 package net.ignaszak.socialnetwork.auth.validator;
 
-import net.ignaszak.socialnetwork.form.UserRegistrationForm;
+import net.ignaszak.socialnetwork.type.UserRegistrationType;
 import net.ignaszak.socialnetwork.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-/**
- * Created by tomek on 09.04.17.
- */
 @Component
-public class UserRegistrationFormValidator implements Validator {
+public class UserRegistrationTypeValidator implements Validator {
 
     private UserService userService;
 
@@ -22,31 +19,31 @@ public class UserRegistrationFormValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> c) {
-        return c.equals(UserRegistrationForm.class);
+        return c.equals(UserRegistrationType.class);
     }
 
     @Override
     public void validate(Object object, Errors errors) {
-        UserRegistrationForm form = (UserRegistrationForm) object;
-        validateEmail(form, errors);
-        validateUsername(form, errors);
-        validatePasswords(form, errors);
+        UserRegistrationType type = (UserRegistrationType) object;
+        validateEmail(type, errors);
+        validateUsername(type, errors);
+        validatePasswords(type, errors);
     }
 
-    private void validateEmail(UserRegistrationForm form, Errors errors) {
-        if (userService.getUserByEmail(form.getEmail()) != null) {
+    private void validateEmail(UserRegistrationType type, Errors errors) {
+        if (userService.getUserByEmail(type.getEmail()) != null) {
             errors.rejectValue("email", "Duplicate.registration.email","User with this email already exists.");
         }
     }
 
-    private void validateUsername(UserRegistrationForm form, Errors errors) {
-        if (userService.getUserByUsername(form.getUsername()) != null) {
+    private void validateUsername(UserRegistrationType type, Errors errors) {
+        if (userService.getUserByUsername(type.getUsername()) != null) {
             errors.rejectValue("username", "Duplicate.registration.username", "User with this username already exists.");
         }
     }
 
-    private void validatePasswords(UserRegistrationForm form, Errors errors) {
-        if (! form.getPassword().equals(form.getPasswordRepeat())) {
+    private void validatePasswords(UserRegistrationType type, Errors errors) {
+        if (! type.getPassword().equals(type.getPasswordRepeat())) {
             errors.rejectValue("password", "Diff.registration.password","Passwords do not match.");
         }
     }

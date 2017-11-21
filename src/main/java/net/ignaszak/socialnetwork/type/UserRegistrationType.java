@@ -1,4 +1,4 @@
-package net.ignaszak.socialnetwork.form;
+package net.ignaszak.socialnetwork.type;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
 /**
  * Created by tomek on 05.04.17.
  */
-public class UserRegistrationForm {
+public class UserRegistrationType {
 
     @NotBlank
     @Email

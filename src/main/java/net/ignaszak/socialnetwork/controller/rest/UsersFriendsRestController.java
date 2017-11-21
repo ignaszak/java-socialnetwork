@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("rest-api/users")
-public class UserFriendRestController {
+public class UsersFriendsRestController {
 
     private UserService userService;
     private RelationService relationService;

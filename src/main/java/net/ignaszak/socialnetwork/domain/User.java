@@ -1,13 +1,13 @@
 package net.ignaszak.socialnetwork.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 
-/**
- * Created by tomek on 05.04.17.
- */
 @Entity
 @Table(name = "user")
 public class User {
@@ -18,15 +18,19 @@ public class User {
     private Integer id;
 
     @Column(name = "email", nullable = false, unique = true)
+    @Email
     private String email;
 
     @Column(name = "new_email")
+    @Email
     private String newEmail;
 
     @Column(name = "username", nullable = false, unique = true, updatable = false)
+    @NotBlank
     private String username;
 
     @Column(name = "password", nullable = false)
+    @NotBlank
     private String password;
 
     @Column(name = "role", nullable = false)
@@ -46,7 +50,6 @@ public class User {
 
     @Column(name = "enabled")
     private boolean enabled;
-
 
     public User() {
         enabled = false;

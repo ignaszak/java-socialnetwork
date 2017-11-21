@@ -2,12 +2,9 @@ package net.ignaszak.socialnetwork.controller.rest;
 
 import net.ignaszak.socialnetwork.domain.User;
 import net.ignaszak.socialnetwork.model.mail.EmailSender;
-import net.ignaszak.socialnetwork.service.relation.RelationService;
 import net.ignaszak.socialnetwork.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,11 +14,10 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("rest-api/users/current")
-public class CurrentUserRestController {
+public class UsersCurrentRestController {
 
     private UserService userService;
     private EmailSender emailSender;
-    private RelationService relationService;
     private String emailFromAddress;
 
     @Autowired
@@ -32,11 +28,6 @@ public class CurrentUserRestController {
     @Autowired
     public void setEmailSender(EmailSender emailSender) {
         this.emailSender = emailSender;
-    }
-
-    @Autowired
-    public void setRelationService(RelationService relationService) {
-        this.relationService = relationService;
     }
 
     @Value("${app.mail.from.address}")
@@ -71,15 +62,5 @@ public class CurrentUserRestController {
         }
         userService.save(currentUser);
         return currentUser;
-    }
-
-    @GetMapping(value = "/invitations", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Page<User> getInvitations(Pageable page) {
-        return userService.getInvitationsByCurrentUser(page);
-    }
-
-    @GetMapping(value = "/invitations/count", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Integer countInvitations() {
-        return relationService.countInvitationsByCurrentUser();
     }
 }

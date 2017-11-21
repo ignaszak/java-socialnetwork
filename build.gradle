@@ -46,6 +46,7 @@ dependencies {
     compile("com.h2database:h2")
     compile(group: 'com.google.guava', name: 'guava', version: '23.0')
     compile(group: 'net.coobird', name: 'thumbnailator', version: '0.4.8')
+    testCompile(group: 'com.jcabi', name: 'jcabi-matchers', version: '1.4')
     testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile('org.springframework.security:spring-security-test')
 }

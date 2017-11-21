@@ -12,8 +12,8 @@
                         <div class="card card-inverse card-success text-center">
                             <div class="card-block">
                                 <blockquote class="card-blockquote">
-                                    <p>Successful data update.</p>
-                                    <p *ngIf="generalFormEmailActivation">You must confirm your new email, by clicking on activation link.</p>
+                                    <h4>Successful data update.</h4>
+                                    <h4 *ngIf="generalFormEmailActivation">You must confirm your new email, by clicking on activation link.</h4>
                                 </blockquote>
                             </div>
                         </div>
@@ -45,26 +45,32 @@
                 </tab>
                 <!-- PASSWORD -->
                 <tab heading="Password">
-                    <form action="" method="post" class="form-horizontal">
+                    <form [formGroup]="passwordForm.getForm()" (ngSubmit)="onSubmitPassword()" class="form-horizontal" novalidate>
                         <div class="form-group row">
                             <label class="col-md-3 form-control-label text-right" for="old-password">Old password</label>
                             <div class="col-md-9">
-                                <input type="password" id="old-password" name="old-password" class="form-control" placeholder="Enter Current Password..">
-                                <span class="help-block">Please enter your current password</span>
+                                <input type="password" id="old-password" formControlName="oldPassword" name="old-password" class="form-control" placeholder="Enter Current Password..">
+                                <span class="help-block" *ngIf="passwordForm.hasError('oldPassword')">
+                                    Invalid password!
+                                </span>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-md-3 form-control-label text-right" for="new-password">New password</label>
                             <div class="col-md-9">
-                                <input type="password" id="new-password" name="new-password" class="form-control" placeholder="Enter New Password..">
-                                <span class="help-block">Please enter your new password</span>
+                                <input type="password" id="new-password" formControlName="newPassword" name="new-password" class="form-control" placeholder="Enter New Password..">
+                                <span class="help-block" *ngIf="passwordForm.hasError('newPassword')">
+                                    Invalid password!
+                                </span>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-md-3 form-control-label text-right" for="repeat-new-password">RepeatNew password</label>
+                            <label class="col-md-3 form-control-label text-right" for="new-password-repeat">RepeatNew password</label>
                             <div class="col-md-9">
-                                <input type="password" id="repeat-new-password" name="repeat-new-password" class="form-control" placeholder="Repeat New Password..">
-                                <span class="help-block">Please repeat your new password</span>
+                                <input type="password" id="new-password-repeat" formControlName="newPasswordRepeat" name="new-password-repeat" class="form-control" placeholder="Repeat New Password..">
+                                <span class="help-block" *ngIf="passwordForm.hasError('newPasswordRepeat')">
+                                    Passwords do not match!
+                                </span>
                             </div>
                         </div>
                         <div class="form-group form-actions text-center">

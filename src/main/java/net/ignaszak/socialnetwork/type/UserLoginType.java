@@ -1,13 +1,10 @@
-package net.ignaszak.socialnetwork.form;
+package net.ignaszak.socialnetwork.type;
 
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Size;
 
-/**
- * Created by tomek on 10.04.17.
- */
-public class UserLoginForm {
+public class UserLoginType {
 
     @NotBlank
     private String username;

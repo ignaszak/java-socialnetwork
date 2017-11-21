@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("rest-api/users/current/medias")
-public class CurrentUserMediaRestController {
+public class UsersCurrentMediaRestController {
 
     private MediaService mediaService;
     private UserService userService;
