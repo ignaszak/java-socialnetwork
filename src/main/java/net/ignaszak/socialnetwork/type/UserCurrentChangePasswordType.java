@@ -1,21 +1,18 @@
 package net.ignaszak.socialnetwork.type;
 
-import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.validation.constraints.Size;
 
 public class UserCurrentChangePasswordType {
 
-    @NotBlank
+    @Size(min = 8, max = 15, message = "Password must by 8-15 characters!")
     private String oldPassword;
 
-    @NotBlank
-    @Size(min = 8, max = 15)
+    @Size(min = 8, max = 15, message = "Password must by 8-15 characters!")
     private String newPassword;
 
-    @NotBlank
-    @Size(min = 8, max = 15)
+    @Size(min = 8, max = 15, message = "Password must by 8-15 characters!")
     private String newPasswordRepeat;
 
     public void setOldPassword(String oldPassword) {
