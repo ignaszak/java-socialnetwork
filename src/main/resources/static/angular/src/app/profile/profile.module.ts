@@ -10,7 +10,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {CommonModule} from "@angular/common";
 import {UserHeaderModule} from "../user/header/user.header.module";
 import {ImageUploadModule} from "angular2-image-upload";
-import {MediaModule} from "../shared/media/media.module";
+import {MediaModule} from "../media/media.module";
 
 @NgModule({
     imports: [

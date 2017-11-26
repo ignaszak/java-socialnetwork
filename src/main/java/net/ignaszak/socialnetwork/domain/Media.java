@@ -1,5 +1,7 @@
 package net.ignaszak.socialnetwork.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.UUID;
@@ -29,7 +31,7 @@ public class Media {
     private Date createdDate;
 
     @Column(name = "key")
-    private Integer key;
+    private String key;
 
     public Media() {}
 
@@ -42,10 +44,19 @@ public class Media {
         createdDate = new Date();
     }
 
+    public Integer getId() {
+        return id;
+    }
+
     public String getFilename() {
         return filename;
     }
 
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    @JsonIgnore
     public Post getPost() {
         return post;
     }
@@ -58,11 +69,12 @@ public class Media {
         this.author = author;
     }
 
-    public Integer getKey() {
+    @JsonIgnore
+    public String getKey() {
         return key;
     }
 
-    public void setKey(Integer key) {
+    public void setKey(String key) {
         this.key = key;
     }
 }

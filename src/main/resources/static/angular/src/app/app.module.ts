@@ -21,7 +21,9 @@ import {UserServiceInterface} from "./user/user.service.interface";
 import {PostService} from "./post/post.service";
 import {RestProvider} from "./rest/rest-provider";
 import {CommentService} from "./comment/comment.service";
-import {MediaModule} from "./shared/media/media.module";
+import {MediaModule} from "./media/media.module";
+import {MediaService} from "./media/media.service";
+import {NgxGalleryModule} from "ngx-gallery";
 
 @NgModule({
     imports: [
@@ -31,7 +33,8 @@ import {MediaModule} from "./shared/media/media.module";
         TabsModule.forRoot(),
         ChartsModule,
         HttpModule,
-        MediaModule
+        MediaModule,
+        NgxGalleryModule
     ],
     declarations: [
         AppComponent,
@@ -45,7 +48,8 @@ import {MediaModule} from "./shared/media/media.module";
         {provide: 'RestProviderInterface', useClass: RestProvider},
         {provide: 'UserServiceInterface', useClass: UserService},
         {provide: 'PostServiceInterface', useClass: PostService},
-        {provide: 'CommentServiceInterface', useClass: CommentService}
+        {provide: 'CommentServiceInterface', useClass: CommentService},
+        {provide: 'MediaServiceInterface', useClass: MediaService}
     ]
 })
 export class AppModule {

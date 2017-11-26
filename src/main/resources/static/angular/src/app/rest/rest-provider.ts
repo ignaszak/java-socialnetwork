@@ -7,12 +7,13 @@ import {Swal} from "../shared/swal";
 @Injectable()
 export class RestProvider implements RestProviderInterface {
 
-    public static readonly PUBLIC_MEDIAS = '/public/medias/';
+    public static readonly PUBLIC_MEDIAS = '/public/medias';
 
     private static readonly REST_URL = '/rest-api';
     public static readonly FEED_PAGEABLE                     = RestProvider.REST_URL + '/feed?page={page}';
     public static readonly POSTS                             = RestProvider.REST_URL + '/posts';
-    public static readonly POSTS_MEDIAS                      = RestProvider.REST_URL + '/posts/medias';
+    public static readonly POSTS_MEDIAS                      = RestProvider.REST_URL + '/posts/{postId}/medias';
+    public static readonly POSTS_MEDIAS_UPLOAD               = RestProvider.REST_URL + '/posts/medias/{key}';
     public static readonly POST                              = RestProvider.REST_URL + '/posts/{postId}';
     public static readonly POST_COMMENTS                     = RestProvider.REST_URL + '/posts/{postId}/comments';
     public static readonly POST_COMMENTS_PAGEABLE            = RestProvider.REST_URL + '/posts/{postId}/comments?page={page}';

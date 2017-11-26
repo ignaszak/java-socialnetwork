@@ -8,8 +8,10 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Set;
+
 @RestController
-@RequestMapping("rest-api/posts/medias")
+@RequestMapping("rest-api/posts")
 public class PostMediaRestController {
 
     private MediaService mediaService;
@@ -25,8 +27,13 @@ public class PostMediaRestController {
         this.userService = userService;
     }
 
-    @PostMapping(value = "/{key}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Media uploadImage(@PathVariable("key") Integer key, @RequestParam("image") MultipartFile image) {
+    @GetMapping(value = "/{id}/medias", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Set<Media> get(@PathVariable("id") Integer id) {
+        return mediaService.getByPostId(id);
+    }
+
+    @PostMapping(value = "/medias/{key}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Media uploadImage(@PathVariable("key") String key, @RequestParam("image") MultipartFile image) {
         return mediaService.saveTempImageWithUserAndKey(image, userService.getCurrentUser(), key);
     }
 }

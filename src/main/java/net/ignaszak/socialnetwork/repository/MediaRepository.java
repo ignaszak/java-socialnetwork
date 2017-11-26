@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 
@@ -17,9 +18,11 @@ import java.util.Set;
 public interface MediaRepository extends JpaRepository<Media, Integer> {
 
     Page<Media> findAllByAuthorOrderByCreatedDate(User author, Pageable page);
-    Set<Media> findAllByKey(Integer key);
+    Set<Media> findAllByKey(String key);
+    Set<Media> findAllByPost_IdOrderById(Integer postId);
 
     @Modifying
-    @Query("UPDATE Media m SET m.key = NULL, m.post = :post WHERE m.key = :key")
-    void attachMediasToPostByKey(@Param("post") Post post, @Param("key") Integer key);
+    @Transactional
+    @Query("UPDATE Media m SET m.key = NULL WHERE m.post = :post")
+    void removeKeysFromAttachedMediasToPost(@Param("post") Post post);
 }

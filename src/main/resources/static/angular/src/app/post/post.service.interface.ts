@@ -6,6 +6,8 @@ export interface PostServiceInterface {
 
     getFeed(page?: number): Promise<RestResponse<Post>>;
     getPostsByUser(user: User, page?: number): Promise<RestResponse<Post>>;
-    addPost(post: Post): Promise<any>;
+    addPost(post: Post): Promise<Post>;
     deletePost(post: Post): Promise<any>;
+    getMediasKey(): string;
+    getMediasUrl(key: string): string;
 }

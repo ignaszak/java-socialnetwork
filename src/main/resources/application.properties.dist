@@ -23,7 +23,7 @@ spring.data.rest.default-page-size = 5
 # THYMELEAF
 spring.thymeleaf.cache = false
 
-# FILE UPLOAD
+# FILE UPLOAD PATH
 app.uploads.path = src/main/resources/static/public/uploads
 # Temporary upload path for images attached to post
 # Images are being uploaded before post submit

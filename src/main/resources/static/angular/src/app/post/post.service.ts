@@ -34,7 +34,7 @@ export class PostService implements PostServiceInterface {
             .catch(RestProvider.handleError);
     }
 
-    addPost(post: Post): Promise<any> {
+    addPost(post: Post): Promise<Post> {
         post.createdDate = new Date();
         return this.http.put(RestProvider.POSTS, post)
             .toPromise()
@@ -45,5 +45,13 @@ export class PostService implements PostServiceInterface {
     deletePost(post: Post): Promise<any> {
         let path: string = this.provider.getPath(RestProvider.POST, {'postId': post.id});
         return this.http.delete(path).toPromise().catch(RestProvider.handleError);
+    }
+
+    getMediasKey(): string {
+        return Math.random().toString(36).substr(2, 16);
+    }
+
+    getMediasUrl(key: string): string {
+        return this.provider.getPath(RestProvider.POSTS_MEDIAS_UPLOAD, {'key': key});
     }
 }

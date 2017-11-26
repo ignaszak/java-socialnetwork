@@ -7,7 +7,6 @@ import net.ignaszak.socialnetwork.exception.MediaUploadException;
 import net.ignaszak.socialnetwork.model.image.Image;
 import net.ignaszak.socialnetwork.model.image.ImageException;
 import net.ignaszak.socialnetwork.repository.MediaRepository;
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -87,9 +86,9 @@ public class MediaServiceImpl implements MediaService {
     @Override
     public Media saveProfileImageWithUser(MultipartFile file, User user) {
         try {
-            String newName = getUniqueName(file);
+            String newName = getUniqueJpgName();
             Media media = new Media(newName);
-            Image image = storeFile(file, newName);
+            Image image = storeFile(file, newName, uploadsLocation);
             image.createProfileThumbnail(profileThumbnailWidth, profileThumbnailHeight);
             user.setProfile(newName);
             media.setAuthor(user);
@@ -101,12 +100,12 @@ public class MediaServiceImpl implements MediaService {
     }
 
     @Override
-    public Media saveTempImageWithUserAndKey(MultipartFile file, User user, Integer key) {
+    public Media saveTempImageWithUserAndKey(MultipartFile file, User user, String key) {
         try {
-            String newName = getUniqueName(file);
-            Media media = new Media(newName);
-            Image image = storeFile(file, newName);
+            String newName = getUniqueJpgName();
+            Image image = storeFile(file, newName, tempLocation);
             image.createThumbnail(thumbnailWidth, thumbnailHeight);
+            Media media = new Media(newName);
             media.setAuthor(user);
             media.setKey(key);
             mediaRepository.save(media);
@@ -117,33 +116,41 @@ public class MediaServiceImpl implements MediaService {
     }
 
     @Override
-    public void attachMediasToPostByKey(Post post, Integer key) {
-        Set<Media> medias = mediaRepository.findAllByKey(key);
-        medias.forEach(m -> {
-            Path file = Paths.get(m.getFilename());
-            Path thumbnail = Paths.get("thumbnail-" + m.getFilename());
-            try {
-                Files.move(tempLocation.resolve(file), uploadsLocation.resolve(file));
-                Files.move(tempLocation.resolve(thumbnail), uploadsLocation.resolve(thumbnail));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        mediaRepository.attachMediasToPostByKey(post, key);
+    public Set<Media> movePostMediasFromTemp(Post post) {
+        Set<Media> medias = mediaRepository.findAllByKey(post.getKey());
+        if (! medias.isEmpty()) {
+            medias.forEach(m -> {
+                Path file = Paths.get(m.getFilename());
+                Path thumbnail = Paths.get("thumbnail-" + m.getFilename());
+                try {
+                    Files.move(tempLocation.resolve(file), uploadsLocation.resolve(file));
+                    Files.move(tempLocation.resolve(thumbnail), uploadsLocation.resolve(thumbnail));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        }
+
+        return medias;
     }
 
     @Override
     public Resource getOneResourceByFilename(String filename) {
+        Path path = uploadsLocation.resolve(filename);
+        return getOneResourceByPath(path);
+    }
+
+    @Override
+    public Resource getOneResourceByPath(Path path) {
         try {
-            Path path = uploadsLocation.resolve(filename);
             Resource resource = new UrlResource(path.toUri());
             if (resource.exists() || resource.isReadable()) {
                 return resource;
             } else {
-                throw new MediaUploadException("Could not read file: " + filename);
+                throw new MediaUploadException("Could not read file: " + path.getFileName());
             }
         } catch (MalformedURLException e) {
-            throw new MediaUploadException("Could not read file: " + filename, e);
+            throw new MediaUploadException("Could not read file: " + path.getFileName(), e);
         }
     }
 
@@ -151,29 +158,36 @@ public class MediaServiceImpl implements MediaService {
     public void init() {
         try {
             if (! Files.exists(uploadsLocation)) Files.createDirectories(uploadsLocation);
+            if (! Files.exists(tempLocation)) Files.createDirectories(tempLocation);
         } catch (IOException e) {
             throw new MediaUploadException("Could not initialize storage", e);
         }
     }
 
-    private Image storeFile(MultipartFile file, String newName) {
+    @Override
+    public Set<Media> getByPostId(Integer postId) {
+        return mediaRepository.findAllByPost_IdOrderById(postId);
+    }
+
+    private Image storeFile(MultipartFile file, String newName, Path path) {
         String filename = StringUtils.cleanPath(file.getOriginalFilename());
         if (file.isEmpty()) throw new MediaUploadException("Failed to store empty file " + filename);
         if (filename.contains(".."))
             throw new MediaUploadException("Cannot store file with relative path outside current directory " + filename);
         try {
             Files.copy(
-                    file.getInputStream(),
-                    this.uploadsLocation.resolve(filename),
-                    StandardCopyOption.REPLACE_EXISTING
+                file.getInputStream(),
+                path.resolve(filename),
+                StandardCopyOption.REPLACE_EXISTING
             );
-            return image.set(getOneResourceByFilename(filename)).toJpg().rename(newName);
+            Path p = path.resolve(filename);
+            return image.set(getOneResourceByPath(p)).toJpg().rename(newName);
         } catch (Exception e) {
             throw new MediaUploadException("Could not store file: " + filename, e);
         }
     }
 
-    private String getUniqueName(MultipartFile file) {
-        return UUID.randomUUID().toString() + "." + FilenameUtils.getExtension(file.getOriginalFilename());
+    private String getUniqueJpgName() {
+        return UUID.randomUUID().toString() + ".jpg";
     }
 }

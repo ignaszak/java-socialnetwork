@@ -77,8 +77,9 @@
                     <div class="disable-clear">
                         <image-upload
                             url="{{profilePhotoUrl}}"
+                            [class]="'uploader'"
                             [preview]="false"
-                            [extensions]="['jpeg','png', 'gif']"
+                            [extensions]="['jpeg', 'png', 'gif']"
                             [buttonCaption]="'Select Image!'"
                             [dropBoxMessage]="'Drop your image here!'"
                             (uploadFinished)="onUploadFinished($event)"

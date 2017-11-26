@@ -1,8 +1,4 @@
 import {Response} from "@angular/http";
-import {Post} from "../post/post";
-import {Comment} from "../comment/comment";
-import {Invitation} from "../user/invitation";
-import {User} from "../user/user";
 
 export class RestResponse <T> {
 

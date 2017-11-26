@@ -15,22 +15,24 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
     Post findById(Integer id);
 
     @Query(
-        "SELECT new map(p.id AS id, p.author AS author, p.text AS text, p.createdDate AS createdDate) FROM Post p WHERE " +
+        "SELECT p FROM Post p LEFT JOIN p.medias m WHERE " +
             "p.author = :user " +
             "OR p.receiver = :user " +
             "OR p.author = :user " +
-            "OR p IN(SELECT c.post FROM Comment c WHERE c.author = :user) " +
+            "OR p IN(SELECT c.post FROM Comment c WHERE c.author = :user)" +
+            "GROUP BY p.id " +
         "ORDER BY p.createdDate DESC"
     )
     Page<Post> findPostsByUser(@Param("user") User user, Pageable page);
 
     @Query(
-        "SELECT new map(p.id AS id, p.author AS author, p.receiver AS receiver, p.text AS text, p.createdDate AS createdDate) FROM Post p WHERE " +
+        "SELECT p FROM Post p LEFT JOIN p.medias m WHERE " +
             "p.author IN(SELECT r.sender FROM Relation r WHERE r.receiver = :user) " +
             "OR p.author IN(SELECT r.receiver FROM Relation r WHERE r.sender = :user) " +
             "OR p.author = :user " +
             "OR p.receiver = :user " +
-            "OR p IN(SELECT c.post FROM Comment c WHERE c.author = :user) " +
+            "OR p IN(SELECT c.post FROM Comment c WHERE c.author = :user)" +
+            "GROUP BY p.id " +
         "ORDER BY p.createdDate DESC"
     )
     Page<Post> findFeedByUser(@Param("user") User user, Pageable page);

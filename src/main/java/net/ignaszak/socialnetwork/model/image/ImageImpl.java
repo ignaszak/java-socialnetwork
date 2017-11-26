@@ -47,9 +47,9 @@ public class ImageImpl implements Image {
             if (isJpg(file)) return this;
             BufferedImage bufferedImage = ImageIO.read(file);
             BufferedImage newBufferedImage = new BufferedImage(
-                    bufferedImage.getWidth(),
-                    bufferedImage.getHeight(),
-                    BufferedImage.TYPE_INT_RGB
+                bufferedImage.getWidth(),
+                bufferedImage.getHeight(),
+                BufferedImage.TYPE_INT_RGB
             );
             newBufferedImage.createGraphics().drawImage(bufferedImage, 0, 0, Color.WHITE, null);
             ImageIO.write(newBufferedImage, "jpg", file);

@@ -1,22 +1,24 @@
 import {Directive, ElementRef, OnChanges, Renderer} from "@angular/core";
-import {User} from "../../user/user";
+import {User} from "../user/user";
+import {Media} from "./media";
+import {RestProvider} from "../rest/rest-provider";
 
 @Directive({
     selector: `[media]`,
     inputs:   ['media']
 })
 export class MediaDirective implements OnChanges {
-    media: string;
+    media: Media = new Media();
 
     constructor(private element: ElementRef, private renderer: Renderer) {
     }
 
     ngOnChanges() {
-        if (this.media) {
+        if (this.media && this.media.filename) {
             this.renderer.setElementProperty(
                 this.element.nativeElement,
                 'src',
-                '/public/medias/' + this.media
+                RestProvider.PUBLIC_MEDIAS + '/' + this.media.filename
             );
         }
     }
@@ -27,17 +29,17 @@ export class MediaDirective implements OnChanges {
     inputs:   ['mediaThumbnail']
 })
 export class MediaThumbnailDirective implements OnChanges {
-    mediaThumbnail: string;
+    mediaThumbnail: Media = new Media();
 
     constructor(private element: ElementRef, private renderer: Renderer) {
     }
 
     ngOnChanges() {
-        if (this.mediaThumbnail) {
+        if (this.mediaThumbnail && this.mediaThumbnail.filename) {
             this.renderer.setElementProperty(
                 this.element.nativeElement,
                 'src',
-                '/public/medias/thumbnail-' + this.mediaThumbnail
+                RestProvider.PUBLIC_MEDIAS + '/thumbnail-' + this.mediaThumbnail.filename
             );
         }
     }
@@ -58,7 +60,7 @@ export class MediaProfileThumbnailDirective implements OnChanges {
             this.renderer.setElementProperty(
                 this.element.nativeElement,
                 'src',
-                '/public/medias/profile-thumbnail-' + this.mediaProfileThumbnail.profile
+                RestProvider.PUBLIC_MEDIAS + '/profile-thumbnail-' + this.mediaProfileThumbnail.profile
             );
         } else {
             this.renderer.setElementProperty(
