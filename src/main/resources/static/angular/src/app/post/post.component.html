@@ -15,8 +15,25 @@
                                 <div class="form-group">
                                     <textarea class="form-control" id="text" formControlName="text" name="text" placeholder="Write something.." rows="3"></textarea>
                                 </div>
-                                <div class="form-group form-actions text-right">
-                                    <button class="btn btn-sm btn-success" type="submit">Post</button>
+                                <div class="form-group" *ngIf="showUploader">
+                                    <image-upload
+                                        [max]="20"
+                                        url="{{postMediaUrl}}"
+                                        [class]="'uploader'"
+                                        [extensions]="['jpeg', 'png', 'gif']"
+                                        [buttonCaption]="'Select images!'"
+                                        [dropBoxMessage]="'Drop your images here!'"
+                                        (uploadFinished)="updateUploaderCounter(1)"
+                                        (removed)="updateUploaderCounter(-1)"
+                                    ></image-upload>
+                                </div>
+                                <div class="form-group form-actions">
+                                    <a href="javascript:" class="btn btn-sm btn-primary" (click)="toggleUploader()">
+                                        <i class="icon-picture"></i>
+                                    </a>
+                                    <button class="btn btn-sm btn-success" type="submit">
+                                        &nbsp;&nbsp;Post&nbsp;&nbsp;
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -41,7 +58,7 @@
                             <a href="#" *ngIf="post.author.username" [routerLink]="['/', post.author.username]">
                                 {{post.author.username}}
                             </a>
-                            <span *ngIf="! user && post.receiver.username != post.author.username">
+                            <span *ngIf="! user && post.receiver && post.author && post.receiver?.username != post.author?.username">
                                 <i class="fa fa-caret-right"></i>
                                 <a href="#" *ngIf="post.receiver.username" [routerLink]="['/', post.receiver.username]">
                                     <img [mediaProfileThumbnail]="post.receiver" class="avatar-receiver" />
@@ -52,13 +69,21 @@
                             <i class="icon-calendar"></i>
                             {{post.createdDate|date: 'dd-MM-yyyy HH:mm'}}
                         </div>
-                        <div class="col-sm-1 text-right" *ngIf="post.author.username == currentUser.username">
+                        <div class="col-sm-1 text-right" *ngIf="post.author?.username == currentUser.username">
                             <a href="javascript:" (click)="deletePost(post)">
                                 <i class="icon-close"></i>
                             </a>
                         </div>
                     </div>
+
                     <p>{{post.text}}</p>
+
+                    <div *ngIf="post.medias !== null && post.medias.length > 0">
+                        <ngx-gallery
+                            [options]="mediaService.getNgxGalleryOptions(post.medias)"
+                            [images]="mediaService.getNgxGalleryImages(post.medias)"
+                        ></ngx-gallery>
+                    </div>
 
                     <hr />
 

@@ -9,6 +9,7 @@ import {CommentServiceInterface} from "../comment/comment.service.interface";
 import {Comment} from "../comment/comment";
 import {RestResponse} from "../rest/rest-response";
 import {Swal} from "../shared/swal";
+import {MediaServiceInterface} from "../media/media.service.interface";
 
 @Component({
     selector:    'post-list',
@@ -20,15 +21,18 @@ export class PostComponent implements OnInit, OnChanges {
     currentUser: User;
     posts: Post[] = null;
     postForm: FormGroup;
-    postMediaUrl: string = '';
+    postMediaUrl: string;
+    postMediaKey: string;
     showUploader: boolean = false;
     private nextPostsPage: number = 0;
     private hasNextPostPage: boolean = true;
+    private uploaderCounter: number = 0;
 
     constructor(
         @Inject('PostServiceInterface') private postService: PostServiceInterface,
         @Inject('UserServiceInterface') private userService: UserServiceInterface,
-        @Inject('CommentServiceInterface') private commentService: CommentServiceInterface
+        @Inject('CommentServiceInterface') private commentService: CommentServiceInterface,
+        @Inject('MediaServiceInterface') public mediaService: MediaServiceInterface
     ) {
         this.postForm = new FormGroup({
             text: new FormControl('', Validators.required)
@@ -45,17 +49,21 @@ export class PostComponent implements OnInit, OnChanges {
 
     ngOnInit(): void {
         this.getCurrentUser();
+        this.initPostMedias();
         if (! this.user) this.getFeed();
     }
 
     onSubmitPost(): void {
-        if (this.postForm.valid) {
+        if (this.postForm.valid || this.areMediasAddedToUploader()) {
             let post: Post = this.postForm.value;
             post.author = this.currentUser;
             post.receiver = this.user ? this.user : this.currentUser;
-            this.postService.addPost(post).then(postId => {
-                post.id = postId;
+            post.key = this.postMediaKey;
+            this.postService.addPost(post).then(responsePost => {
+                post.id = responsePost.id;
+                post.medias = responsePost.medias;
                 this.prependPost(post);
+                this.initPostMedias();
             });
             this.postForm.reset();
         }
@@ -121,6 +129,24 @@ export class PostComponent implements OnInit, OnChanges {
         }, 'Delete comment?');
     }
 
+    toggleUploader(): void {
+        if (this.showUploader && this.areMediasAddedToUploader()) {
+            Swal.confirm(() => {
+                this.showUploader = false;
+            }, 'All attached medias will be removed!');
+        } else {
+            this.showUploader = ! this.showUploader;
+        }
+    }
+
+    updateUploaderCounter(value: number): void {
+        this.uploaderCounter += value;
+    }
+
+    areMediasAddedToUploader(): boolean {
+        return this.uploaderCounter > 0;
+    }
+
     private getFeed(): void {
         if (this.hasNextPostPage)
             this.postService.getFeed(this.nextPostsPage).then(response => this.loadPosts(response));
@@ -153,7 +179,14 @@ export class PostComponent implements OnInit, OnChanges {
         this.userService.getCurrentUser().then(user => this.currentUser = user);
     }
 
-    private prependPost(post: Post) {
+    private prependPost(post: Post): void {
         this.posts.unshift(post);
+    }
+
+    private initPostMedias(): void {
+        this.postMediaKey = this.postService.getMediasKey();
+        this.postMediaUrl = this.postService.getMediasUrl(this.postMediaKey);
+        this.showUploader = false;
+        this.uploaderCounter = 0;
     }
 }

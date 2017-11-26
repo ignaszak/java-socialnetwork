@@ -1,7 +1,3 @@
-/**
- * Created by tomek on 01.07.17.
- */
-
 import {NgModule} from "@angular/core";
 import {ProfileRoutingModule} from "./profile-routing.module";
 import {BsDropdownModule, TabsModule} from "ngx-bootstrap";
@@ -10,7 +6,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {CommonModule} from "@angular/common";
 import {UserHeaderModule} from "../user/header/user.header.module";
 import {ImageUploadModule} from "angular2-image-upload";
-import {MediaModule} from "../shared/media/media.module";
+import {MediaModule} from "../media/media.module";
 
 @NgModule({
     imports: [

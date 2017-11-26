@@ -1,11 +1,14 @@
 package net.ignaszak.socialnetwork.service.media;
 
 import net.ignaszak.socialnetwork.domain.Media;
+import net.ignaszak.socialnetwork.domain.Post;
 import net.ignaszak.socialnetwork.domain.User;
 import net.ignaszak.socialnetwork.exception.MediaUploadException;
 import net.ignaszak.socialnetwork.model.image.Image;
 import net.ignaszak.socialnetwork.model.image.ImageException;
 import net.ignaszak.socialnetwork.repository.MediaRepository;
+import net.ignaszak.socialnetwork.repository.PostRepository;
+import net.ignaszak.socialnetwork.service.post.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -22,6 +25,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Set;
+import java.util.UUID;
 
 @Service
 public class MediaServiceImpl implements MediaService {
@@ -29,6 +34,7 @@ public class MediaServiceImpl implements MediaService {
     private MediaRepository mediaRepository;
     private Image image;
     private Path uploadsLocation;
+    private Path tempLocation;
     private int profileThumbnailWidth;
     private int profileThumbnailHeight;
     private int thumbnailWidth;
@@ -47,6 +53,11 @@ public class MediaServiceImpl implements MediaService {
     @Value("${app.uploads.path}")
     public void setUploadsLocation(String uploadsLocation) {
         this.uploadsLocation = Paths.get(uploadsLocation);
+    }
+
+    @Value("${app.uploads.temp.path}")
+    public void setTempLocation(String tempLocation) {
+        this.tempLocation = Paths.get(tempLocation);
     }
 
     @Value("${app.profile.thumbnail.width}")
@@ -77,10 +88,11 @@ public class MediaServiceImpl implements MediaService {
     @Override
     public Media saveProfileImageWithUser(MultipartFile file, User user) {
         try {
-            Media media = new Media();
-            Image image = storeFile(file, media.getUuid());
+            String newName = getUniqueJpgName();
+            Media media = new Media(newName);
+            Image image = storeFile(file, newName, uploadsLocation);
             image.createProfileThumbnail(profileThumbnailWidth, profileThumbnailHeight);
-            user.setProfile(image.toFile().getName());
+            user.setProfile(newName);
             media.setAuthor(user);
             mediaRepository.save(media);
             return media;
@@ -90,31 +102,58 @@ public class MediaServiceImpl implements MediaService {
     }
 
     @Override
-    public Media saveImageWithUser(MultipartFile file, User user) {
+    public Media saveTempImageWithUserAndKey(MultipartFile file, User user, String key) {
         try {
-            Media media = new Media();
-            Image image = storeFile(file, media.getUuid());
+            String newName = getUniqueJpgName();
+            Image image = storeFile(file, newName, tempLocation);
             image.createThumbnail(thumbnailWidth, thumbnailHeight);
+            Media media = new Media(newName);
             media.setAuthor(user);
+            media.setKey(key);
             mediaRepository.save(media);
             return media;
         } catch (ImageException e) {
-            throw new MediaUploadException("Failed to store file " + file.getOriginalFilename(), e);
+            throw new MediaUploadException("Failed to store temp file " + file.getOriginalFilename(), e);
         }
+    }
+
+    @Override
+    public Set<Media> movePostMediasFromTemp(Post post) {
+        Set<Media> medias = mediaRepository.findAllByKey(post.getKey());
+        if (! medias.isEmpty()) {
+            medias.forEach(media -> {
+                Path file = Paths.get(media.getFilename());
+                Path thumbnail = Paths.get("thumbnail-" + media.getFilename());
+                try {
+                    Files.move(tempLocation.resolve(file), uploadsLocation.resolve(file));
+                    Files.move(tempLocation.resolve(thumbnail), uploadsLocation.resolve(thumbnail));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                media.setPost(post);
+            });
+        }
+
+        return medias;
     }
 
     @Override
     public Resource getOneResourceByFilename(String filename) {
+        Path path = uploadsLocation.resolve(filename);
+        return getOneResourceByPath(path);
+    }
+
+    @Override
+    public Resource getOneResourceByPath(Path path) {
         try {
-            Path path = uploadsLocation.resolve(filename);
             Resource resource = new UrlResource(path.toUri());
             if (resource.exists() || resource.isReadable()) {
                 return resource;
             } else {
-                throw new MediaUploadException("Could not read file: " + filename);
+                throw new MediaUploadException("Could not read file: " + path.getFileName());
             }
         } catch (MalformedURLException e) {
-            throw new MediaUploadException("Could not read file: " + filename, e);
+            throw new MediaUploadException("Could not read file: " + path.getFileName(), e);
         }
     }
 
@@ -122,25 +161,36 @@ public class MediaServiceImpl implements MediaService {
     public void init() {
         try {
             if (! Files.exists(uploadsLocation)) Files.createDirectories(uploadsLocation);
+            if (! Files.exists(tempLocation)) Files.createDirectories(tempLocation);
         } catch (IOException e) {
             throw new MediaUploadException("Could not initialize storage", e);
         }
     }
 
-    private Image storeFile(MultipartFile file, String newNameWithoutExtension) {
+    @Override
+    public Set<Media> getByPostId(Integer postId) {
+        return mediaRepository.findAllByPost_IdOrderById(postId);
+    }
+
+    private Image storeFile(MultipartFile file, String newName, Path path) {
         String filename = StringUtils.cleanPath(file.getOriginalFilename());
         if (file.isEmpty()) throw new MediaUploadException("Failed to store empty file " + filename);
         if (filename.contains(".."))
             throw new MediaUploadException("Cannot store file with relative path outside current directory " + filename);
         try {
             Files.copy(
-                    file.getInputStream(),
-                    this.uploadsLocation.resolve(filename),
-                    StandardCopyOption.REPLACE_EXISTING
+                file.getInputStream(),
+                path.resolve(filename),
+                StandardCopyOption.REPLACE_EXISTING
             );
-            return image.set(getOneResourceByFilename(filename)).toJpg().rename(newNameWithoutExtension + ".jpg");
+            Path p = path.resolve(filename);
+            return image.set(getOneResourceByPath(p)).toJpg().rename(newName);
         } catch (Exception e) {
             throw new MediaUploadException("Could not store file: " + filename, e);
         }
+    }
+
+    private String getUniqueJpgName() {
+        return UUID.randomUUID().toString() + ".jpg";
     }
 }

@@ -10,3 +10,20 @@
         display: none !important;
     }
 }
+
+.uploader {
+    border: 3px dashed #c3c3c3;
+    margin: 5px;
+}
+
+.uploader .img-ul-upload {
+    background-color: #4dbd74 !important;
+}
+
+.uploader .img-ul-clear {
+    background-color: #f86c6b !important;
+}
+
+.uploader .img-ul-drag-box-msg {
+    color: #6e6e6e !important;
+}

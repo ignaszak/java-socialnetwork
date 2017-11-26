@@ -12,8 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-
 @Controller
 @RequestMapping("public/medias")
 public class MediaController {
@@ -31,7 +29,7 @@ public class MediaController {
         try {
             Resource resource = mediaService.getOneResourceByFilename(filename);
             return new ResponseEntity<>(
-                    ByteStreams.toByteArray(resource.getInputStream()), new HttpHeaders(), HttpStatus.CREATED
+                ByteStreams.toByteArray(resource.getInputStream()), new HttpHeaders(), HttpStatus.CREATED
             );
         } catch (Exception e) {
             throw new ResourceNotFoundException("File '" + filename + "' does not exist!", e);

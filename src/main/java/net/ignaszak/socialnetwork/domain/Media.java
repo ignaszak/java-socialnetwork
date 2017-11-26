@@ -1,5 +1,7 @@
 package net.ignaszak.socialnetwork.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.UUID;
@@ -13,8 +15,12 @@ public class Media {
     @Column(name = "id", nullable = false, updatable = false)
     private Integer id;
 
-    @Column(name = "uuid", nullable = false)
-    private String uuid;
+    @Column(name = "filename", nullable = false)
+    private String filename;
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "post_id")
+    private Post post;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
     @JoinColumn(name = "author_id", nullable = false)
@@ -24,8 +30,13 @@ public class Media {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
 
-    public Media() {
-        uuid = UUID.randomUUID().toString();
+    @Column(name = "key")
+    private String key;
+
+    public Media() {}
+
+    public Media(String filename) {
+        this.filename = filename;
     }
 
     @PrePersist
@@ -33,11 +44,37 @@ public class Media {
         createdDate = new Date();
     }
 
+    public Integer getId() {
+        return id;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    @JsonIgnore
+    public Post getPost() {
+        return post;
+    }
+
+    public void setPost(Post post) {
+        this.post = post;
+    }
+
     public void setAuthor(User author) {
         this.author = author;
     }
 
-    public String getUuid() {
-        return uuid;
+    @JsonIgnore
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 }

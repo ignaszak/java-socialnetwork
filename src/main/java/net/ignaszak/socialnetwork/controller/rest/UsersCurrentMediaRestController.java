@@ -34,7 +34,7 @@ public class UsersCurrentMediaRestController {
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public Media uploadImage(@RequestParam("image") MultipartFile image) {
-        return mediaService.saveImageWithUser(image, userService.getCurrentUser());
+        return mediaService.saveProfileImageWithUser(image, userService.getCurrentUser());
     }
 
     @PostMapping(value = "/profile", produces = MediaType.APPLICATION_JSON_VALUE)

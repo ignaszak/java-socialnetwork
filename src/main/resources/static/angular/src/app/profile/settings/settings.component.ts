@@ -20,6 +20,8 @@ export class SettingsComponent extends Event implements OnInit{
     generalForm: FormGroup;
     passwordForm: ValidationManager;
     profilePhotoUrl: string = RestProvider.USER_CURRENT_MEDIAS_PROFILE;
+    generalFormSubmit: boolean;
+    generalFormEmailActivation: boolean;
     private message = 'Your profile has been updated successfully!';
 
     constructor(

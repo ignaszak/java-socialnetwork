@@ -25,6 +25,14 @@
                         </div>
                     </div>
                     <div class="col-sm-6 text-right">
+                        <button *ngIf="user.username == currentUser.username" class="btn btn-secondary btn-sm" type="button" [routerLink]="['/', user.username]">
+                            <i class="icon-user"></i>
+                            Profile
+                        </button>
+                        <button *ngIf="user.username == currentUser.username" class="btn btn-secondary btn-sm" type="button" [routerLink]="['/', 'profile', 'settings']">
+                            <i class="fa fa-wrench"></i>
+                            Settings
+                        </button>
                         <button class="btn btn-secondary btn-sm" type="button" [routerLink]="['/', user.username, 'friends']">
                             <i class="icon-people"></i>
                             Friends

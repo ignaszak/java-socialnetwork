@@ -8,7 +8,7 @@ import {CommonModule} from "@angular/common";
 import {PostModule} from "../post/post.module";
 import {UserHeaderModule} from "./header/user.header.module";
 import {UserFriendsComponent} from "./friends/user.friends.component";
-import {MediaModule} from "../shared/media/media.module";
+import {MediaModule} from "../media/media.module";
 
 @NgModule({
     imports: [
