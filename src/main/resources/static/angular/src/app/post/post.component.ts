@@ -141,6 +141,7 @@ export class PostComponent implements OnInit, OnChanges {
 
     updateUploaderCounter(value: number): void {
         this.uploaderCounter += value;
+        if (this.uploaderCounter < 1) this.initPostMedias(true);
     }
 
     areMediasAddedToUploader(): boolean {
@@ -183,10 +184,10 @@ export class PostComponent implements OnInit, OnChanges {
         this.posts.unshift(post);
     }
 
-    private initPostMedias(): void {
+    private initPostMedias(show: boolean = false): void {
         this.postMediaKey = this.postService.getMediasKey();
         this.postMediaUrl = this.postService.getMediasUrl(this.postMediaKey);
-        this.showUploader = false;
+        this.showUploader = show;
         this.uploaderCounter = 0;
     }
 }

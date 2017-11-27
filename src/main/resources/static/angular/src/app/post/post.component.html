@@ -69,7 +69,7 @@
                             <i class="icon-calendar"></i>
                             {{post.createdDate|date: 'dd-MM-yyyy HH:mm'}}
                         </div>
-                        <div class="col-sm-1 text-right" *ngIf="post.author?.username == currentUser.username">
+                        <div class="col-sm-1 text-right" *ngIf="post.author?.username == currentUser?.username">
                             <a href="javascript:" (click)="deletePost(post)">
                                 <i class="icon-close"></i>
                             </a>

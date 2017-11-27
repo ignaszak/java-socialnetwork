@@ -1,6 +1,7 @@
 package net.ignaszak.socialnetwork.controller.rest;
 
 import net.ignaszak.socialnetwork.domain.Media;
+import net.ignaszak.socialnetwork.exception.MediaUploadException;
 import net.ignaszak.socialnetwork.service.media.MediaService;
 import net.ignaszak.socialnetwork.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,13 +33,12 @@ public class UsersCurrentMediaRestController {
         return mediaService.getByUser(userService.getCurrentUser(), page);
     }
 
-    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public Media uploadImage(@RequestParam("image") MultipartFile image) {
-        return mediaService.saveProfileImageWithUser(image, userService.getCurrentUser());
-    }
-
     @PostMapping(value = "/profile", produces = MediaType.APPLICATION_JSON_VALUE)
     public Media uploadProfile(@RequestParam("image") MultipartFile image) {
-        return mediaService.saveProfileImageWithUser(image, userService.getCurrentUser());
+        try {
+            return mediaService.saveProfileImageWithUser(image, userService.getCurrentUser());
+        } catch (Exception e) {
+            throw new MediaUploadException("Failed to upload file: " + image.getOriginalFilename(), e);
+        }
     }
 }

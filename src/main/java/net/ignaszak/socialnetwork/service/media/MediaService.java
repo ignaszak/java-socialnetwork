@@ -13,8 +13,8 @@ import java.util.Set;
 
 public interface MediaService {
 
-    Media saveProfileImageWithUser(MultipartFile file, User user);
-    Media saveTempImageWithUserAndKey(MultipartFile file, User user, String key);
+    Media saveProfileImageWithUser(MultipartFile file, User user) throws Exception;
+    Media saveTempImageWithUserAndKey(MultipartFile file, User user, String key) throws Exception;
     Set<Media> movePostMediasFromTemp(Post post);
     Resource getOneResourceByFilename(String filename);
     Resource getOneResourceByPath(Path path);

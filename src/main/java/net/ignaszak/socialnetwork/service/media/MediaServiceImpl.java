@@ -5,10 +5,7 @@ import net.ignaszak.socialnetwork.domain.Post;
 import net.ignaszak.socialnetwork.domain.User;
 import net.ignaszak.socialnetwork.exception.MediaUploadException;
 import net.ignaszak.socialnetwork.model.image.Image;
-import net.ignaszak.socialnetwork.model.image.ImageException;
 import net.ignaszak.socialnetwork.repository.MediaRepository;
-import net.ignaszak.socialnetwork.repository.PostRepository;
-import net.ignaszak.socialnetwork.service.post.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -86,35 +83,27 @@ public class MediaServiceImpl implements MediaService {
     }
 
     @Override
-    public Media saveProfileImageWithUser(MultipartFile file, User user) {
-        try {
-            String newName = getUniqueJpgName();
-            Media media = new Media(newName);
-            Image image = storeFile(file, newName, uploadsLocation);
-            image.createProfileThumbnail(profileThumbnailWidth, profileThumbnailHeight);
-            user.setProfile(newName);
-            media.setAuthor(user);
-            mediaRepository.save(media);
-            return media;
-        } catch (ImageException e) {
-            throw new MediaUploadException("Failed to store file " + file.getOriginalFilename(), e);
-        }
+    public Media saveProfileImageWithUser(MultipartFile file, User user) throws Exception {
+        String newName = getUniqueJpgName();
+        Media media = new Media(newName);
+        Image image = storeFile(file, newName, uploadsLocation);
+        image.createProfileThumbnail(profileThumbnailWidth, profileThumbnailHeight);
+        user.setProfile(newName);
+        media.setAuthor(user);
+        mediaRepository.save(media);
+        return media;
     }
 
     @Override
-    public Media saveTempImageWithUserAndKey(MultipartFile file, User user, String key) {
-        try {
-            String newName = getUniqueJpgName();
-            Image image = storeFile(file, newName, tempLocation);
-            image.createThumbnail(thumbnailWidth, thumbnailHeight);
-            Media media = new Media(newName);
-            media.setAuthor(user);
-            media.setKey(key);
-            mediaRepository.save(media);
-            return media;
-        } catch (ImageException e) {
-            throw new MediaUploadException("Failed to store temp file " + file.getOriginalFilename(), e);
-        }
+    public Media saveTempImageWithUserAndKey(MultipartFile file, User user, String key) throws Exception {
+        String newName = getUniqueJpgName();
+        Image image = storeFile(file, newName, tempLocation);
+        image.createThumbnail(thumbnailWidth, thumbnailHeight);
+        Media media = new Media(newName);
+        media.setAuthor(user);
+        media.setKey(key);
+        mediaRepository.save(media);
+        return media;
     }
 
     @Override
@@ -172,22 +161,12 @@ public class MediaServiceImpl implements MediaService {
         return mediaRepository.findAllByPost_IdOrderById(postId);
     }
 
-    private Image storeFile(MultipartFile file, String newName, Path path) {
+    private Image storeFile(MultipartFile file, String newName, Path path) throws Exception {
         String filename = StringUtils.cleanPath(file.getOriginalFilename());
         if (file.isEmpty()) throw new MediaUploadException("Failed to store empty file " + filename);
-        if (filename.contains(".."))
-            throw new MediaUploadException("Cannot store file with relative path outside current directory " + filename);
-        try {
-            Files.copy(
-                file.getInputStream(),
-                path.resolve(filename),
-                StandardCopyOption.REPLACE_EXISTING
-            );
-            Path p = path.resolve(filename);
-            return image.set(getOneResourceByPath(p)).toJpg().rename(newName);
-        } catch (Exception e) {
-            throw new MediaUploadException("Could not store file: " + filename, e);
-        }
+        Path p = path.resolve(filename);
+        Files.copy(file.getInputStream(), p, StandardCopyOption.REPLACE_EXISTING);
+        return image.set(getOneResourceByPath(p)).toJpg().rename(newName);
     }
 
     private String getUniqueJpgName() {

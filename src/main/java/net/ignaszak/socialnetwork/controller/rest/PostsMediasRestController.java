@@ -1,6 +1,7 @@
 package net.ignaszak.socialnetwork.controller.rest;
 
 import net.ignaszak.socialnetwork.domain.Media;
+import net.ignaszak.socialnetwork.exception.MediaUploadException;
 import net.ignaszak.socialnetwork.service.media.MediaService;
 import net.ignaszak.socialnetwork.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,10 @@ public class PostsMediasRestController {
 
     @PostMapping(value = "/medias/{key}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Media uploadImage(@PathVariable("key") String key, @RequestParam("image") MultipartFile image) {
-        return mediaService.saveTempImageWithUserAndKey(image, userService.getCurrentUser(), key);
+        try {
+            return mediaService.saveTempImageWithUserAndKey(image, userService.getCurrentUser(), key);
+        } catch (Exception e) {
+            throw new MediaUploadException("Failed to upload file: " + image.getOriginalFilename(), e);
+        }
     }
 }
