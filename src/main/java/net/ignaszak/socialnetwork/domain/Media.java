@@ -63,6 +63,7 @@ public class Media {
 
     public void setPost(Post post) {
         this.post = post;
+        this.key = null;
     }
 
     public void setAuthor(User author) {

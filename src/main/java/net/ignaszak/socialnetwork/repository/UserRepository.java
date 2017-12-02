@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import javax.jws.soap.SOAPBinding;
 import java.util.List;
 
 
@@ -37,7 +36,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query(
         "SELECT new map(u.id AS id, u.username AS username, u.profile AS profile, r.invitationDate AS invitationDate) FROM Relation r " +
         "LEFT JOIN r.sender u " +
-        "WHERE r.receiver = :user AND u.enabled = 1" +
+        "WHERE r.receiver = :user AND (r.accepted = 0 OR r.accepted IS NULL) AND u.enabled = 1" +
         "ORDER BY r.invitationDate DESC"
     )
     Page<User> findInvitationsByUser(@Param("user") User user, Pageable page);

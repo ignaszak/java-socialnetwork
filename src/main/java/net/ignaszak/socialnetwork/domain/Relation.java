@@ -51,6 +51,11 @@ public class Relation {
     }
 
     @JsonIgnore
+    public String getKey() {
+        return key;
+    }
+
+    @JsonIgnore
     public User getSender() {
         return sender;
     }

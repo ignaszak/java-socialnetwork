@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 public interface RelationRepository extends JpaRepository<Relation, Integer> {
 
     Relation findRelationBySender_IdAndReceiver_Id(Integer senderId, Integer receiverId);
-    Integer countByReceiverAndAcceptedIsFalse(User receiver);
+    Integer countByReceiverAndAcceptedIsFalseOrAcceptedIsNull(User receiver);
 }

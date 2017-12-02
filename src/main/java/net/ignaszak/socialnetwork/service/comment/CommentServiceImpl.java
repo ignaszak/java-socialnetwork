@@ -30,7 +30,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Page<Comment> getCommentsByPost(Post post, Pageable page) {
-        return commentRepository.queryAllByPostOrderByCreatedDateDesc(post, page);
+        return commentRepository.findAllByPostOrderByCreatedDateDesc(post, page);
     }
 
     @Override

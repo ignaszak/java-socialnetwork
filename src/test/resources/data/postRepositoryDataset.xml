@@ -1,0 +1,14 @@
+<dataset>
+    <User id="1" email="test1@ignaszak.net" username="test1" password="$2a$10$2ca8QFZHceCboBhXSSnsuuOJh7.8l9E8VnRlr1btSIoXl3qMGqmvq" role="USER" enabled="1" />
+    <User id="2" email="test2@ignaszak.net" username="test2" password="$2a$10$2ca8QFZHceCboBhXSSnsuuOJh7.8l9E8VnRlr1btSIoXl3qMGqmvq" role="USER" enabled="1" />
+    <User id="3" email="test3@ignaszak.net" username="test3" password="$2a$10$2ca8QFZHceCboBhXSSnsuuOJh7.8l9E8VnRlr1btSIoXl3qMGqmvq" role="USER" enabled="1" />
+
+    <Relation id="1" key="1-2" sender_id="1" receiver_id="2" accepted="1" invitation_date="2017-11-29" accepted_date="2017-11-29" />
+
+    <Post id="1" author_id="1" receiver_id="1" text="Post 1" created_date="2017-11-30" />
+    <Post id="2" author_id="2" receiver_id="2" text="Post 2" created_date="2017-11-30" />
+    <Post id="3" author_id="3" receiver_id="3" text="Post 3" created_date="2017-11-30" />
+    <Post id="4" author_id="2" receiver_id="1" text="Post 4" created_date="2017-11-30" />
+    <Post id="5" author_id="3" receiver_id="1" text="Post 5" created_date="2017-11-30" />
+    <Post id="6" author_id="1" receiver_id="1" text="Post 6" created_date="2017-11-30" />
+</dataset>

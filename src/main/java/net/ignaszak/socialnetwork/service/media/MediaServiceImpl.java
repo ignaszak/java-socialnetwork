@@ -79,7 +79,7 @@ public class MediaServiceImpl implements MediaService {
 
     @Override
     public Page<Media> getByUser(User user, Pageable page) {
-        return mediaRepository.findAllByAuthorOrderByCreatedDate(user, page);
+        return mediaRepository.findAllByAuthorAndKeyIsNullOrderByCreatedDate(user, page);
     }
 
     @Override

@@ -1,0 +1,12 @@
+<dataset>
+    <User id="1" email="test@ignaszak.net" username="test" password="$2a$10$2ca8QFZHceCboBhXSSnsuuOJh7.8l9E8VnRlr1btSIoXl3qMGqmvq" role="USER" enabled="1" />
+
+    <Post id="1" author_id="1" receiver_id="1" text="Post 1" created_date="2017-11-30" />
+
+    <Media id="1" filename="testImage1.jpg" post_id="1" author_id="1" created_date="2017-11-30" />
+    <Media id="2" filename="testImage2.jpg" post_id="1" author_id="1" created_date="2017-11-30" />
+    <Media id="3" filename="testImage3.jpg" author_id="1" created_date="2017-12-02" key="uniqueKey" />
+    <Media id="4" filename="testImage4.jpg" author_id="1" created_date="2017-12-02" key="uniqueKey" />
+    <Media id="5" filename="testImage4.jpg" author_id="1" created_date="2017-12-02" key="uniqueKey" />
+    <Media id="6" filename="testImage4.jpg" author_id="1" created_date="2017-12-02" key="uniqueKey" />
+</dataset>
