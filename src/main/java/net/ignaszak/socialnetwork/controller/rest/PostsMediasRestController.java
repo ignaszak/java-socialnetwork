@@ -34,4 +34,9 @@ public class PostsMediasRestController {
             throw new MediaUploadException("Failed to upload file: " + image.getOriginalFilename(), e);
         }
     }
+
+    @DeleteMapping(value = "/medias/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public void deleteMedia(@PathVariable("id") Integer id) {
+        mediaService.deleteByIdAndAuthor(id, userService.getCurrentUser());
+    }
 }

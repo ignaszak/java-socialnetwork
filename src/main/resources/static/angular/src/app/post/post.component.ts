@@ -10,6 +10,8 @@ import {Comment} from "../comment/comment";
 import {RestResponse} from "../rest/rest-response";
 import {Swal} from "../shared/swal";
 import {MediaServiceInterface} from "../media/media.service.interface";
+import {FileHolder} from "angular2-image-upload";
+import {Media} from "../media/media";
 
 @Component({
     selector:    'post-list',
@@ -144,7 +146,14 @@ export class PostComponent implements OnInit, OnChanges {
         if (this.uploaderCounter < 1) this.initPostMedias(true);
     }
 
-    areMediasAddedToUploader(): boolean {
+    removeMedia(event: FileHolder) {
+        this.updateUploaderCounter(-1);
+        let media: Media = JSON.parse(event.serverResponse['_body']);
+        console.log(media);
+        this.mediaService.deleteMedia(media);
+    }
+
+    private areMediasAddedToUploader(): boolean {
         return this.uploaderCounter > 0;
     }
 

@@ -53,6 +53,7 @@ public class ImageImpl implements Image {
             );
             newBufferedImage.createGraphics().drawImage(bufferedImage, 0, 0, Color.WHITE, null);
             ImageIO.write(newBufferedImage, "jpg", file);
+            check(file);
         } catch (IOException e) {
             throw new ImageException("Could not convert to jpg file: " + file.getName(), e);
         }
@@ -65,6 +66,7 @@ public class ImageImpl implements Image {
         File newFile = Paths.get(pathName).resolve(newName).toFile();
         try {
             Files.move(file, newFile);
+            check(newFile);
             file = newFile;
         } catch (IOException e) {
             throw new ImageException("Could not rename file: " + file.getName(), e);

@@ -102,7 +102,7 @@ public class MediaServiceImpl implements MediaService {
         Media media = new Media(newName);
         media.setAuthor(user);
         media.setKey(key);
-        mediaRepository.save(media);
+        if (image.toFile().exists()) mediaRepository.save(media);
         return media;
     }
 
@@ -111,15 +111,20 @@ public class MediaServiceImpl implements MediaService {
         Set<Media> medias = mediaRepository.findAllByKey(post.getKey());
         if (! medias.isEmpty()) {
             medias.forEach(media -> {
-                Path file = Paths.get(media.getFilename());
-                Path thumbnail = Paths.get("thumbnail-" + media.getFilename());
-                try {
-                    Files.move(tempLocation.resolve(file), uploadsLocation.resolve(file));
-                    Files.move(tempLocation.resolve(thumbnail), uploadsLocation.resolve(thumbnail));
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+                String thumbnail = "thumbnail-" + media.getFilename();
+                Path fileLocation = tempLocation.resolve(media.getFilename());
+                Path thumbnailLocation = tempLocation.resolve(thumbnail);
+                if (Files.exists(fileLocation) && Files.exists(thumbnailLocation)) {
+                    try {
+                        Files.move(fileLocation, uploadsLocation.resolve(media.getFilename()));
+                        Files.move(thumbnailLocation, uploadsLocation.resolve(thumbnail));
+                        media.setPost(post);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                } else {
+                    mediaRepository.delete(media);
                 }
-                media.setPost(post);
             });
         }
 
@@ -159,6 +164,11 @@ public class MediaServiceImpl implements MediaService {
     @Override
     public Set<Media> getByPostId(Integer postId) {
         return mediaRepository.findAllByPost_IdOrderById(postId);
+    }
+
+    @Override
+    public void deleteByIdAndAuthor(Integer id, User author) {
+        mediaRepository.removeDistinctByIdAndAuthor(id, author);
     }
 
     private Image storeFile(MultipartFile file, String newName, Path path) throws Exception {

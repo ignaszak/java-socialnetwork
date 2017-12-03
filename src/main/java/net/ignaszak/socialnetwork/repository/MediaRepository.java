@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 
@@ -15,4 +16,6 @@ public interface MediaRepository extends JpaRepository<Media, Integer> {
     Page<Media> findAllByAuthorAndKeyIsNullOrderByCreatedDate(User author, Pageable page);
     Set<Media> findAllByKey(String key);
     Set<Media> findAllByPost_IdOrderById(Integer postId);
+    @Transactional
+    void removeDistinctByIdAndAuthor(Integer id, User author);
 }

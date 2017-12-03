@@ -21,4 +21,5 @@ public interface MediaService {
     Page<Media> getByUser(User user, Pageable page);
     void init();
     Set<Media> getByPostId(Integer postId);
+    void deleteByIdAndAuthor(Integer id, User author);
 }

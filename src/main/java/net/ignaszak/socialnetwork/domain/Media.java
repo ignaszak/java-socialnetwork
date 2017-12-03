@@ -1,14 +1,28 @@
 package net.ignaszak.socialnetwork.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Date;
-import java.util.UUID;
 
+@Component
 @Entity
 @Table(name = "media")
 public class Media {
+
+    @Transient
+    private static Path uploadsLocation;
+
+    @Value("${app.uploads.path}")
+    public void setUploadsLocation(String uploadsLocation) {
+        Media.uploadsLocation = Paths.get(uploadsLocation);
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,11 +32,11 @@ public class Media {
     @Column(name = "filename", nullable = false)
     private String filename;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "post_id")
     private Post post;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "author_id", nullable = false)
     private User author;
 
@@ -42,6 +56,13 @@ public class Media {
     @PrePersist
     protected void onCreate() {
         createdDate = new Date();
+    }
+
+    @PreRemove
+    protected void onRemove() throws IOException {
+        String thumbnail = "thumbnail-" + filename;
+        Files.deleteIfExists(uploadsLocation.resolve(filename));
+        Files.deleteIfExists(uploadsLocation.resolve(thumbnail));
     }
 
     public Integer getId() {

@@ -3,12 +3,12 @@
         <div class="card card-inverse card-primary text-center">
             <div class="card-block">
                 <blockquote class="card-blockquote">
-                    <img [mediaProfileThumbnail]="user" class="img-avatar" alt="{{user.username}}" />
+                    <img [mediaProfileThumbnail]="user" class="img-avatar avatar-big" alt="{{user.username}}" />
                     <h1>{{user.username}}</h1>
                     <h3>{{user.caption}}</h3>
                 </blockquote>
                 <div class="row">
-                    <div class="col-sm-6 text-left">
+                    <div class="col-sm-4 text-left">
                         <div *ngIf="user.username != currentUser.username">
                             <button *ngIf="relation.accepted == null" class="btn btn-success btn-sm" type="button" (click)="invite(user)">
                                 <i class="icon-user-follow"></i>
@@ -24,7 +24,7 @@
                             </button>
                         </div>
                     </div>
-                    <div class="col-sm-6 text-right">
+                    <div class="col-sm-8 text-right">
                         <button *ngIf="user.username == currentUser.username" class="btn btn-secondary btn-sm" type="button" [routerLink]="['/', user.username]">
                             <i class="icon-user"></i>
                             Profile
