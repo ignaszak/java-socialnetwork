@@ -14,6 +14,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("rest-api/posts/{id}/comments")
 public class PostsCommentsRestController {
@@ -45,8 +47,10 @@ public class PostsCommentsRestController {
     }
 
     @PutMapping
-    public ResponseEntity<Integer> add(@RequestBody Comment comment, @PathVariable("id") Integer id) {
-        comment.setPost(postService.getPostById(id));
+    public ResponseEntity<Integer> add(@Valid @RequestBody Comment comment, @PathVariable("id") Integer id) {
+        Post post = postService.getPostById(id);
+        if (post == null) throw new ResourceNotFoundException();
+        comment.setPost(post);
         comment.setAuthor(userService.getCurrentUser());
         commentService.save(comment);
         return new ResponseEntity<>(comment.getId(), HttpStatus.OK);

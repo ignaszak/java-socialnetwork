@@ -1,6 +1,7 @@
 package net.ignaszak.socialnetwork.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.Set;
 
@@ -15,10 +16,12 @@ public class Post {
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
     @JoinColumn(name = "author_id", nullable = false)
+    @NotNull
     private User author;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
     @JoinColumn(name = "receiver_id", nullable = false)
+    @NotNull
     private User receiver;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "post", cascade = CascadeType.ALL)
@@ -30,6 +33,7 @@ public class Post {
 
     @Column(name = "created_date", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
+    @NotNull
     private Date createdDate;
 
     /**
@@ -78,6 +82,10 @@ public class Post {
 
     public Date getCreatedDate() {
         return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
     }
 
     public boolean isAuthor(User user) {

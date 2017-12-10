@@ -1,10 +1,12 @@
 package net.ignaszak.socialnetwork.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -30,6 +32,7 @@ public class Media {
     private Integer id;
 
     @Column(name = "filename", nullable = false)
+    @NotBlank
     private String filename;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
@@ -38,10 +41,12 @@ public class Media {
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "author_id", nullable = false)
+    @NotNull
     private User author;
 
     @Column(name = "created_date", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
+    @NotNull
     private Date createdDate;
 
     @Column(name = "key")

@@ -1,8 +1,10 @@
 package net.ignaszak.socialnetwork.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
@@ -15,14 +17,17 @@ public class Relation {
     private Integer id;
 
     @Column(name = "key", nullable = false, unique = true, updatable = false)
+    @NotBlank
     private String key;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     @JoinColumn(name = "sender_id")
+    @NotNull
     private User sender;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     @JoinColumn(name = "receiver_id")
+    @NotNull
     private User receiver;
 
     @Column(name = "accepted")
@@ -30,6 +35,7 @@ public class Relation {
 
     @Column(name = "invitation_date", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
+    @NotNull
     private Date invitationDate;
 
     @Column(name = "accepted_date")

@@ -27,8 +27,8 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
 
     @Query(
         "SELECT p FROM Post p LEFT JOIN p.medias m WHERE " +
-            "p.author IN(SELECT r.sender FROM Relation r WHERE r.receiver = :user) " +
-            "OR p.author IN(SELECT r.receiver FROM Relation r WHERE r.sender = :user) " +
+            "p.author IN(SELECT r.sender FROM Relation r WHERE r.receiver = :user AND r.accepted = 1) " +
+            "OR p.author IN(SELECT r.receiver FROM Relation r WHERE r.sender = :user AND r.accepted = 1) " +
             "OR p.author = :user " +
             "OR p.receiver = :user " +
             "OR p IN(SELECT c.post FROM Comment c WHERE c.author = :user)" +

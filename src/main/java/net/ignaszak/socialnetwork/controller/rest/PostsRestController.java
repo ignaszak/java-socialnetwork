@@ -2,14 +2,14 @@ package net.ignaszak.socialnetwork.controller.rest;
 
 import net.ignaszak.socialnetwork.domain.Post;
 import net.ignaszak.socialnetwork.domain.User;
+import net.ignaszak.socialnetwork.exception.AccessDeniedException;
+import net.ignaszak.socialnetwork.exception.ResourceNotFoundException;
 import net.ignaszak.socialnetwork.service.post.PostService;
 import net.ignaszak.socialnetwork.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.MediaType;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("rest-api/posts")
@@ -28,14 +28,8 @@ public class PostsRestController {
         this.userService = userService;
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    @Secured("ROLE_ADMIN")
-    public Page<Post> findAll(Pageable page) {
-        return postService.getAll(page);
-    }
-
     @PutMapping
-    public Post add(@RequestBody Post post) {
+    public Post add(@Valid @RequestBody Post post) {
         User currentUser = userService.getCurrentUser();
         post.setAuthor(currentUser);
         postService.save(post);
@@ -46,7 +40,8 @@ public class PostsRestController {
     public void delete(@PathVariable Integer id) {
         User currentUser = userService.getCurrentUser();
         Post post = postService.getPostById(id);
-        if (post.isAuthor(currentUser))
-            postService.delete(post);
+        if (post == null) throw new ResourceNotFoundException();
+        if (! post.isAuthor(currentUser)) throw new AccessDeniedException();
+        postService.delete(post);
     }
 }

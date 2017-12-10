@@ -1,5 +1,7 @@
 package net.ignaszak.socialnetwork.domain;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -21,6 +23,7 @@ public class Comment {
     private Post post;
 
     @Column(name = "text", nullable = false)
+    @NotBlank
     private String text;
 
     @Column(name = "created_date", nullable = false)
@@ -58,6 +61,10 @@ public class Comment {
 
     public String getText() {
         return text;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
     }
 
     public Date getCreatedDate() {

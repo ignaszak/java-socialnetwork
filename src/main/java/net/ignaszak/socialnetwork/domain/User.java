@@ -19,6 +19,7 @@ public class User {
 
     @Column(name = "email", nullable = false, unique = true)
     @Email
+    @NotBlank
     private String email;
 
     @Column(name = "new_email")
@@ -34,6 +35,7 @@ public class User {
     private String password;
 
     @Column(name = "role", nullable = false)
+    @NotBlank
     private String role;
 
     @Column(name = "caption")
