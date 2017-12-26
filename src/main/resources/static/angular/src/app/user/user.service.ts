@@ -73,25 +73,22 @@ export class UserService implements UserServiceInterface{
         let path: string = this.provider.getPath(RestProvider.USER_FRIEND, {'userId': user.id});
         return this.http.get(path)
             .toPromise()
-            .then(response => {
-                if (response.text()) return response.json() as Relation;
-                return new Relation();
-            })
-            .catch(RestProvider.handleError)
+            .then(response => response.json() as Relation)
+            .catch(RestProvider.handleError);
     }
 
     updateUser(user: User): Promise<boolean> {
-        return this.http.put(RestProvider.USER_CURRENT, user)
+        return this.http.post(RestProvider.USER_CURRENT, user)
             .toPromise()
             .then(() => true)
             .catch(RestProvider.handleError);
     }
 
-    inviteUser(user: User): Promise<boolean> {
+    inviteUser(user: User): Promise<Relation> {
         let path: string = this.provider.getPath(RestProvider.USER_FRIENDS, {'userId': user.id});
-        return this.http.post(path, null)
+        return this.http.put(path, null)
             .toPromise()
-            .then(() => false) // False for not accepted invitation
+            .then(relation => relation.json() as Relation)
             .catch(RestProvider.handleError);
     }
 
@@ -112,7 +109,7 @@ export class UserService implements UserServiceInterface{
     }
 
     changePassword(passwordSet: any): Promise<boolean> {
-        return this.http.put(RestProvider.USER_CURRENT_PASSWORD, passwordSet)
+        return this.http.post(RestProvider.USER_CURRENT_PASSWORD, passwordSet)
             .toPromise()
             .then(() => true)
             .catch(() => false);

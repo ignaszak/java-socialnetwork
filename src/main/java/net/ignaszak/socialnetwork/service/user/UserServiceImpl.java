@@ -48,10 +48,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserFromUserRegistrationForm(UserRegistrationType userRegistrationForm) {
-        User user = new User();
-        user.setEmail(userRegistrationForm.getEmail());
-        user.setUsername(userRegistrationForm.getUsername());
-        user.setPassword(userRegistrationForm.getPassword());
+        User user = new User(
+            userRegistrationForm.getUsername(),
+            userRegistrationForm.getEmail(),
+            userRegistrationForm.getPassword()
+        );
         user.setRole(userRegistrationForm.getRole());
         return user;
     }

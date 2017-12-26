@@ -40,7 +40,7 @@ public class UsersCurrentRestController {
         return userService.getCurrentUser();
     }
 
-    @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public User update(@RequestBody User user, HttpServletRequest request) {
         User currentUser = userService.getCurrentUser();
         currentUser.setCaption(user.getCaption());

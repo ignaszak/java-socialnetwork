@@ -2,7 +2,7 @@ package net.ignaszak.socialnetwork.controller.rest;
 
 import net.ignaszak.socialnetwork.domain.User;
 import net.ignaszak.socialnetwork.service.user.UserService;
-import net.ignaszak.socialnetwork.type.UserCurrentChangePasswordType;
+import net.ignaszak.socialnetwork.type.UserChangePasswordType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
@@ -21,8 +21,8 @@ public class UsersCurrentPasswordRestController {
         this.userService = userService;
     }
 
-    @PutMapping
-    public ResponseEntity change(@Valid @RequestBody UserCurrentChangePasswordType change, Errors errors) {
+    @PostMapping
+    public ResponseEntity change(@Valid @RequestBody UserChangePasswordType change, Errors errors) {
         User current = userService.getCurrentUser();
         if (! change.isEqualsWithOldPassword(current.getPassword()))
             errors.reject("oldPassword", "oldPassword");

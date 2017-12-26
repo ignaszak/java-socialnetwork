@@ -42,7 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
             .and()
             .authorizeRequests()
-                .antMatchers("/", "/rest-api/**", "/public/**", "/registration", "/login", "/remind", "/user/email-activation")
+                .antMatchers("/", "/public/**", "/registration", "/login", "/remind", "/user/email-activation")
                 .permitAll()
                 .anyRequest()
                 .fullyAuthenticated()

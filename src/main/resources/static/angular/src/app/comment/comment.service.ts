@@ -26,12 +26,12 @@ export class CommentService implements CommentServiceInterface {
             .catch(RestProvider.handleError);
     }
 
-    addComment(comment: Comment, postId: number): Promise<any> {
+    addComment(comment: Comment, postId: number): Promise<Comment> {
         comment.createdDate = new Date();
         let path = this.provider.getPath(RestProvider.POST_COMMENTS, {'postId': postId});
         return this.http.put(path, comment)
             .toPromise()
-            .then(result => result.json())
+            .then(result => result.json() as Comment)
             .catch(RestProvider.handleError);
     }
 

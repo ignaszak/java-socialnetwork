@@ -1,6 +1,5 @@
 package net.ignaszak.socialnetwork.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
@@ -20,12 +19,12 @@ public class Relation {
     @NotBlank
     private String key;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
     @JoinColumn(name = "sender_id")
     @NotNull
     private User sender;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
     @JoinColumn(name = "receiver_id")
     @NotNull
     private User receiver;
@@ -56,17 +55,14 @@ public class Relation {
         }
     }
 
-    @JsonIgnore
     public String getKey() {
         return key;
     }
 
-    @JsonIgnore
     public User getSender() {
         return sender;
     }
 
-    @JsonIgnore
     public User getReceiver() {
         return receiver;
     }

@@ -1,9 +1,14 @@
+import {User} from "./user";
+
 export class Relation {
 
     /**
-     * @var boolean|null
+     * @var string|null
      */
-    accepted: any;
+    key: any;
+    sender: User;
+    receiver: User;
+    accepted: boolean;
     invitationDate: any;
     acceptedDate: any;
 }

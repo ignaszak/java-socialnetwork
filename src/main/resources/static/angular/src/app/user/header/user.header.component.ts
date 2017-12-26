@@ -39,7 +39,7 @@ export class UserHeaderComponent implements OnInit, OnChanges {
     }
 
     public invite(user: User): void {
-        this.userService.inviteUser(user).then(accepted => this.relation.accepted = accepted);
+        this.userService.inviteUser(user).then(relation => this.relation = relation);
     }
 
     public deleteRelation(user: User): void {

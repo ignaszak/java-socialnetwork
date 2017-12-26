@@ -14,7 +14,7 @@ export interface UserServiceInterface {
     getRelationByUser(user: User): Promise<Relation>;
     updateUser(user: User): Promise<boolean>;
     changePassword(passwordSet: any): Promise<boolean>;
-    inviteUser(user: User): Promise<boolean>;
+    inviteUser(user: User): Promise<Relation>;
     acceptByUserId(userId: number): Promise<boolean>;
     deleteRelationByUserId(userId: number): Promise<any>;
 }

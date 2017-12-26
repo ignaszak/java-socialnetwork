@@ -31,10 +31,7 @@ target/
 
 .git
 out/
-gradle/
 .settings/
-gradlew
-gradlew.bat
 *.class
 
 # IDE - VSCode

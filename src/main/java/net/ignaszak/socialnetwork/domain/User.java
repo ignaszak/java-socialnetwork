@@ -6,7 +6,6 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
-import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "user")
@@ -55,6 +54,13 @@ public class User {
 
     public User() {
         enabled = false;
+    }
+
+    public User(String username, String email, String password) {
+        this.username = username;
+        this.email = email;
+        role = "USER";
+        setPassword(password);
     }
 
     public Integer getId() {

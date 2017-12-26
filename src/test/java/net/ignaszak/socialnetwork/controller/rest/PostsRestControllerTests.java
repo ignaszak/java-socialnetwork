@@ -42,21 +42,25 @@ public class PostsRestControllerTests {
         post.setAuthor(new User());
         post.setReceiver(new User());
         post.setCreatedDate(new Date());
-        mockMvc.perform(
-            put("/rest-api/posts")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(post))
-        ).andExpect(status().isOk());
+        mockMvc
+            .perform(
+                put("/rest-api/posts")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(mapper.writeValueAsString(post))
+            )
+            .andExpect(status().isOk());
         Mockito.verify(userService, Mockito.times(1)).getCurrentUser();
         Mockito.verify(postService, Mockito.times(1)).save(Mockito.any());
     }
 
     @Test
     public void shouldNotAddPostIfDataAreMissing() throws Exception {
-        mockMvc.perform(
-            put("/rest-api/posts")
-                .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isBadRequest());
+        mockMvc
+            .perform(
+                put("/rest-api/posts")
+                    .contentType(MediaType.APPLICATION_JSON)
+            )
+            .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -64,7 +68,9 @@ public class PostsRestControllerTests {
         Mockito.when(postService.getPostById(1)).thenReturn(post);
         Mockito.when(userService.getCurrentUser()).thenReturn(user);
         Mockito.when(post.isAuthor(user)).thenReturn(true);
-        mockMvc.perform(delete("/rest-api/posts/{id}", 1)).andExpect(status().isOk());
+        mockMvc
+            .perform(delete("/rest-api/posts/{id}", 1))
+            .andExpect(status().isOk());
         Mockito.verify(postService, Mockito.times(1)).delete(post);
     }
 
@@ -73,13 +79,17 @@ public class PostsRestControllerTests {
         Mockito.when(postService.getPostById(1)).thenReturn(post);
         Mockito.when(userService.getCurrentUser()).thenReturn(user);
         Mockito.when(post.isAuthor(user)).thenReturn(false);
-        mockMvc.perform(delete("/rest-api/posts/{id}", 1)).andExpect(status().isForbidden());
+        mockMvc
+            .perform(delete("/rest-api/posts/{id}", 1))
+            .andExpect(status().isForbidden());
         Mockito.verify(postService, Mockito.never()).delete(post);
     }
 
     @Test
     public void shouldNotDeleteNotExistingPost() throws Exception {
-        mockMvc.perform(delete("/rest-api/posts/{id}", 1)).andExpect(status().isNotFound());
+        mockMvc
+            .perform(delete("/rest-api/posts/{id}", 1))
+            .andExpect(status().isNotFound());
         Mockito.verify(postService, Mockito.never()).delete(post);
     }
 }

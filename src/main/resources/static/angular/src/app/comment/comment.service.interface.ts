@@ -6,5 +6,5 @@ export interface CommentServiceInterface {
 
     getCommentsByPost(post: Post, page?: number): Promise<RestResponse<Comment>>;
     addComment(comment: Comment, postId: number): Promise<any>;
-    deleteComment(comment: Comment): Promise<any>;
+    deleteComment(comment: Comment): Promise<Comment>;
 }

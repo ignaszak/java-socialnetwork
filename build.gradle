@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '1.5.7.RELEASE'
+        springBootVersion = '1.5.9.RELEASE'
     }
     repositories {
         mavenCentral()
@@ -23,6 +23,7 @@ apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'com.moowork.node'
 apply plugin: 'docker'
+apply plugin: 'application'
 
 jar {
     baseName = 'socialnetwork'
@@ -30,7 +31,6 @@ jar {
 }
 
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
@@ -47,12 +47,12 @@ dependencies {
     compile(group: 'commons-io', name: 'commons-io', version: '2.6')
     compile(group: 'com.google.guava', name: 'guava', version: '23.0')
     compile(group: 'net.coobird', name: 'thumbnailator', version: '0.4.8')
+    compile(group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.0')
     testCompile(group: 'com.jcabi', name: 'jcabi-matchers', version: '1.4')
     testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile('org.springframework.security:spring-security-test')
-
-    compile group: 'org.dbunit', name: 'dbunit', version: '2.5.4'
-    testCompile group: 'com.github.springtestdbunit', name: 'spring-test-dbunit', version: '1.3.0'
+    compile(group: 'org.dbunit', name: 'dbunit', version: '2.5.4')
+    testCompile(group: 'com.github.springtestdbunit', name: 'spring-test-dbunit', version: '1.3.0')
 }
 
 node {
@@ -66,7 +66,7 @@ task buildClientDev(type: NpmTask, dependsOn: 'npmInstall') {
     description = 'Compile client side folder for development'
     args = ['run','build']
 }
-task buildClient(type: NpmTask, dependsOn:'npmInstall') {
+task buildClient(type: NpmTask, dependsOn: 'npmInstall') {
     group = 'build'
     description = "Compile client side folder for production"
     args = ['run','buildProd']
@@ -76,19 +76,19 @@ task buildClientWatch(type: NpmTask, dependsOn: 'npmInstall') {
     description = "Build and watches the client side assets for rebuilding"
     args = ['run','buildWatch']
 }
-task copyIndexClientDev(type: Copy, dependsOn: [buildClientDev]) {
+task copyAngularResources(type: Copy) {
     group = 'application'
-    description = 'Copy angular index.html to templates folder for development'
+    description = 'Copy angular index.html into templates folder'
     from 'src/main/resources/static/public/angular/index.html'
     into 'src/main/resources/templates'
 }
-task copyIndexClient(type: Copy, dependsOn: [buildClient]) {
-    group = 'application'
-    description = 'Copy angular index.html to templates folder for production'
-    from 'src/main/resources/static/public/angular/index.html'
-    into 'src/main/resources/templates'
+task copyAngularResourcesClient(type: Copy, dependsOn: 'buildClient') {
+    copyAngularResources.execute()
 }
-task copyApplicationProperitiesClient(type: Copy) {
+task copyAngularResourcesClientDev(type: Copy, dependsOn: 'buildClientDev') {
+    copyAngularResources.execute()
+}
+task copyApplicationProperities(type: Copy) {
     group = 'application'
     description = 'Create application.properities file'
     def file = new File('src/main/resources/application.properties')
@@ -112,8 +112,14 @@ task buildDocker(type: Docker, dependsOn: build) {
     }
 }
 
+// Development
 bootRun.dependsOn(buildClientDev)
-bootRun.dependsOn(copyIndexClientDev)
-bootRun.dependsOn(copyApplicationProperitiesClient)
+bootRun.dependsOn(copyAngularResourcesClientDev)
+bootRun.dependsOn(copyApplicationProperities)
+
+// Production
+run.dependsOn(buildClientDev)
+run.dependsOn(copyAngularResourcesClient)
+run.dependsOn(copyApplicationProperities)
 
 jar.dependsOn(buildClient)

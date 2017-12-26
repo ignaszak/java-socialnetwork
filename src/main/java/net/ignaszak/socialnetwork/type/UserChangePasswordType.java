@@ -4,7 +4,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.validation.constraints.Size;
 
-public class UserCurrentChangePasswordType {
+public class UserChangePasswordType {
 
     @Size(min = 8, max = 15, message = "Password must by 8-15 characters!")
     private String oldPassword;

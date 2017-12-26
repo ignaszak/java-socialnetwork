@@ -10,15 +10,15 @@
                 <div class="row">
                     <div class="col-sm-4 text-left">
                         <div *ngIf="user.username != currentUser.username">
-                            <button *ngIf="relation.accepted == null" class="btn btn-success btn-sm" type="button" (click)="invite(user)">
+                            <button *ngIf="relation.key == null" class="btn btn-success btn-sm" type="button" (click)="invite(user)">
                                 <i class="icon-user-follow"></i>
                                 Add friend
                             </button>
-                            <button *ngIf="relation.accepted == false" class="btn btn-success btn-sm" type="button" disabled>
+                            <button *ngIf="relation.key != null && relation.accepted == false" class="btn btn-success btn-sm" type="button" disabled>
                                 <i class="icon-clock"></i>
                                 Waiting for confirmation
                             </button>
-                            <button *ngIf="relation.accepted == true" class="btn btn-success btn-sm" type="button" (click)="deleteRelation(user)">
+                            <button *ngIf="relation.key != null && relation.accepted == true" class="btn btn-success btn-sm" type="button" (click)="deleteRelation(user)">
                                 <i class="icon-user-unfollow"></i>
                                 Remove from friends
                             </button>

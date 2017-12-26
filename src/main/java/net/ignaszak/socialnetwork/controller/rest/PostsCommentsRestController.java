@@ -2,6 +2,7 @@ package net.ignaszak.socialnetwork.controller.rest;
 
 import net.ignaszak.socialnetwork.domain.Comment;
 import net.ignaszak.socialnetwork.domain.Post;
+import net.ignaszak.socialnetwork.dto.ErrorDTO;
 import net.ignaszak.socialnetwork.exception.ResourceNotFoundException;
 import net.ignaszak.socialnetwork.service.comment.CommentService;
 import net.ignaszak.socialnetwork.service.post.PostService;
@@ -40,19 +41,22 @@ public class PostsCommentsRestController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public Page<Comment> get(@PathVariable("id") Integer id, Pageable page) {
+    public ResponseEntity<?> get(@PathVariable("id") Integer id, Pageable page) {
         Post post = postService.getPostById(id);
-        if (post == null) throw new ResourceNotFoundException();
-        return commentService.getCommentsByPost(post, page);
+        if (post == null) return new ResponseEntity<>(ErrorDTO.notFound(), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(
+            commentService.getCommentsByPost(post, page),
+            HttpStatus.OK
+        );
     }
 
     @PutMapping
-    public ResponseEntity<Integer> add(@Valid @RequestBody Comment comment, @PathVariable("id") Integer id) {
+    public ResponseEntity<?> add(@Valid @RequestBody Comment comment, @PathVariable("id") Integer id) {
         Post post = postService.getPostById(id);
-        if (post == null) throw new ResourceNotFoundException();
+        if (post == null) return new ResponseEntity<>(ErrorDTO.notFound(), HttpStatus.NOT_FOUND);
         comment.setPost(post);
         comment.setAuthor(userService.getCurrentUser());
         commentService.save(comment);
-        return new ResponseEntity<>(comment.getId(), HttpStatus.OK);
+        return new ResponseEntity<>(comment, HttpStatus.OK);
     }
 }
