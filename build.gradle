@@ -15,7 +15,7 @@ buildscript {
     }
 }
 
-group = 'springio'
+group = 'ignaszak'
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
@@ -30,6 +30,7 @@ jar {
     version  = '0.0.1'
 }
 
+sourceCompatibility = 1.8
 version = '0.0.1-SNAPSHOT'
 
 repositories {
