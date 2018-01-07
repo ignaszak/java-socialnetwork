@@ -7,9 +7,9 @@ import {Event} from "../shared/event/event";
 
 @Component({
     selector: 'app-dashboard',
-    templateUrl: './layout.component.html'
+    templateUrl: './index.component.html'
 })
-export class LayoutComponent extends Event implements OnInit {
+export class IndexComponent extends Event implements OnInit {
 
     public disabled = false;
     public status: { isopen: boolean } = {isopen: false};

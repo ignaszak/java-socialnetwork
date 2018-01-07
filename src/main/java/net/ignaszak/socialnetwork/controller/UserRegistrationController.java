@@ -1,13 +1,12 @@
 package net.ignaszak.socialnetwork.controller;
 
 import net.ignaszak.socialnetwork.auth.validator.UserRegistrationTypeValidator;
+import net.ignaszak.socialnetwork.service.mailer.MailerService;
 import net.ignaszak.socialnetwork.type.UserRegistrationType;
-import net.ignaszak.socialnetwork.model.mail.EmailSender;
 import net.ignaszak.socialnetwork.service.user.SecurityService;
 import net.ignaszak.socialnetwork.service.user.UserService;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,8 +25,7 @@ public class UserRegistrationController {
     private UserService userService;
     private UserRegistrationTypeValidator userRegistrationTypeValidator;
     private SecurityService securityService;
-    private EmailSender emailSender;
-    private String emailFromAddress;
+    private MailerService mailerService;
 
     @Autowired
     public void setSecurityService(SecurityService securityService) {
@@ -45,13 +43,8 @@ public class UserRegistrationController {
     }
 
     @Autowired
-    public void setEmailSender(EmailSender emailSender) {
-        this.emailSender = emailSender;
-    }
-
-    @Value("${app.mail.from.address}")
-    public void setEmailFromAddress(String emailFromAddress) {
-        this.emailFromAddress = emailFromAddress;
+    public void setMailerService(MailerService mailerService) {
+        this.mailerService = mailerService;
     }
 
     @InitBinder("registration")
@@ -78,14 +71,9 @@ public class UserRegistrationController {
         net.ignaszak.socialnetwork.domain.User user = userService.getUserFromUserRegistrationForm(userRegistrationForm);
         String code = UUID.randomUUID().toString();
         try {
-            emailSender.send(
-                user.getEmail(),
-                emailFromAddress,
-                "User activation",
-                "Your activation link: "
-                + request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
-                + "/user/email-activation?code=" + code
-            );
+            String activationLink = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+                + "/user/email-activation?code=" + code;
+            mailerService.sendActivationLink(user, activationLink);
             user.setActivationCode(code);
         } catch (MessagingException e) {
             user.enable();

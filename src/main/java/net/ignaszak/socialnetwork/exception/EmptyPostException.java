@@ -3,6 +3,10 @@ package net.ignaszak.socialnetwork.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-public class EmptyPostException extends RuntimeException {
+@ResponseStatus(HttpStatus.BAD_REQUEST)
+public class EmptyPostException extends AppException {
+
+    public EmptyPostException() {
+        super("Post could not be empty");
+    }
 }

@@ -7,9 +7,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Integer> {
 
     Page<Comment> findAllByPostOrderByCreatedDateDesc(Post post, Pageable page);
-    Comment findCommentById(Integer id);
+    Optional<Comment> findCommentById(Integer id);
 }

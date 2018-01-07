@@ -9,10 +9,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface PostRepository extends JpaRepository<Post, Integer> {
 
-    Post findById(Integer id);
+    Optional<Post> findById(Integer id);
 
     @Query(
         "SELECT p FROM Post p LEFT JOIN p.medias m WHERE " +

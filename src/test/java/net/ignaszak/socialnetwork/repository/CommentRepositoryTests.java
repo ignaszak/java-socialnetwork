@@ -10,6 +10,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.Optional;
+
 @DatabaseSetup("classpath:data/commentRepositoryDataset.xml")
 public class CommentRepositoryTests extends RepositoryTestsInitializer {
 
@@ -17,6 +19,8 @@ public class CommentRepositoryTests extends RepositoryTestsInitializer {
     private CommentRepository commentRepository;
     @MockBean
     private Pageable pageable;
+    @MockBean
+    private Comment emptyComment;
 
     @Test
     public void findAllbyPost() {
@@ -28,7 +32,6 @@ public class CommentRepositoryTests extends RepositoryTestsInitializer {
 
     @Test
     public void findById() {
-        Comment comment = commentRepository.findCommentById(1);
-        Assert.assertEquals("Test comment 1", comment.getText());
+        Assert.assertEquals("Test comment 1", commentRepository.findCommentById(1).orElse(emptyComment).getText());
     }
 }

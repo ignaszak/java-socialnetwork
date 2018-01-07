@@ -41,7 +41,7 @@ public class RelationServiceTests {
         Relation relation = Mockito.mock(Relation.class);
         Mockito.when(relation.getSender()).thenReturn(sender);
         Mockito.when(relation.getReceiver()).thenReturn(receiver);
-        Mockito.when(receiver.isEqualsTo(sender)).thenReturn(true);
+        Mockito.when(receiver.equals(sender)).thenReturn(true);
         relationService.add(relation);
     }
 
@@ -52,7 +52,7 @@ public class RelationServiceTests {
         Relation relation = Mockito.mock(Relation.class);
         Mockito.when(relation.getSender()).thenReturn(sender);
         Mockito.when(relation.getReceiver()).thenReturn(receiver);
-        Mockito.when(receiver.isEqualsTo(sender)).thenReturn(false);
+        Mockito.when(receiver.equals(sender)).thenReturn(false);
         relationService.add(relation);
         Mockito.verify(relationRepository, Mockito.times(1)).save(relation);
     }

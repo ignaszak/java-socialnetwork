@@ -2,8 +2,8 @@ package net.ignaszak.socialnetwork.controller.rest;
 
 import net.ignaszak.socialnetwork.domain.Post;
 import net.ignaszak.socialnetwork.domain.User;
-import net.ignaszak.socialnetwork.exception.AccessDeniedException;
-import net.ignaszak.socialnetwork.exception.ResourceNotFoundException;
+import net.ignaszak.socialnetwork.dto.SuccessRestDTO;
+import net.ignaszak.socialnetwork.exception.*;
 import net.ignaszak.socialnetwork.service.post.PostService;
 import net.ignaszak.socialnetwork.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class PostsRestController {
     }
 
     @PutMapping
-    public Post add(@Valid @RequestBody Post post) {
+    public Post add(@Valid @RequestBody Post post) throws EmptyPostException {
         User currentUser = userService.getCurrentUser();
         post.setAuthor(currentUser);
         postService.save(post);
@@ -37,11 +37,11 @@ public class PostsRestController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public void delete(@PathVariable Integer id) {
+    public SuccessRestDTO delete(@PathVariable Integer id) throws AppException {
         User currentUser = userService.getCurrentUser();
         Post post = postService.getPostById(id);
-        if (post == null) throw new ResourceNotFoundException();
         if (! post.isAuthor(currentUser)) throw new AccessDeniedException();
         postService.delete(post);
+        return new SuccessRestDTO();
     }
 }

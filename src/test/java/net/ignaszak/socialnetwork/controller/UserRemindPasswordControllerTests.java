@@ -3,8 +3,9 @@ package net.ignaszak.socialnetwork.controller;
 import net.ignaszak.socialnetwork.auth.validator.UserRemindPasswordValidator;
 import net.ignaszak.socialnetwork.config.SecurityConfig;
 import net.ignaszak.socialnetwork.domain.User;
-import net.ignaszak.socialnetwork.model.mail.EmailSender;
+import net.ignaszak.socialnetwork.exception.NotFoundException;
 import net.ignaszak.socialnetwork.model.password.PasswordGenerator;
+import net.ignaszak.socialnetwork.service.mailer.MailerService;
 import net.ignaszak.socialnetwork.service.user.UserService;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,7 +33,7 @@ public class UserRemindPasswordControllerTests {
     @MockBean
     UserService userService;
     @MockBean
-    EmailSender emailSender;
+    MailerService mailerService;
     @MockBean
     PasswordGenerator passwordGenerator;
     @MockBean
@@ -50,8 +51,8 @@ public class UserRemindPasswordControllerTests {
     @Test
     public void shouldDisplayRemindPasswordForm() throws Exception {
         mockMvc.perform(get("/remind"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("remind"));
+            .andExpect(status().isOk())
+            .andExpect(view().name("remind"));
     }
 
     @Test
@@ -59,26 +60,26 @@ public class UserRemindPasswordControllerTests {
         String email = "test@ignaszak.net";
         Mockito.when(userService.getUserByEmail(email)).thenReturn(user);
         mockMvc.perform(post("/remind").with(csrf()).param("email", email))
-                .andExpect(status().isMovedTemporarily())
-                .andExpect(redirectedUrl("/login?remind"));
-        Mockito.verify(emailSender, Mockito.times(1))
-                .send(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+            .andExpect(status().isMovedTemporarily())
+            .andExpect(redirectedUrl("/login?remind"));
+        Mockito.verify(mailerService, Mockito.times(1))
+            .sendRemindPassword(Mockito.any(), Mockito.anyString());
     }
 
     @Test
     public void shouldDisplayFormIfEmailIsIncorrect() throws Exception {
         String email = "incorrectEmail";
         mockMvc.perform(post("/remind").with(csrf()).param("email", email))
-                .andExpect(status().isOk())
-                .andExpect(model().attribute("isEmailInvalid", true));
+            .andExpect(status().isOk())
+            .andExpect(model().attribute("isEmailInvalid", true));
     }
 
     @Test
     public void shouldDisplayFormIfEmailIsNotFound() throws Exception {
         String email = "test@ignaszak.net";
-        Mockito.when(userService.getUserByEmail(email)).thenReturn(null);
+        Mockito.when(userService.getUserByEmail(email)).thenThrow(new NotFoundException());
         mockMvc.perform(post("/remind").with(csrf()).param("email", email))
-                .andExpect(status().isOk())
-                .andExpect(model().attribute("isEmailInvalid", true));
+            .andExpect(status().isOk())
+            .andExpect(model().attribute("isEmailInvalid", true));
     }
 }

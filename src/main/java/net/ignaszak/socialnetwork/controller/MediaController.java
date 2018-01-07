@@ -1,7 +1,8 @@
 package net.ignaszak.socialnetwork.controller;
 
 import com.google.common.io.ByteStreams;
-import net.ignaszak.socialnetwork.exception.ResourceNotFoundException;
+import net.ignaszak.socialnetwork.exception.MediaUploadException;
+import net.ignaszak.socialnetwork.exception.NotFoundException;
 import net.ignaszak.socialnetwork.service.media.MediaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -25,14 +26,14 @@ public class MediaController {
 
     @ResponseBody
     @GetMapping(value = "/{filename:.+}", produces = MediaType.IMAGE_JPEG_VALUE)
-    public ResponseEntity<byte[]> get(@PathVariable String filename) {
+    public ResponseEntity<byte[]> get(@PathVariable String filename) throws Exception {
         try {
             Resource resource = mediaService.getOneResourceByFilename(filename);
             return new ResponseEntity<>(
                 ByteStreams.toByteArray(resource.getInputStream()), new HttpHeaders(), HttpStatus.CREATED
             );
-        } catch (Exception e) {
-            throw new ResourceNotFoundException("File '" + filename + "' does not exist!", e);
+        } catch (MediaUploadException e) {
+            throw new NotFoundException();
         }
     }
 }

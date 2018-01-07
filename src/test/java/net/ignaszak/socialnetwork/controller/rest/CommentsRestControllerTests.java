@@ -1,8 +1,8 @@
 package net.ignaszak.socialnetwork.controller.rest;
 
 import net.ignaszak.socialnetwork.domain.Comment;
-import net.ignaszak.socialnetwork.domain.Post;
 import net.ignaszak.socialnetwork.domain.User;
+import net.ignaszak.socialnetwork.exception.NotFoundException;
 import net.ignaszak.socialnetwork.service.comment.CommentService;
 import net.ignaszak.socialnetwork.service.user.UserService;
 import org.junit.Test;
@@ -31,36 +31,41 @@ public class CommentsRestControllerTests {
     User user;
     @MockBean
     Comment comment;
-    @MockBean
-    Post post;
 
     @Test
-    public void shouldDeleteCommentIfUserIsAuthorOfPost() throws Exception {
+    public void shouldDeleteCommentIfUserCanHandleComment() throws Exception {
         Mockito.when(userService.getCurrentUser()).thenReturn(user);
         Mockito.when(commentService.getCommentById(1)).thenReturn(comment);
-        Mockito.when(comment.isAuthor(Mockito.any())).thenReturn(false);
-        Mockito.when(comment.getPost()).thenReturn(post);
-        Mockito.when(post.isAuthor(Mockito.any())).thenReturn(true);
-        mockMvc.perform(delete("/rest-api/comments/{id}", 1)).andExpect(status().isOk());
+        Mockito.when(comment.canHandle(user)).thenReturn(true);
+        mockMvc
+            .perform(delete("/rest-api/comments/{id}", 1))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.success").value(true));
         Mockito.verify(commentService, Mockito.times(1)).delete(Mockito.any());
     }
 
     @Test
-    public void shouldDeleteCommentIfUserIsAuthorOfComment() throws Exception {
+    public void shouldReturnAccessDeniedIfUserCanNotHandleComment() throws Exception {
         Mockito.when(userService.getCurrentUser()).thenReturn(user);
         Mockito.when(commentService.getCommentById(1)).thenReturn(comment);
-        Mockito.when(comment.isAuthor(Mockito.any())).thenReturn(true);
-        Mockito.when(comment.getPost()).thenReturn(post);
-        Mockito.when(post.isAuthor(Mockito.any())).thenReturn(false);
-        mockMvc.perform(delete("/rest-api/comments/{id}", 1)).andExpect(status().isOk());
-        Mockito.verify(commentService, Mockito.times(1)).delete(Mockito.any());
+        Mockito.when(comment.canHandle(user)).thenReturn(false);
+        mockMvc
+            .perform(delete("/rest-api/comments/{id}", 1))
+            .andExpect(status().isForbidden())
+            .andExpect(jsonPath("$.success").value(false))
+            .andExpect(jsonPath("$.message").value("Access denied"));
+        Mockito.verify(commentService, Mockito.never()).delete(Mockito.any());
     }
 
     @Test
-    public void shouldReturnNotFoundIfCommentDoesntExists() throws Exception {
+    public void shouldReturnNotFoundIfCommentDoesNotExists() throws Exception {
         Mockito.when(userService.getCurrentUser()).thenReturn(user);
-        Mockito.when(commentService.getCommentById(1)).thenReturn(comment);
-        mockMvc.perform(delete("/rest-api/comments/{id}", 2)).andExpect(status().isNotFound());
+        Mockito.when(commentService.getCommentById(Mockito.anyInt())).thenThrow(new NotFoundException());
+        mockMvc
+            .perform(delete("/rest-api/comments/{id}", 2))
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.success").value(false))
+            .andExpect(jsonPath("$.message").value("Not found"));
         Mockito.verify(commentService, Mockito.never()).delete(Mockito.any());
     }
 }

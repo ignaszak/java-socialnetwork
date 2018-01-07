@@ -14,7 +14,7 @@ import {AsideToggleDirective} from './shared/aside.directive';
 import {AppRoutingModule} from './app.routing';
 
 // Layouts
-import {LayoutComponent} from './layout/layout.component';
+import {IndexComponent} from './index/index.component';
 import {UserService} from "./user/user.service";
 import {HttpModule} from "@angular/http";
 import {UserServiceInterface} from "./user/user.service.interface";
@@ -24,6 +24,7 @@ import {CommentService} from "./comment/comment.service";
 import {MediaModule} from "./media/media.module";
 import {MediaService} from "./media/media.service";
 import {NgxGalleryModule} from "ngx-gallery";
+import {HomeModule} from "./home/home.module";
 
 @NgModule({
     imports: [
@@ -34,11 +35,12 @@ import {NgxGalleryModule} from "ngx-gallery";
         ChartsModule,
         HttpModule,
         MediaModule,
-        NgxGalleryModule
+        NgxGalleryModule,
+        HomeModule
     ],
     declarations: [
         AppComponent,
-        LayoutComponent,
+        IndexComponent,
         NAV_DROPDOWN_DIRECTIVES,
         SIDEBAR_TOGGLE_DIRECTIVES,
         AsideToggleDirective

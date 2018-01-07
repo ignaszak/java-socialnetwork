@@ -9,6 +9,9 @@ import {PostModule} from "../post/post.module";
 import {UserHeaderModule} from "./header/user.header.module";
 import {UserFriendsComponent} from "./friends/user.friends.component";
 import {MediaModule} from "../media/media.module";
+import {UserSettingsComponent} from "./settings/user.settings.component";
+import {TabsModule} from "ngx-bootstrap";
+import {ImageUploadModule} from "angular2-image-upload";
 
 @NgModule({
     imports: [
@@ -19,11 +22,14 @@ import {MediaModule} from "../media/media.module";
         ReactiveFormsModule,
         PostModule,
         UserHeaderModule,
-        MediaModule
+        MediaModule,
+        TabsModule,
+        ImageUploadModule.forRoot(),
     ],
     declarations: [
         UserComponent,
         UserFriendsComponent,
+        UserSettingsComponent
     ]
 })
 export class UserModule {

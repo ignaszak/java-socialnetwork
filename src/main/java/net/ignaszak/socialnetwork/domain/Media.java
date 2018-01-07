@@ -32,7 +32,7 @@ public class Media {
     private Integer id;
 
     @Column(name = "filename", nullable = false)
-    @NotBlank
+    @NotBlank(message = "Add filename")
     private String filename;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
@@ -41,12 +41,12 @@ public class Media {
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "author_id", nullable = false)
-    @NotNull
+    @NotNull(message = "Add author")
     private User author;
 
     @Column(name = "created_date", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    @NotNull
+    @NotNull(message = "Could not set created date")
     private Date createdDate;
 
     @Column(name = "key")

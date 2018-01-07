@@ -1,7 +1,7 @@
 package net.ignaszak.socialnetwork.controller.rest;
 
 import net.ignaszak.socialnetwork.domain.User;
-import net.ignaszak.socialnetwork.model.mail.EmailSender;
+import net.ignaszak.socialnetwork.service.mailer.MailerService;
 import net.ignaszak.socialnetwork.service.user.UserService;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,7 +26,7 @@ public class UsersCurrentRestControllerTests {
     @MockBean
     UserService userService;
     @MockBean
-    EmailSender emailSender;
+    MailerService mailerService;
     private User user;
 
     @Before
@@ -70,8 +70,7 @@ public class UsersCurrentRestControllerTests {
             .andExpect(jsonPath("$.caption").value("some user caption"))
             .andExpect(jsonPath("$.email").value("test@ignaszak.net"));
         Mockito.verify(userService, Mockito.times(1)).save(user);
-        Mockito.verify(emailSender, Mockito.times(1)).send(
-            Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString()
-        );
+        Mockito.verify(mailerService, Mockito.times(1))
+            .sendActivationLink(Mockito.any(), Mockito.anyString());
     }
 }

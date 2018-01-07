@@ -1,6 +1,7 @@
 package net.ignaszak.socialnetwork.controller;
 
 import net.ignaszak.socialnetwork.domain.User;
+import net.ignaszak.socialnetwork.exception.NotFoundException;
 import net.ignaszak.socialnetwork.service.user.UserService;
 import org.junit.Assert;
 import org.junit.Test;
@@ -42,7 +43,7 @@ public class UserActivationControllerTests {
     @Test
     public void shouldDisableUserWhenActivationCodeIsIncorrect() throws Exception {
         String activationCode = "invalidCode";
-        Mockito.when(userService.getUserByActivationCode(activationCode)).thenReturn(null);
+        Mockito.when(userService.getUserByActivationCode(activationCode)).thenThrow(new NotFoundException());
         mockMvc.perform(get("/user/email-activation").param("code", activationCode))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("success", false));

@@ -19,13 +19,13 @@ public class EmailSenderImpl implements EmailSender {
     }
 
     @Override
-    public void send(String to, String from, String subject, String content) throws MessagingException {
+    public void send(String to, String from, String subject, String message) throws MessagingException {
         MimeMessage mail = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mail, true);
         helper.setTo(to);
         helper.setFrom(from);
         helper.setSubject(subject);
-        helper.setText(content);
+        helper.setText(message);
         javaMailSender.send(mail);
     }
 }

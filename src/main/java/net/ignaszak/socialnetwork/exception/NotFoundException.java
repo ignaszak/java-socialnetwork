@@ -4,15 +4,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.NOT_FOUND)
-public final class ResourceNotFoundException extends RuntimeException {
+public final class NotFoundException extends AppException {
 
-    public ResourceNotFoundException() {}
+    public NotFoundException() {
+        super("Not found");
+    }
 
-    public ResourceNotFoundException(String message) {
+    public NotFoundException(String message) {
         super(message);
     }
 
-    public ResourceNotFoundException(String message, Throwable cause) {
+    public NotFoundException(String message, Exception cause) {
         super(message, cause);
     }
 }

@@ -83,27 +83,35 @@ public class MediaServiceImpl implements MediaService {
     }
 
     @Override
-    public Media saveProfileImageWithUser(MultipartFile file, User user) throws Exception {
-        String newName = getUniqueJpgName();
-        Media media = new Media(newName);
-        Image image = storeFile(file, newName, uploadsLocation);
-        image.createProfileThumbnail(profileThumbnailWidth, profileThumbnailHeight);
-        user.setProfile(newName);
-        media.setAuthor(user);
-        mediaRepository.save(media);
-        return media;
+    public Media saveProfileImageWithUser(MultipartFile file, User user) throws MediaUploadException {
+        try {
+            String newName = getUniqueJpgName();
+            Media media = new Media(newName);
+            Image image = storeFile(file, newName, uploadsLocation);
+            image.createProfileThumbnail(profileThumbnailWidth, profileThumbnailHeight);
+            user.setProfile(newName);
+            media.setAuthor(user);
+            mediaRepository.save(media);
+            return media;
+        } catch (Exception e) {
+            throw new MediaUploadException("Could not save profile image: " + file.getName(), e);
+        }
     }
 
     @Override
-    public Media saveTempImageWithUserAndKey(MultipartFile file, User user, String key) throws Exception {
-        String newName = getUniqueJpgName();
-        Image image = storeFile(file, newName, tempLocation);
-        image.createThumbnail(thumbnailWidth, thumbnailHeight);
-        Media media = new Media(newName);
-        media.setAuthor(user);
-        media.setKey(key);
-        if (image.toFile().exists()) mediaRepository.save(media);
-        return media;
+    public Media saveTempImageWithUserAndKey(MultipartFile file, User user, String key) throws MediaUploadException {
+        try {
+            String newName = getUniqueJpgName();
+            Image image = storeFile(file, newName, tempLocation);
+            image.createThumbnail(thumbnailWidth, thumbnailHeight);
+            Media media = new Media(newName);
+            media.setAuthor(user);
+            media.setKey(key);
+            if (image.toFile().exists()) mediaRepository.save(media);
+            return media;
+        } catch (Exception e) {
+            throw new MediaUploadException("Could not save temp image: " + file.getName(), e);
+        }
     }
 
     @Override
@@ -132,13 +140,13 @@ public class MediaServiceImpl implements MediaService {
     }
 
     @Override
-    public Resource getOneResourceByFilename(String filename) {
+    public Resource getOneResourceByFilename(String filename) throws MediaUploadException {
         Path path = uploadsLocation.resolve(filename);
         return getOneResourceByPath(path);
     }
 
     @Override
-    public Resource getOneResourceByPath(Path path) {
+    public Resource getOneResourceByPath(Path path) throws MediaUploadException {
         try {
             Resource resource = new UrlResource(path.toUri());
             if (resource.exists() || resource.isReadable()) {
@@ -152,7 +160,7 @@ public class MediaServiceImpl implements MediaService {
     }
 
     @Override
-    public void init() {
+    public void init() throws MediaUploadException {
         try {
             if (! Files.exists(uploadsLocation)) Files.createDirectories(uploadsLocation);
             if (! Files.exists(tempLocation)) Files.createDirectories(tempLocation);

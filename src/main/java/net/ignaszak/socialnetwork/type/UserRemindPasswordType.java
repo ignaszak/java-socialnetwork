@@ -6,7 +6,7 @@ import org.hibernate.validator.constraints.NotBlank;
 public class UserRemindPasswordType {
 
     @Email
-    @NotBlank(message = "Invalid email!")
+    @NotBlank(message = "Invalid email")
     private String email;
 
     public String getEmail() {

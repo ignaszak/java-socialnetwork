@@ -18,7 +18,7 @@ public class User {
 
     @Column(name = "email", nullable = false, unique = true)
     @Email
-    @NotBlank
+    @NotBlank(message = "Add email")
     private String email;
 
     @Column(name = "new_email")
@@ -26,15 +26,15 @@ public class User {
     private String newEmail;
 
     @Column(name = "username", nullable = false, unique = true, updatable = false)
-    @NotBlank
+    @NotBlank(message = "Add username")
     private String username;
 
     @Column(name = "password", nullable = false)
-    @NotBlank
+    @NotBlank(message = "Add password")
     private String password;
 
     @Column(name = "role", nullable = false)
-    @NotBlank
+    @NotBlank(message = "Add role")
     private String role;
 
     @Column(name = "caption")
@@ -134,7 +134,7 @@ public class User {
         enabled = true;
     }
 
-    public boolean isEqualsTo(User user) {
+    public boolean equals(User user) {
         return this.username.equals(user.username);
     }
 

@@ -6,6 +6,7 @@ import {
 
 import {UserComponent} from './user.component';
 import {UserFriendsComponent} from "./friends/user.friends.component";
+import {UserSettingsComponent} from "./settings/user.settings.component";
 
 const routes: Routes = [
     {
@@ -18,6 +19,10 @@ const routes: Routes = [
             {
                 path: 'friends',
                 component: UserFriendsComponent
+            },
+            {
+                path: 'settings',
+                component: UserSettingsComponent
             }
         ]
     }

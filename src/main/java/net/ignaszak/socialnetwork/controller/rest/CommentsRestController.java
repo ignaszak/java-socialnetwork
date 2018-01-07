@@ -2,7 +2,9 @@ package net.ignaszak.socialnetwork.controller.rest;
 
 import net.ignaszak.socialnetwork.domain.Comment;
 import net.ignaszak.socialnetwork.domain.User;
-import net.ignaszak.socialnetwork.exception.ResourceNotFoundException;
+import net.ignaszak.socialnetwork.dto.SuccessRestDTO;
+import net.ignaszak.socialnetwork.exception.AccessDeniedException;
+import net.ignaszak.socialnetwork.exception.AppException;
 import net.ignaszak.socialnetwork.service.comment.CommentService;
 import net.ignaszak.socialnetwork.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +28,11 @@ public class CommentsRestController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public void delete(@PathVariable Integer id) {
+    public SuccessRestDTO delete(@PathVariable Integer id) throws AppException {
         User currentUser = userService.getCurrentUser();
         Comment comment = commentService.getCommentById(id);
-        if (comment == null) throw new ResourceNotFoundException();
-        if (comment.isAuthor(currentUser) || comment.getPost().isAuthor(currentUser))
-            commentService.delete(comment);
+        if (! comment.canHandle(currentUser)) throw new AccessDeniedException();
+        commentService.delete(comment);
+        return new SuccessRestDTO();
     }
 }

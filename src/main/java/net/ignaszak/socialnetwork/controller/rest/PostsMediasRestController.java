@@ -1,6 +1,7 @@
 package net.ignaszak.socialnetwork.controller.rest;
 
 import net.ignaszak.socialnetwork.domain.Media;
+import net.ignaszak.socialnetwork.dto.SuccessRestDTO;
 import net.ignaszak.socialnetwork.exception.MediaUploadException;
 import net.ignaszak.socialnetwork.service.media.MediaService;
 import net.ignaszak.socialnetwork.service.user.UserService;
@@ -27,16 +28,16 @@ public class PostsMediasRestController {
     }
 
     @PostMapping(value = "/medias/{key}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Media uploadImage(@PathVariable("key") String key, @RequestParam("image") MultipartFile image) {
-        try {
-            return mediaService.saveTempImageWithUserAndKey(image, userService.getCurrentUser(), key);
-        } catch (Exception e) {
-            throw new MediaUploadException("Failed to upload file: " + image.getOriginalFilename(), e);
-        }
+    public Media uploadImage(
+        @PathVariable("key") String key,
+        @RequestParam("image") MultipartFile image
+    ) throws MediaUploadException {
+        return mediaService.saveTempImageWithUserAndKey(image, userService.getCurrentUser(), key);
     }
 
     @DeleteMapping(value = "/medias/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public void deleteMedia(@PathVariable("id") Integer id) {
+    public SuccessRestDTO deleteMedia(@PathVariable("id") Integer id) {
         mediaService.deleteByIdAndAuthor(id, userService.getCurrentUser());
+        return new SuccessRestDTO();
     }
 }

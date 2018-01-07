@@ -10,17 +10,17 @@ import javax.validation.constraints.Size;
  */
 public class UserRegistrationType {
 
-    @NotBlank(message = "Invalid email!")
+    @NotBlank(message = "Invalid email")
     @Email
     private String email;
 
-    @NotBlank(message = "Invalid username!")
+    @NotBlank(message = "Invalid username")
     private String username;
 
-    @Size(min = 8, max = 15, message = "Password must by 8-15 characters!")
+    @Size(min = 8, max = 15, message = "Password must by 8-15 characters")
     private String password;
 
-    @Size(min = 8, max = 15, message = "Password must by 8-15 characters!")
+    @Size(min = 8, max = 15, message = "Password must by 8-15 characters")
     private String passwordRepeat;
 
     public String getEmail() {

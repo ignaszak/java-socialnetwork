@@ -1,6 +1,7 @@
 package net.ignaszak.socialnetwork.controller.rest;
 
 import net.ignaszak.socialnetwork.domain.User;
+import net.ignaszak.socialnetwork.exception.NotFoundException;
 import net.ignaszak.socialnetwork.service.post.PostService;
 import net.ignaszak.socialnetwork.service.user.UserService;
 import org.junit.Test;
@@ -46,9 +47,11 @@ public class UsersRestControllerTests {
 
     @Test
     public void shouldReturnNotFoundIfCantFindUserById() throws Exception {
+        Mockito.when(userService.getUserById(1)).thenThrow(new NotFoundException());
         mockMvc
             .perform(get("/rest-api/users/{id}", 1))
             .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.success").value(false))
             .andExpect(jsonPath("$.message").value("Not found"));
     }
 
@@ -65,9 +68,11 @@ public class UsersRestControllerTests {
 
     @Test
     public void shouldReturnNotFoundIfCantFindUserByUsername() throws Exception {
+        Mockito.when(userService.getUserByUsername("test")).thenThrow(new NotFoundException());
         mockMvc
             .perform(get("/rest-api/users/findByUsername").param("username", "test"))
             .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.success").value(false))
             .andExpect(jsonPath("$.message").value("Not found"));
     }
 
@@ -84,17 +89,21 @@ public class UsersRestControllerTests {
 
     @Test
     public void shouldReturnNotFoundIfCantFindUserByEmail() throws Exception {
+        Mockito.when(userService.getUserByEmailOrNewEmail("test@ignaszak.net")).thenThrow(new NotFoundException());
         mockMvc
             .perform(get("/rest-api/users/findByEmail").param("email", "test@ignaszak.net"))
             .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.success").value(false))
             .andExpect(jsonPath("$.message").value("Not found"));
     }
 
     @Test
     public void shouldReturnNotFoundWhileAccessingPostFromNorExistingUser() throws Exception {
+        Mockito.when(userService.getUserById(1)).thenThrow(new NotFoundException());
         mockMvc
             .perform(get("/rest-api/users/{id}/posts", 1))
             .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.success").value(false))
             .andExpect(jsonPath("$.message").value("Not found"));
     }
 

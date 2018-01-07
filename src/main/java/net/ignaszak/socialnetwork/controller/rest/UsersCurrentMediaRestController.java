@@ -34,11 +34,7 @@ public class UsersCurrentMediaRestController {
     }
 
     @PostMapping(value = "/profile", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Media uploadProfile(@RequestParam("image") MultipartFile image) {
-        try {
-            return mediaService.saveProfileImageWithUser(image, userService.getCurrentUser());
-        } catch (Exception e) {
-            throw new MediaUploadException("Failed to upload file: " + image.getOriginalFilename(), e);
-        }
+    public Media uploadProfile(@RequestParam("image") MultipartFile image) throws MediaUploadException {
+        return mediaService.saveProfileImageWithUser(image, userService.getCurrentUser());
     }
 }

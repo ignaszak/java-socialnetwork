@@ -1,7 +1,7 @@
 package net.ignaszak.socialnetwork.service.user;
 
 import net.ignaszak.socialnetwork.domain.User;
-import net.ignaszak.socialnetwork.repository.UserRepository;
+import net.ignaszak.socialnetwork.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -20,21 +20,22 @@ import java.util.Set;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Autowired
-    public void setUserRepository(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public void setUserService(UserService userService) {
+        this.userService = userService;
     }
 
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findUserByUsername(username);
-        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-        grantedAuthorities.add(new SimpleGrantedAuthority(user.getRole()));
+        try {
+            User user = userService.getUserByUsername(username);
+            Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
+            grantedAuthorities.add(new SimpleGrantedAuthority(user.getRole()));
 
-        return new org.springframework.security.core.userdetails.User(
+            return new org.springframework.security.core.userdetails.User(
                 user.getUsername(),
                 user.getPassword(),
                 user.isEnabled(),
@@ -42,6 +43,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 true,
                 true,
                 grantedAuthorities
-        );
+            );
+        } catch (NotFoundException e) {
+            throw new UsernameNotFoundException("", e);
+        }
     }
 }

@@ -1,6 +1,7 @@
 package net.ignaszak.socialnetwork.controller;
 
 import net.ignaszak.socialnetwork.domain.User;
+import net.ignaszak.socialnetwork.exception.NotFoundException;
 import net.ignaszak.socialnetwork.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,7 +26,7 @@ public class UserActivationController {
             user.activate();
             userService.save(user);
             return new ModelAndView("activation_code", "success", true);
-        } catch (NullPointerException e) {
+        } catch (NotFoundException e) {
             return new ModelAndView("activation_code", "success", false);
         }
 

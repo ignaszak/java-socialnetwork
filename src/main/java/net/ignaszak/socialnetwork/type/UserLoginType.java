@@ -6,10 +6,10 @@ import javax.validation.constraints.Size;
 
 public class UserLoginType {
 
-    @NotBlank(message = "Invalid username!")
+    @NotBlank(message = "Invalid username")
     private String username;
 
-    @Size(min = 8, max = 15, message = "Password must by 8-15 characters!")
+    @Size(min = 8, max = 15, message = "Password must by 8-15 characters")
     private String password;
 
     public String getUsername() {

@@ -1,9 +1,12 @@
 package net.ignaszak.socialnetwork.controller;
 
+import net.ignaszak.socialnetwork.exception.MediaUploadException;
+import net.ignaszak.socialnetwork.exception.NotFoundException;
 import net.ignaszak.socialnetwork.service.media.MediaService;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -15,6 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.io.File;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mockingDetails;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -36,12 +40,13 @@ public class MediaControllerTests {
         Resource resource = new UrlResource(file.toURI());
         given(mediaService.getOneResourceByFilename(filename)).willReturn(resource);
         mockMvc.perform(get("/public/medias/{filename}", file.getName()))
-                .andExpect(status().isCreated());
+            .andExpect(status().isCreated());
     }
 
     @Test
     public void shouldReturnNotFoundIfFileDoesNotExists() throws Exception {
+        Mockito.when(mediaService.getOneResourceByFilename(Mockito.anyString())).thenThrow(new MediaUploadException());
         mockMvc.perform(get("/public/medias/{filename}", "notExistingFile.jpg"))
-                .andExpect(status().isNotFound());
+            .andExpect(status().isNotFound());
     }
 }

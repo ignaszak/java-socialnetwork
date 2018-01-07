@@ -1,6 +1,7 @@
 package net.ignaszak.socialnetwork.service.user;
 
 import net.ignaszak.socialnetwork.domain.User;
+import net.ignaszak.socialnetwork.exception.NotFoundException;
 import net.ignaszak.socialnetwork.type.UserRegistrationType;
 import net.ignaszak.socialnetwork.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,18 +28,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserById(Integer id) {
-        return userRepository.findOne(id);
+    public User getUserById(Integer id) throws NotFoundException {
+        return userRepository.findUserById(id).orElseThrow(NotFoundException::new);
     }
 
     @Override
-    public User getUserByUsername(String username) {
-        return userRepository.findUserByUsername(username);
+    public User getUserByUsername(String username) throws NotFoundException {
+        return userRepository.findUserByUsername(username).orElseThrow(NotFoundException::new);
     }
 
     @Override
-    public User getUserByEmail(String email) {
-        return userRepository.findUserByEmail(email);
+    public User getUserByEmail(String email) throws NotFoundException {
+        return userRepository.findUserByEmail(email).orElseThrow(NotFoundException::new);
     }
 
     @Override
@@ -73,13 +74,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserByActivationCode(String code) {
-        return userRepository.findUserByActivationCode(code);
+    public User getUserByActivationCode(String code) throws NotFoundException {
+        return userRepository.findUserByActivationCode(code).orElseThrow(NotFoundException::new);
     }
 
     @Override
-    public User getUserByEmailOrNewEmail(String email) {
-        return userRepository.findUserByEmailOrNewEmail(email, email);
+    public User getUserByEmailOrNewEmail(String email) throws NotFoundException {
+        return userRepository.findUserByEmailOrNewEmail(email, email).orElseThrow(NotFoundException::new);
     }
 
     @Override

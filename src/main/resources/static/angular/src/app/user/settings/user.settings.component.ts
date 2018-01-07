@@ -1,9 +1,9 @@
 import {Component, Inject, OnInit} from "@angular/core";
-import {User} from "../../user/user";
+import {User} from "../user";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Http} from "@angular/http";
-import {UserServiceInterface} from "../../user/user.service.interface";
-import {UserService} from "../../user/user.service";
+import {UserServiceInterface} from "../user.service.interface";
+import {UserService} from "../user.service";
 import {RestProvider} from "../../rest/rest-provider";
 import {FileHolder, UploadMetadata} from "angular2-image-upload";
 import {Events} from "../../shared/event/events";
@@ -12,9 +12,9 @@ import {Swal} from "../../shared/swal";
 import {ValidationManager} from "ng2-validation-manager";
 
 @Component({
-    templateUrl: './settings.component.html'
+    templateUrl: './user.settings.component.html'
 })
-export class SettingsComponent extends Event implements OnInit{
+export class UserSettingsComponent extends Event implements OnInit{
 
     currentUser: User;
     generalForm: FormGroup;

@@ -16,17 +16,17 @@ public class Relation {
     private Integer id;
 
     @Column(name = "key", nullable = false, unique = true, updatable = false)
-    @NotBlank
+    @NotBlank(message = "Could not generate key")
     private String key;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
     @JoinColumn(name = "sender_id")
-    @NotNull
+    @NotNull(message = "Add sender")
     private User sender;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
     @JoinColumn(name = "receiver_id")
-    @NotNull
+    @NotNull(message = "Add receiver")
     private User receiver;
 
     @Column(name = "accepted")
@@ -34,7 +34,7 @@ public class Relation {
 
     @Column(name = "invitation_date", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    @NotNull
+    @NotNull(message = "Could not set invitation date")
     private Date invitationDate;
 
     @Column(name = "accepted_date")

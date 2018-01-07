@@ -1,5 +1,6 @@
 package net.ignaszak.socialnetwork.auth.validator;
 
+import net.ignaszak.socialnetwork.exception.NotFoundException;
 import net.ignaszak.socialnetwork.service.user.UserService;
 import net.ignaszak.socialnetwork.type.UserRemindPasswordType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,9 @@ public class UserRemindPasswordValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         UserRemindPasswordType type = (UserRemindPasswordType) target;
-        if (userService.getUserByEmail(type.getEmail()) == null) {
+        try {
+            userService.getUserByEmail(type.getEmail());
+        } catch (NotFoundException e) {
             errors.rejectValue("email", "Invalid.email","Email does not exists.");
         }
     }

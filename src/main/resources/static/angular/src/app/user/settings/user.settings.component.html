@@ -1,11 +1,11 @@
 <div class="container">
-
     <user-header *ngIf="currentUser.id > 0" [user]="currentUser"></user-header>
 
     <div class="row mt-2">
         <div class="offset-sm-2 col-md-8">
 
             <tabset>
+
                 <!-- GENERAL -->
                 <tab heading="General">
                     <form [formGroup]="generalForm" (ngSubmit)="onSubmitGeneral()" class="form-horizontal" novalidate>
@@ -33,6 +33,7 @@
                         </div>
                     </form>
                 </tab>
+
                 <!-- PASSWORD -->
                 <tab heading="Password">
                     <form [formGroup]="passwordForm.getForm()" (ngSubmit)="onSubmitPassword()" class="form-horizontal" novalidate>
@@ -68,6 +69,7 @@
                         </div>
                     </form>
                 </tab>
+
                 <!-- PROFILE PHOTO -->
                 <tab heading="Profile photo">
                     <div class="disable-clear">
@@ -83,9 +85,10 @@
                         ></image-upload>
                     </div>
                 </tab>
+
             </tabset>
 
         </div><!-- .col-xs-12 -->
     </div><!-- .row -->
 
-</div><!-- .container -->
+</div>

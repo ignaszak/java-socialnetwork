@@ -2,12 +2,12 @@ package net.ignaszak.socialnetwork.controller;
 
 import net.ignaszak.socialnetwork.auth.validator.UserRemindPasswordValidator;
 import net.ignaszak.socialnetwork.domain.User;
+import net.ignaszak.socialnetwork.exception.NotFoundException;
+import net.ignaszak.socialnetwork.service.mailer.MailerService;
 import net.ignaszak.socialnetwork.type.UserRemindPasswordType;
-import net.ignaszak.socialnetwork.model.mail.EmailSender;
 import net.ignaszak.socialnetwork.model.password.PasswordGenerator;
 import net.ignaszak.socialnetwork.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,10 +22,9 @@ import javax.validation.Valid;
 public class UserRemindPasswordController {
 
     private UserService userService;
-    private EmailSender emailSender;
+    private MailerService mailerService;
     private PasswordGenerator passwordGenerator;
     private UserRemindPasswordValidator userRemindPasswordValidator;
-    private String emailFromAddress;
 
     @Autowired
     public void setUserService(UserService userService) {
@@ -33,8 +32,8 @@ public class UserRemindPasswordController {
     }
 
     @Autowired
-    public void setEmailSender(EmailSender emailSender) {
-        this.emailSender = emailSender;
+    public void setMailerService(MailerService mailerService) {
+        this.mailerService = mailerService;
     }
 
     @Autowired
@@ -45,11 +44,6 @@ public class UserRemindPasswordController {
     @Autowired
     public void setUserRegistrationTypeValidator(UserRemindPasswordValidator userRemindPasswordValidator) {
         this.userRemindPasswordValidator = userRemindPasswordValidator;
-    }
-
-    @Value("${app.mail.from.address}")
-    public void setEmailFromAddress(String emailFromAddress) {
-        this.emailFromAddress = emailFromAddress;
     }
 
     @InitBinder("remind")
@@ -69,22 +63,22 @@ public class UserRemindPasswordController {
             BindingResult bindingResult,
             Model model
     ) throws MessagingException {
-        User user = userService.getUserByEmail(remindForm.getEmail());
-        if (bindingResult.hasErrors() || user == null) {
+
+        if (bindingResult.hasErrors()) {
             model.addAttribute("isEmailInvalid", true);
             return "remind";
         }
-        String newPassword = passwordGenerator.generate();
-        user.setPassword(newPassword);
-        emailSender.send(
-                user.getEmail(),
-                emailFromAddress,
-                "Remind password",
-                "" +
-                "Your new password is: " + newPassword +
-                "\nPleas sign in to your account and change it in your profile settings."
-        );
-        userService.save(user);
+
+        try {
+            User user = userService.getUserByEmail(remindForm.getEmail());
+            String newPassword = passwordGenerator.generate();
+            user.setPassword(newPassword);
+            userService.save(user);
+            mailerService.sendRemindPassword(user, newPassword);
+        } catch (NotFoundException e) {
+            model.addAttribute("isEmailInvalid", true);
+            return "remind";
+        }
 
         return "redirect:/login?remind";
     }

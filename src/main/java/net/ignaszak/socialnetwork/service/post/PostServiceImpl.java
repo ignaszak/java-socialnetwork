@@ -4,6 +4,7 @@ import net.ignaszak.socialnetwork.domain.Media;
 import net.ignaszak.socialnetwork.domain.Post;
 import net.ignaszak.socialnetwork.domain.User;
 import net.ignaszak.socialnetwork.exception.EmptyPostException;
+import net.ignaszak.socialnetwork.exception.NotFoundException;
 import net.ignaszak.socialnetwork.repository.PostRepository;
 import net.ignaszak.socialnetwork.service.media.MediaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post save(Post post) {
+    public Post save(Post post) throws EmptyPostException {
         Set<Media> medias = mediaService.movePostMediasFromTemp(post);
         if (medias.isEmpty() && post.getText().isEmpty()) throw new EmptyPostException();
         post.setMedias(medias);
@@ -40,8 +41,8 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post getPostById(Integer id) {
-        return postRepository.findById(id);
+    public Post getPostById(Integer id) throws NotFoundException {
+        return postRepository.findById(id).orElseThrow(NotFoundException::new);
     }
 
     @Override

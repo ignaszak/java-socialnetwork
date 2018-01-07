@@ -3,10 +3,13 @@ package net.ignaszak.socialnetwork.service.relation;
 import net.ignaszak.socialnetwork.domain.Relation;
 import net.ignaszak.socialnetwork.domain.User;
 import net.ignaszak.socialnetwork.exception.InvalidRelationException;
+import net.ignaszak.socialnetwork.exception.NotFoundException;
 import net.ignaszak.socialnetwork.repository.RelationRepository;
 import net.ignaszak.socialnetwork.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class RelationServiceImpl implements RelationService {
@@ -26,7 +29,7 @@ public class RelationServiceImpl implements RelationService {
 
     @Override
     public void add(Relation relation) throws InvalidRelationException {
-        if (relation.getReceiver().isEqualsTo(relation.getSender()))
+        if (relation.getReceiver().equals(relation.getSender()))
             throw new InvalidRelationException();
         relationRepository.save(relation);
     }
@@ -43,17 +46,25 @@ public class RelationServiceImpl implements RelationService {
     }
 
     @Override
-    public Relation getRelationWithCurrentUserByUserId(Integer id) {
-        User currentUser = userService.getCurrentUser();
-        Relation relation = relationRepository.findRelationBySender_IdAndReceiver_Id(currentUser.getId(), id);
-        if (relation == null) {
-            return relationRepository.findRelationBySender_IdAndReceiver_Id(id, currentUser.getId());
-        }
-        return relation;
+    public Relation getRelationWithCurrentUserByUserId(Integer id) throws NotFoundException {
+        return getRelationByUserId(id).orElseThrow(NotFoundException::new);
+    }
+
+    @Override
+    public Relation getRelationWithCurrentUserByUserIdOrGetEmptyRelation(Integer id) {
+        return getRelationByUserId(id).orElse(new Relation());
     }
 
     @Override
     public Integer countInvitationsByCurrentUser() {
         return relationRepository.countByReceiverAndAcceptedIsFalseOrAcceptedIsNull(userService.getCurrentUser());
+    }
+
+    private Optional<Relation> getRelationByUserId(Integer id) {
+        User currentUser = userService.getCurrentUser();
+        Optional<Relation> relation = relationRepository.findRelationBySender_IdAndReceiver_Id(currentUser.getId(), id);
+        if (! relation.isPresent())
+            relation = relationRepository.findRelationBySender_IdAndReceiver_Id(id, currentUser.getId());
+        return relation;
     }
 }

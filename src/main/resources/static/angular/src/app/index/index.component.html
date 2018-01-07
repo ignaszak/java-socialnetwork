@@ -13,7 +13,7 @@
             <div class="dropdown-menu dropdown-menu-right" *dropdownMenu aria-labelledby="simple-dropdown">
                 <a class="dropdown-item" href="#" [routerLink]="['/', currentUser.username]"><i class="icon-user"></i> Profile</a>
                 <a class="dropdown-item" href="#" [routerLink]="['/', currentUser.username, 'friends']"><i class="icon-people"></i> Friends</a>
-                <a class="dropdown-item" href="#" [routerLink]="['/profile/settings']"><i class="fa fa-wrench"></i> Settings</a>
+                <a class="dropdown-item" href="#" [routerLink]="['/', currentUser.username, 'settings']"><i class="fa fa-wrench"></i> Settings</a>
                 <a class="dropdown-item" href="/auth/logout"><i class="fa fa-lock"></i> Logout</a>
             </div>
         </li>

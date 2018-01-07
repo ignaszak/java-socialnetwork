@@ -51,14 +51,14 @@ public class PostServiceTests {
     }
 
     @Test
-    public void shouldSavePostContainingOnlyMedia() {
+    public void shouldSavePostContainingOnlyMedia() throws EmptyPostException {
         Mockito.when(mediaService.movePostMediasFromTemp(post)).thenReturn(medias);
         postService.save(post);
         Mockito.verify(postRepository, Mockito.times(1)).save(post);
     }
 
     @Test
-    public void shouldSavePostContainingOnlyText() {
+    public void shouldSavePostContainingOnlyText() throws EmptyPostException {
         Mockito.when(mediaService.movePostMediasFromTemp(post)).thenReturn(new HashSet<>());
         Mockito.when(post.getText()).thenReturn("Some text");
         postService.save(post);
@@ -66,7 +66,7 @@ public class PostServiceTests {
     }
 
     @Test
-    public void shouldSavePostWithTextAndMedias() {
+    public void shouldSavePostWithTextAndMedias() throws EmptyPostException {
         Mockito.when(mediaService.movePostMediasFromTemp(post)).thenReturn(medias);
         Mockito.when(post.getText()).thenReturn("Some text");
         postService.save(post);
@@ -74,7 +74,7 @@ public class PostServiceTests {
     }
 
     @Test(expected = EmptyPostException.class)
-    public void shouldNotSavePostWithoutBothTextAndMedias() {
+    public void shouldNotSavePostWithoutBothTextAndMedias() throws EmptyPostException {
         Mockito.when(mediaService.movePostMediasFromTemp(post)).thenReturn(new HashSet<>());
         Mockito.when(post.getText()).thenReturn("");
         postService.save(post);

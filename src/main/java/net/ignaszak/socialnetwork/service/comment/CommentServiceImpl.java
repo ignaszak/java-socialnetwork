@@ -2,6 +2,7 @@ package net.ignaszak.socialnetwork.service.comment;
 
 import net.ignaszak.socialnetwork.domain.Comment;
 import net.ignaszak.socialnetwork.domain.Post;
+import net.ignaszak.socialnetwork.exception.NotFoundException;
 import net.ignaszak.socialnetwork.repository.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -34,7 +35,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment getCommentById(Integer id) {
-        return commentRepository.findCommentById(id);
+    public Comment getCommentById(Integer id) throws NotFoundException {
+        return commentRepository.findCommentById(id).orElseThrow(NotFoundException::new);
     }
 }

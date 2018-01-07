@@ -3,6 +3,7 @@ package net.ignaszak.socialnetwork.domain;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
@@ -16,22 +17,24 @@ public class Comment {
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
     @JoinColumn(name = "author_id")
+    @NotNull(message = "Add author")
     private User author;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     @JoinColumn(name = "post_id")
+    @NotNull(message = "Add post")
     private Post post;
 
     @Column(name = "text", nullable = false)
-    @NotBlank
+    @NotBlank(message = "Comment must be not empty")
     private String text;
 
     @Column(name = "created_date", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
+    @NotNull(message = "Could not set created date")
     private Date createdDate;
 
-    @PrePersist
-    protected void onCreate() {
+    public Comment() {
         createdDate = new Date();
     }
 
@@ -72,6 +75,10 @@ public class Comment {
     }
 
     public boolean isAuthor(User user) {
-        return this.author.isEqualsTo(user);
+        return author.equals(user);
+    }
+
+    public boolean canHandle(User user) {
+        return isAuthor(user) || post.isAuthor(user);
     }
 }

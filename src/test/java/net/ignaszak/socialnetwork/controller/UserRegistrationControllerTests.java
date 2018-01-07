@@ -3,6 +3,7 @@ package net.ignaszak.socialnetwork.controller;
 import net.ignaszak.socialnetwork.auth.validator.UserRegistrationTypeValidator;
 import net.ignaszak.socialnetwork.config.SecurityConfig;
 import net.ignaszak.socialnetwork.model.mail.EmailSender;
+import net.ignaszak.socialnetwork.service.mailer.MailerService;
 import net.ignaszak.socialnetwork.service.user.SecurityService;
 import net.ignaszak.socialnetwork.service.user.UserService;
 import org.junit.Before;
@@ -37,7 +38,7 @@ public class UserRegistrationControllerTests {
     @MockBean
     UserRegistrationTypeValidator userRegistrationFormValidator;
     @MockBean
-    EmailSender emailSender;
+    MailerService mailerService;
     @MockBean
     UserDetailsService userDetailsService;
     @MockBean

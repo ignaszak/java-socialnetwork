@@ -16,12 +16,12 @@ public class Post {
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
     @JoinColumn(name = "author_id", nullable = false)
-    @NotNull
+    @NotNull(message = "Add author")
     private User author;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
     @JoinColumn(name = "receiver_id", nullable = false)
-    @NotNull
+    @NotNull(message = "Add receiver")
     private User receiver;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "post", cascade = CascadeType.ALL)
@@ -33,7 +33,7 @@ public class Post {
 
     @Column(name = "created_date", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    @NotNull
+    @NotNull(message = "Could not set created date")
     private Date createdDate;
 
     /**
@@ -43,9 +43,22 @@ public class Post {
     @Transient
     private String key;
 
-    @PrePersist
-    protected void onCreate() {
+    public Post() {
         createdDate = new Date();
+    }
+
+    public Post(User author, User receiver, String text) {
+        this();
+        this.author = author;
+        this.receiver = receiver;
+        this.text = text;
+    }
+
+    public Post(User author, User receiver, Set<Media> medias) {
+        this();
+        this.author = author;
+        this.receiver = receiver;
+        this.medias = medias;
     }
 
     public Integer getId() {
@@ -89,7 +102,7 @@ public class Post {
     }
 
     public boolean isAuthor(User user) {
-        return this.author.isEqualsTo(user);
+        return this.author.equals(user);
     }
 
     public String getKey() {

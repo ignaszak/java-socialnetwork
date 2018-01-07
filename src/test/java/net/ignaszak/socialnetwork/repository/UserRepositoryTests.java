@@ -16,6 +16,8 @@ public class UserRepositoryTests extends RepositoryTestsInitializer {
     private UserRepository userRepository;
     @MockBean
     private Pageable pageable;
+    @MockBean
+    private User emptyUser;
 
     @Test
     public void findUserByEmailOrNewEmail() {
@@ -23,11 +25,11 @@ public class UserRepositoryTests extends RepositoryTestsInitializer {
         String newEmail = "new-test2@ignaszak.net";
         Assert.assertEquals(
             "test2",
-            userRepository.findUserByEmailOrNewEmail(email, email).getUsername()
+            userRepository.findUserByEmailOrNewEmail(email, email).orElse(emptyUser).getUsername()
         );
         Assert.assertEquals(
             "test2",
-            userRepository.findUserByEmailOrNewEmail(newEmail, newEmail).getUsername()
+            userRepository.findUserByEmailOrNewEmail(newEmail, newEmail).orElse(emptyUser).getUsername()
         );
     }
 
@@ -35,7 +37,7 @@ public class UserRepositoryTests extends RepositoryTestsInitializer {
     public void findUserByUsername() {
         Assert.assertEquals(
             "test1",
-            userRepository.findUserByUsername("test1").getUsername()
+            userRepository.findUserByUsername("test1").orElse(emptyUser).getUsername()
         );
     }
 
@@ -43,7 +45,7 @@ public class UserRepositoryTests extends RepositoryTestsInitializer {
     public void findUserByEmail() {
         Assert.assertEquals(
             "test3@ignaszak.net",
-            userRepository.findUserByEmail("test3@ignaszak.net").getEmail()
+            userRepository.findUserByEmail("test3@ignaszak.net").orElse(emptyUser).getEmail()
         );
     }
 
@@ -51,7 +53,7 @@ public class UserRepositoryTests extends RepositoryTestsInitializer {
     public void findUserByActivationCode() {
         Assert.assertEquals(
             "test3@ignaszak.net",
-            userRepository.findUserByActivationCode("uniqueActivationCode").getEmail()
+            userRepository.findUserByActivationCode("uniqueActivationCode").orElse(emptyUser).getEmail()
         );
     }
 

@@ -4,6 +4,7 @@
     <div class="row">
         <div class="offset-sm-2 col-md-8">
             <div class="row">
+
                 <div *ngFor="let friend of friends" class="col-md-4 col-sm-6">
                     <a href="#" [routerLink]="['/', friend.username]">
                         <div class="card card-accent-info">

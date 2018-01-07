@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -16,10 +17,12 @@ import java.util.List;
  */
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
-    User findUserByEmailOrNewEmail(String email, String newEmail);
-    User findUserByUsername(String username);
-    User findUserByEmail(String email);
-    User findUserByActivationCode(String code);
+
+    Optional<User> findUserById(Integer id);
+    Optional<User> findUserByEmailOrNewEmail(String email, String newEmail);
+    Optional<User> findUserByUsername(String username);
+    Optional<User> findUserByEmail(String email);
+    Optional<User> findUserByActivationCode(String code);
 
     @Query("SELECT u FROM User u WHERE u.username = ?#{principal.username}")
     List<User> findCurrentUser();

@@ -6,13 +6,13 @@ import javax.validation.constraints.Size;
 
 public class UserChangePasswordType {
 
-    @Size(min = 8, max = 15, message = "Password must by 8-15 characters!")
+    @Size(min = 8, max = 15, message = "Password must by 8-15 characters")
     private String oldPassword;
 
-    @Size(min = 8, max = 15, message = "Password must by 8-15 characters!")
+    @Size(min = 8, max = 15, message = "Password must by 8-15 characters")
     private String newPassword;
 
-    @Size(min = 8, max = 15, message = "Password must by 8-15 characters!")
+    @Size(min = 8, max = 15, message = "Password must by 8-15 characters")
     private String newPasswordRepeat;
 
     public void setOldPassword(String oldPassword) {

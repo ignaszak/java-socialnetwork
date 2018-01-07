@@ -1,10 +1,9 @@
 package net.ignaszak.socialnetwork.controller.rest;
 
 import net.ignaszak.socialnetwork.domain.User;
-import net.ignaszak.socialnetwork.model.mail.EmailSender;
+import net.ignaszak.socialnetwork.service.mailer.MailerService;
 import net.ignaszak.socialnetwork.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,8 +16,7 @@ import java.util.UUID;
 public class UsersCurrentRestController {
 
     private UserService userService;
-    private EmailSender emailSender;
-    private String emailFromAddress;
+    private MailerService mailerService;
 
     @Autowired
     public void setUserService(UserService userService) {
@@ -26,13 +24,8 @@ public class UsersCurrentRestController {
     }
 
     @Autowired
-    public void setEmailSender(EmailSender emailSender) {
-        this.emailSender = emailSender;
-    }
-
-    @Value("${app.mail.from.address}")
-    public void setEmailFromAddress(String emailFromAddress) {
-        this.emailFromAddress = emailFromAddress;
+    public void setMailerService(MailerService mailerService) {
+        this.mailerService = mailerService;
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -48,14 +41,9 @@ public class UsersCurrentRestController {
             String code = UUID.randomUUID().toString();
             currentUser.changeEmail(user.getEmail(), code);
             try {
-                emailSender.send(
-                    user.getEmail(),
-                    emailFromAddress,
-                    "Activation code",
-                    "Your activation link: "
-                    + request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
-                    + "/user/email-activation?code=" + code
-                );
+                String activationLink = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+                    + "/user/email-activation?code=" + code;
+                mailerService.sendActivationLink(user, activationLink);
             } catch (MessagingException e) {
                 user.activate();
             }
