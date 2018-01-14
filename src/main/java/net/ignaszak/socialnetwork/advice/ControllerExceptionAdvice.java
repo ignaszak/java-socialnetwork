@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import static org.springframework.core.annotation.AnnotatedElementUtils.findMergedAnnotation;
 
-
 abstract class ControllerExceptionAdvice {
 
     HttpStatus getHttpStatus(Exception e) {
@@ -18,6 +17,6 @@ abstract class ControllerExceptionAdvice {
     }
 
     ResponseEntity<ErrorRestDTO> getErrorResponseEntity(Exception e) {
-        return new ResponseEntity<ErrorRestDTO>(new ErrorRestDTO(e.getMessage()), getHttpStatus(e));
+        return new ResponseEntity<>(new ErrorRestDTO(e.getMessage()), getHttpStatus(e));
     }
 }

@@ -4,7 +4,7 @@ Simple social network based on spring boot, angular4 and [CoreUI](http://coreui.
 
 ## Start Application
 
-Just type ```./gradlew bootRun``` and open ```http://localhost:8080``` in your browser.
+Just type ```./gradlew run``` and open ```http://localhost:8080``` in your browser.
 
 ## Configuration
 

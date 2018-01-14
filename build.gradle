@@ -15,7 +15,7 @@ buildscript {
     }
 }
 
-group = 'ignaszak'
+
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
@@ -30,8 +30,10 @@ jar {
     version  = '0.0.1'
 }
 
+group = 'ignaszak'
 sourceCompatibility = 1.8
 version = '0.0.1-SNAPSHOT'
+mainClassName = 'net.ignaszak.socialnetwork.SocialnetworkApplication'
 
 repositories {
     mavenCentral()
@@ -119,7 +121,7 @@ bootRun.dependsOn(copyAngularResourcesClientDev)
 bootRun.dependsOn(copyApplicationProperities)
 
 // Production
-run.dependsOn(buildClientDev)
+run.dependsOn(buildClient)
 run.dependsOn(copyAngularResourcesClient)
 run.dependsOn(copyApplicationProperities)
 
