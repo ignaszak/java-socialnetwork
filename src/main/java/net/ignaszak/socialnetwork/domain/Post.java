@@ -1,5 +1,7 @@
 package net.ignaszak.socialnetwork.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -27,6 +29,10 @@ public class Post {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "post", cascade = CascadeType.ALL)
     @OrderBy("id")
     private Set<Media> medias;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", cascade = CascadeType.ALL)
+    @OrderBy("id")
+    private Set<Comment> comments;
 
     @Column(name = "text")
     private String text;
@@ -115,5 +121,14 @@ public class Post {
 
     public void setMedias(Set<Media> medias) {
         this.medias = medias;
+    }
+
+    @JsonIgnore
+    public Set<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
     }
 }

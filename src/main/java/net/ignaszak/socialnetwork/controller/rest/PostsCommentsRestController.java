@@ -43,7 +43,7 @@ public class PostsCommentsRestController {
         return commentService.getCommentsByPost(post, page);
     }
 
-    @PutMapping
+    @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public Comment add(
         @Valid @RequestBody Comment comment,
         @PathVariable("id") Integer id
@@ -51,7 +51,6 @@ public class PostsCommentsRestController {
         Post post = postService.getPostById(id);
         comment.setPost(post);
         comment.setAuthor(userService.getCurrentUser());
-        commentService.save(comment);
-        return comment;
+        return commentService.save(comment);
     }
 }

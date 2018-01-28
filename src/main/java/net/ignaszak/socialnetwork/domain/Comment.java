@@ -20,9 +20,8 @@ public class Comment {
     @NotNull(message = "Add author")
     private User author;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "post_id")
-    @NotNull(message = "Add post")
     private Post post;
 
     @Column(name = "text", nullable = false)
